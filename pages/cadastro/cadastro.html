@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <title>Cadastro</title>
+</head>
+
+<body>
+
+  <span id="voltar"> <a href="../../index.html">Voltar</a> </span>
+
+  <main>
+
+    <div class="titulo">
+
+
+      <div class="imagem">
+  
+        <img src="../../carregando.png" alt="Logo" class="logo">
+  
+        <h2>Cadastro</h2>
+  
+      </div>
+  
+  
+  
+      <form>
+  
+        <div class="grupo-input">
+  
+          <label for="text">Nome Completo:</label>
+          <input type="text" id="text" name="text" placeholder="Digite seu nome" required>
+  
+        </div>
+  
+        <div class="grupo-input">
+  
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" placeholder="seu@email.com" required>
+  
+        </div>
+  
+  
+        <div class="grupo-input">
+  
+          <label for="password">Senha:</label>
+          <input type="password" id="password" name="password" placeholder="Digite sua senha" required>
+  
+        </div>
+  
+        <div class="grupo-input">
+  
+          <label for="password">Confirmar Senha:</label>
+          <input type="password" id="password" name="password" placeholder="Confirme sua senha" required>
+  
+        </div>
+  
+        <div class="grupo-input">
+  
+          <label for="tel">Telefone Para Contato:</label>
+          <input type="tel" id="tel" name="tel" placeholder="Digite seu telefone" pattern="[0-9]{10,11}"
+            title="Digite apenas números (10 ou 11 dígitos)" required>
+  
+        </div>
+  
+        <input type="submit" id="submit" value="Enviar" /><br /><br />
+  
+      </form>
+
+  </main>
+
+  <footer>
+
+    <p>&copy; 2025 Guilherme Aquino</p>
+
+    <p>Todos os direitos reservados.</p>
+
+</footer>
+
+    <script>
+
+      document.getElementById("tel").addEventListener("input", function (e) {
+
+        let valor = this.value.replace(/\D/g, "")
+
+        if (valor.length > 11) valor = valor.slice(0, 11);
+
+        if (valor.length > 10) {
+          this.value = `(${valor.slice(0, 2)}) ${valor.slice(2, 7)}-${valor.slice(7)}`;
+
+        } else if (valor.length > 6) {
+          this.value = `(${valor.slice(0, 2)}) ${valor.slice(2, 6)}-${valor.slice(6)}`;
+
+        } else if (valor.length > 2) {
+          this.value = `(${valor.slice(0, 2)}) ${valor.slice(2)}`;
+          
+        } else {
+          this.value = valor;
+        }
+
+        });
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,114 @@
+@import url('https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Bree Serif', serif;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Bree Serif', serif;
+  background-color: #880e0e;
+  height: 100vh;
+}
+
+span{
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+.titulo {
+  text-align: center;
+}
+
+h2 {
+  color: white;
+  text-align: center;
+  margin: 0;
+}
+
+a {
+  transition: 1s;
+}
+
+span a {
+  color: white;
+}
+
+span a:hover {
+  color: #007bff;
+}
+
+
+form input{
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #cccccc;
+  background-color: white;
+}
+
+label {
+  display: block;
+  font-weight: bold;
+  text-align: left;
+  margin: 4px;
+  color: black;
+}
+
+#submit{
+  width: 276px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid white;
+  background-color: rgb(0, 0, 0);
+  color: white;
+  cursor: pointer;
+  transition: 1s;
+  margin-top: 10px
+}
+
+#submit:hover{
+  background-color: rgb(255, 255, 255);
+  color: black;
+}
+
+#email, #password{
+  width: 276px;
+  padding: 10px;
+}
+
+img {
+  width: 50px;
+  height: 50px;
+  animation: girar 2s linear infinite;
+}
+
+img:hover {
+  animation: girar 1s linear infinite;
+}
+
+@keyframes girar {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+footer {
+  color: white;
+  text-align: center;
+  padding: 10px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  font-size: 14px;
+}

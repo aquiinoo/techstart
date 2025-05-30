@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duelo de Programação</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <span id="voltar"> <a href="../../index.html">Voltar</a> </span>
+
+    <div id="particulas"></div>
+
+    <main class="input-group">
+
+        <div class="titulo">
+            <div class="versus-box">
+                <span class="jogador">Gabriel</span>
+                <span class="versus">VS</span>
+                <span class="jogador">Pedrinho Bola</span>
+            </div>
+            <div class="placar">
+                <span id="placar1">0</span>
+                <span>-</span>
+                <span id="placar2">2</span>
+            </div>
+            <h2>Round 3</h2>
+            <div class="timer" id="timer">60</div> <!-- Contador regressivo -->
+        </div>
+
+        <section class="duelo-box">
+            <div class="round-info">
+                <p>Desafio: Crie uma função que soma dois números.</p>
+            </div>
+
+            <textarea id="codigo" placeholder="Digite seu código aqui..."></textarea>
+
+            <div class="botoes">
+                <button onclick="espiarCodigo()">Espiar</button>
+                <button onclick="testarCodigo()">Testar</button>
+                <button onclick="enviarCodigo()">Enviar</button>
+            </div>
+
+            <div id="resultado"></div>
+        </section>
+
+    </main>
+
+    <!-- Chatzinho rápido -->
+    <div class="chat-rapido">
+        <p onclick="enviarEmoji('🔥')">🔥</p>
+        <p onclick="enviarEmoji('😎')">😎</p>
+        <p onclick="enviarEmoji('💀')">💀</p>
+        <p onclick="enviarEmoji('👏')">👏</p>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 TechStart</p>
+        <p>Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

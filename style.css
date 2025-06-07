@@ -4,8 +4,8 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    color: white;
     font-family: 'Bree Serif', serif;
+    text-decoration: none;
 }
 
 body{
@@ -35,6 +35,7 @@ img:hover{
 
 h2{
     margin-bottom: 10px;
+    color: #fff;
 }
 
 .input-group{
@@ -46,7 +47,6 @@ form input {
     padding: 10px;
     border-radius: 5px;
     border: 1px solid #cccccc;
-    background-color: white;
 }
 
 form button{
@@ -61,6 +61,10 @@ form button{
     margin-bottom: 10px;
 }
 
+button a {
+    color: #fff;
+}
+
 form button:hover{
     background-color: rgb(255, 255, 255);
     color: black;
@@ -68,6 +72,7 @@ form button:hover{
 
 p{
     text-align: center;
+    color: #fff;
 }
 
 p a{

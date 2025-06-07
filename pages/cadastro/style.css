@@ -16,7 +16,24 @@ body {
   height: 100vh;
 }
 
-span{
+.botao {
+  width: 100px;
+  height: 30px;
+  border: none;
+  outline: none;
+  border-radius: 6px;
+  color: #880e0e;
+  cursor: pointer;
+  transition: .6s;
+}
+
+.botao:hover {
+  background-color: rgb(224, 215, 215);
+  box-shadow: 2px 2px 10px 1px #0000008c;
+  transform: scale(1.05);
+}
+
+span, #voltar {
   position: absolute;
   top: 10px;
   left: 10px;

@@ -13,7 +13,7 @@ body {
     overflow-x: hidden;
 }
 
-span{
+#voltar{
   position: absolute;
   top: 10px;
   left: 10px;

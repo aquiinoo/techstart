@@ -65,9 +65,9 @@ button a {
     color: #fff;
 }
 
-form button:hover{
+form button:hover {
     background-color: rgb(255, 255, 255);
-    color: black;
+    color: #000000;
 }
 
 p{

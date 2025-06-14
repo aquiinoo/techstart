@@ -17,13 +17,35 @@ body{
 
 }
 
-img{
+.div-panda {
+    width: 300px;
+    height: 300px;
+    display: flex;
+    height: auto;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 50%;
+    padding: 10px;
+}
+
+.logo_panda {
+    width: 200px;
+    height: auto;
+}
+
+.div-panda h1 {
+    color: #fff;
+    font-size: 60px;
+}
+
+.carregar {
     width: 50px;
     height: auto;
     animation: girar 2s linear infinite;
 }
 
-img:hover{
+.carregar:hover{
     animation: girar 1s linear infinite;
 }
 
@@ -40,6 +62,12 @@ h2{
 
 .input-group{
     margin-bottom: 5px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 50px;
 }
 
 form input {

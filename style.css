@@ -31,7 +31,26 @@ body{
 
 .logo_panda {
     width: 200px;
-    height: auto;
+    height: 200px;
+    background-image: url('./assets/obrigadov2.png');
+    background-position: 50%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    animation: aceno 1.5s ease infinite;
+}
+
+@keyframes aceno {
+    0% {
+        background-image: url('./assets/obrigadov2.png');
+    }
+
+    50% {
+        background-image: url('./assets/ChatGPT\ Image\ Jun\ 16\,\ 2025\,\ 11_03_24\ AM.png');
+    }
+
+    100% {
+        background-image: url('./assets/obrigadov2.png');
+    }
 }
 
 .div-panda h1 {

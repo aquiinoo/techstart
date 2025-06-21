@@ -179,8 +179,6 @@ textarea {
 footer {
     text-align: center;
     padding: 15px;
-    position: fixed;
-    bottom: 0;
     width: 100%;
     font-size: 0.9em;
     color: white;

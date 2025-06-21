@@ -180,6 +180,8 @@ footer {
     text-align: center;
     padding: 15px;
     width: 100%;
+    position: absolute;
+    bottom: 0;
     font-size: 0.9em;
     color: white;
     background-color: #5a0000;

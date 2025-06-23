@@ -17,15 +17,15 @@ body {
 }
 
 .div-panda {
-    width: 300px;
+    width: 100%;
     height: 300px;
     display: flex;
     height: auto;
     justify-content: center;
     flex-direction: column;
     align-items: center;
-    border-radius: 50%;
-    padding: 10px;
+    position: relative;
+    top: 60px;
 }
 
 .logo_panda {
@@ -150,6 +150,8 @@ footer {
   padding: 10px;
   position: absolute;
   bottom: 0;
+  top: 750px;
   width: 100%;
+  height: 80px;
   font-size: 14px;
 }

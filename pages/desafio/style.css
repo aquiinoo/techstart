@@ -12,6 +12,10 @@ body {
     max-height: 100vh;
     background-color: #880e0e;
     overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .botao {
@@ -189,12 +193,14 @@ footer {
 }
 
 
-@media (min-width: 78px) {
+@media (max-width: 660px) {
     body {
-        max-width: 120vh;
+        max-height: 150vh;
     }
     .chat-rapido {
-        bottom: 80px;
-        left: 34%;
+        position: static;
+        display: flex;
+        justify-content: center;
+        width: 220px;
     }
 }

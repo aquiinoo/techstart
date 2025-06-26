@@ -9,6 +9,7 @@
 }
 
 body {
+    max-height: 100vh;
     background-color: #880e0e;
     overflow-x: hidden;
 }
@@ -149,7 +150,7 @@ textarea {
 
 .chat-rapido {
     position: fixed;
-    bottom: 15px;
+    bottom: 8px;
     left: 15px;
     background: rgba(0, 0, 0, 0.5);
     border: 1px solid #555;
@@ -185,4 +186,15 @@ footer {
     font-size: 0.9em;
     color: white;
     background-color: #5a0000;
+}
+
+
+@media (min-width: 78px) {
+    body {
+        max-width: 120vh;
+    }
+    .chat-rapido {
+        bottom: 80px;
+        left: 34%;
+    }
 }

@@ -157,35 +157,14 @@ p{
     color: #fff;
 }
 
-p a{
+a{
     color: white;
     text-decoration: underline;
     transition: 1s;
 }
 
-p a:hover{
-    color: #007bff;
-}
-
-.esqueci:hover{
-    color: #007bff;
-}
-
-.cadastrott- {
-    margin-top: 10px;
-    text-align: center;
-    font-size: 14px;
-    color: #555;
-}
-
-.cadastroLink {
-    text-decoration: underline;
-    font-weight: 500;
-}
-
-.cadastroLink:hover {
-    text-decoration: underline;
-    color: #007bff;
+a:hover{
+    color: black;
 }
 
 @keyframes girar{
@@ -209,7 +188,6 @@ footer {
     height: 80px;
     position: absolute;
     bottom: 0;
-    top: 750px;
     font-size: 14px;
 }
 

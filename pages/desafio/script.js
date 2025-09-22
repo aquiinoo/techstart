@@ -33,3 +33,24 @@ function testarCodigo() {
     }
    
 }
+
+let dicas = [
+    "Dica 1: Você precisa criar uma função usando <span class=\"codigospan\">function</span> + nome da função neste caso é <span class=\"codigospan\">soma</span> + parênteses <span class=\"codigospan\">()</span> + chaves <span class=\"codigospan\">{}</span> para abrir e fechar o bloco, e colocar sua lógica dentro das chaves.",
+    "Dica 2: A função deve receber dois parâmetros. Esses parâmetros vão dentro dos parênteses após o nome da função, separados por vírgula, por exemplo: <span class=\"codigospan\">(a, b)</span>.",
+    "Dica 3: Em javascript não declaramos o tipo de variável dentro dos parâmetros.",
+    "Dica 4: A função deve retornar a soma dos dois parâmetros. Você pode usar diretamente o return e retornar a soma dos parâmetros, por exemplo: <span class=\"codigospan\">return a + b;</span>"
+];
+
+
+let indiceDica = 0;
+
+function ajudaCodigo() {
+    const resultadoDiv = document.getElementById("resultado");
+    
+    if (indiceDica < dicas.length) {
+        resultadoDiv.innerHTML = `<p style="color: yellow;">${dicas[indiceDica]}</p>`;
+        indiceDica++;
+    } else {
+        resultadoDiv.innerHTML = `<p style="color: yellow;">Você já viu todas as dicas!</p>`;
+    }
+}

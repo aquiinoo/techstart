@@ -1,73 +1,48 @@
-document.addEventListener("DOMContentLoaded", function () {
-    if (typeof particlesJS !== "undefined") {
-        particlesJS("particulas", {
-            particles: {
-                number: {
-                    value: 8,
-                    density: {
-                        enable: true,
-                        value_area: 800
-                    }
-                },
-                color: {
-                    value: ["#000000", "#ffffff"]
-                },
-                shape: {
-                    type: "circle",
-                },
-                opacity: {
-                    value: 1,
-                    random: false
-                },
-                size: {
-                    value: 3,
-                    random: false
-                },
-                line_linked: {
-                    enable: false,
-                    distance: 150,
-                    color: "#ffffff",
-                    opacity: 0.4,
-                    width: 1
-                },
-                move: {
-                    enable: true,
-                    speed: 2,
-                    direction: "none",
-                    random: false,
-                    straight: false,
-                    out_mode: "out"
-                }
-            },
-            interactivity: {
-                detect_on: "canvas",
-                events: {
-                    onhover: {
-                        enable: true,
-                        mode: "repulse"
-                    },
-                    onclick: {
-                        enable: true,
-                        mode: "push"
-                    },
-                    resize: true
-                },
-                modes: {
-                    repulse: {
-                        distance: 25,
-                        duration: 1
-                    },
-                    grab: {
-                        distance: 4,
-                    },
-                    push: {
-                        particles_nb: 40
-                    }
-                }
-            },
-            retina_detect: true
-        });
-    } else {
-        console.error("particlesJS não foi carregado.");
-    }
+TechStartApp.seed();
+
+const loginForm = document.getElementById("login-form");
+const feedback = document.getElementById("login-feedback");
+const popup = document.getElementById("success-popup");
+const popupConfirm = document.getElementById("popup-confirm");
+const guestLoginButton = document.getElementById("guest-login");
+const focusLoginButton = document.getElementById("focus-login");
+const userInput = document.getElementById("usuario");
+
+function showPopup() {
+  popup.classList.remove("hidden");
+}
+
+function hidePopupAndRedirect() {
+  window.location.href = "./pages/dashboard/dashboard.html";
+}
+
+TechStartApp.getCurrentUserAsync().then((user) => {
+  if (user) {
+    hidePopupAndRedirect();
+  }
 });
+
+loginForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const result = await TechStartApp.loginAsync(userInput.value, document.getElementById("senha").value);
+
+  if (!result.ok) {
+    feedback.textContent = result.message;
+    feedback.classList.remove("success");
+    return;
+  }
+
+  feedback.textContent = "Credenciais validadas com sucesso.";
+  feedback.classList.add("success");
+  showPopup();
+});
+
+guestLoginButton.addEventListener("click", async () => {
+  await TechStartApp.loginAsGuestAsync();
+  feedback.textContent = "Acesso como convidado liberado.";
+  feedback.classList.add("success");
+  showPopup();
+});
+
+focusLoginButton.addEventListener("click", () => userInput.focus());
+popupConfirm.addEventListener("click", hidePopupAndRedirect);

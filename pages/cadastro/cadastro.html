@@ -1,115 +1,97 @@
 <!DOCTYPE html>
-<html lang="pt-br">
-
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cadastro - TechStart</title>
+  <title>TechStart | Cadastro</title>
   <link rel="stylesheet" href="style.css">
   <link rel="shortcut icon" href="../../assets/piscando.png" type="image/x-icon">
 </head>
-
 <body>
-
-  <a href="../../index.html"><button id="voltar" class="botao">Voltar</button></a>
-
-  <main>
-
-    <div class="titulo">
-      <div class="div-panda">
-        <!--<img class="logo_panda" src="./assets/obrigadov2.png" alt="Logo Panda">-->
-        <h1>TechStart</h1>
+  <main class="register-layout">
+    <section class="register-card">
+      <div class="header-row">
+        <a class="back-link" href="../../index.html">Voltar</a>
+        <a class="login-link" href="../../index.html">Login</a>
       </div>
 
+      <p class="section-label">Cadastro</p>
+      <h1>Crie sua conta</h1>
+      <p class="intro">Preencha os campos obrigatorios para entrar na plataforma e ir direto para a area do usuario.</p>
 
-      <div class="imagem">
-  
-        <img src="../../assets/carregando.png" alt="Logo" class="logo">
-  
-        <h2>Cadastro</h2>
-  
-        
-        
-  
-        <form action="../../index.html">
-          
-          <div class="grupo-input">
-            
-            <label for="text">Nome Completo:</label>
-            <input type="text" id="text" name="text" placeholder="Digite seu nome" required>
-            
-          </div>
-          
-          <div class="grupo-input">
-            
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" placeholder="seu@email.com" required>
-            
-          </div>
-          
-          
-          <div class="grupo-input">
-            
-            <label for="password">Senha:</label>
-            <input type="password" id="password" name="password" placeholder="Digite sua senha" required>
-            
-          </div>
-          
-          <div class="grupo-input">
-            
-            <label for="password">Confirmar Senha:</label>
-            <input type="password" id="password" name="password" placeholder="Confirme sua senha" required>
-            
-          </div>
-          
-          <div class="grupo-input">
-            
-            <label for="tel">Telefone Para Contato:</label>
-            <input type="tel" id="tel" name="tel" placeholder="Digite seu telefone" pattern="\(\d{2}\)\s?\d{4,5}-\d{4}"
-            title="Formato esperado: (41) 99958-5864" required>
-            
-          </div>
-          
-          <input type="submit" id="submit" value="Enviar" /><br /><br />
-          
-        </form>
-      </div>
+      <form id="register-form" class="register-form">
+        <div class="grid">
+          <label>
+            Nome completo
+            <input type="text" id="name" required>
+          </label>
+          <label>
+            Nick
+            <input type="text" id="nick" required>
+          </label>
+        </div>
 
+        <div class="grid">
+          <label>
+            Email
+            <input type="email" id="email" required>
+          </label>
+          <label>
+            Linguagem preferida
+            <select id="language">
+              <option>JavaScript</option>
+              <option>Python</option>
+              <option>Java</option>
+              <option>C#</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="grid">
+          <label>
+            Senha
+            <input type="password" id="password" required>
+          </label>
+          <label>
+            Confirmar senha
+            <input type="password" id="confirm-password" required>
+          </label>
+        </div>
+
+        <label>
+          Link do GitHub
+          <input type="url" id="github" placeholder="https://github.com/seuusuario">
+        </label>
+
+        <label>
+          Bio
+          <textarea id="bio" rows="4" placeholder="Conte um pouco sobre voce."></textarea>
+        </label>
+
+        <button type="submit" class="primary-button">Cadastrar</button>
+      </form>
+
+      <p id="register-feedback" class="feedback" aria-live="polite"></p>
+      <p class="switch-auth">Ja possui conta? <a href="../../index.html">Login</a></p>
+    </section>
   </main>
 
-  <footer>
+  <div id="success-popup" class="popup hidden" role="dialog" aria-modal="true">
+    <div class="popup-card">
+      <p class="section-label">Conta criada</p>
+      <h2>Cadastro efetuado com sucesso</h2>
+      <p>Voce sera redirecionado para a tela do usuario.</p>
+      <button type="button" class="primary-button" id="popup-confirm">Ir para o dashboard</button>
+    </div>
+  </div>
 
-    <p>&copy; 2025 TechStart</p>
-
-    <p>Todos os direitos reservados.</p>
-
-</footer>
-
-    <script>
-
-      document.getElementById("tel").addEventListener("input", function (e) {
-
-        let valor = this.value.replace(/\D/g, "")
-
-        if (valor.length > 11) valor = valor.slice(0, 11);
-
-        if (valor.length > 10) {
-          this.value = `(${valor.slice(0, 2)}) ${valor.slice(2, 7)}-${valor.slice(7)}`;
-
-        } else if (valor.length > 6) {
-          this.value = `(${valor.slice(0, 2)}) ${valor.slice(2, 6)}-${valor.slice(6)}`;
-
-        } else if (valor.length > 2) {
-          this.value = `(${valor.slice(0, 2)}) ${valor.slice(2)}`;
-          
-        } else {
-          this.value = valor;
-        }
-
-        });
-
-    </script>
-
+  <script src="../../shared/firebase-config.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.7.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.7.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore-compat.js"></script>
+  <script src="../../shared/firebase.js"></script>
+  <script src="../../shared/firebase-client.js"></script>
+  <script src="../../shared/app.js"></script>
+  <script src="script.js"></script>
 </body>
-
 </html>

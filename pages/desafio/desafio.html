@@ -1,70 +1,117 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Duelo de Programação</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="shortcut icon" href="../../assets/piscando.png" type="image/x-icon">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TechStart | Duelo</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="shortcut icon" href="../../assets/piscando.png" type="image/x-icon">
 </head>
 <body>
+  <main class="duel-layout">
+    <section class="duel-main">
+      <div class="topbar">
+        <a class="back-link" href="../dashboard/dashboard.html">Voltar</a>
+        <div class="room-chip" id="room-chip"></div>
+      </div>
 
-    <a href="../dashboard/dashboard.html"><button id="voltar" class="botao">Voltar</button></a>
+      <section class="panel scoreboard">
+        <div>
+          <p class="section-label">Sala</p>
+          <h1 id="challenge-title">Aguardando duelo</h1>
+          <p id="challenge-description" class="muted"></p>
+        </div>
+        <div class="score-grid">
+          <div class="score-card">
+            <strong id="player-one-name">Jogador 1</strong>
+            <p id="player-one-status">Aguardando</p>
+            <span id="player-one-score">0 pts</span>
+          </div>
+          <div class="score-card">
+            <strong id="round-indicator">Round 1</strong>
+            <p id="timer-indicator">Tempo: aguardando inicio</p>
+            <span id="winner-indicator">Sem vencedor</span>
+          </div>
+          <div class="score-card">
+            <strong id="player-two-name">Jogador 2</strong>
+            <p id="player-two-status">Aguardando</p>
+            <span id="player-two-score">0 pts</span>
+          </div>
+        </div>
+        <div class="lobby-actions">
+          <button id="copy-link" class="secondary-button">Copiar link</button>
+          <button id="ready-button" class="primary-button">PRONTO</button>
+          <button id="give-up-button" class="danger-button">DESISTIR</button>
+        </div>
+      </section>
 
-    <div id="particulas"></div>
+      <section class="panel challenge-panel">
+        <div class="challenge-meta">
+          <div>
+            <p class="section-label">Desafio</p>
+            <h2 id="challenge-name">Preparando round</h2>
+          </div>
+          <div class="language-chip" id="language-chip"></div>
+        </div>
+        <textarea id="solution-input" placeholder="Digite sua solucao aqui."></textarea>
+        <div class="editor-actions">
+          <button id="test-button" class="secondary-button">Testar</button>
+          <button id="submit-button" class="primary-button">Enviar solucao</button>
+          <button id="help-button" class="secondary-button">Solicitar ajuda externa</button>
+        </div>
+        <div class="feedback-grid">
+          <article class="feedback-card">
+            <h3>Resultado</h3>
+            <p id="result-output" class="muted">Os testes e o feedback aparecerao aqui.</p>
+          </article>
+          <article class="feedback-card">
+            <h3>Analise da IA</h3>
+            <p id="ai-output" class="muted">A IA vai analisar sua resposta apos o inicio do exercicio.</p>
+          </article>
+        </div>
+      </section>
 
-    <!-- <main class="input-group">
+      <section class="panel finish-panel">
+        <div class="finish-actions">
+          <button id="rematch-button" class="primary-button">Pedir/Aceitar revanche</button>
+          <button id="new-opponent-button" class="secondary-button">Jogar com outro aleatorio</button>
+        </div>
+      </section>
+    </section>
 
-        <div class="titulo">
-            <div class="versus-box">
-                <span class="jogador">Gabriel</span>
-                <span class="versus">VS</span>
-                <span class="jogador">Pedrinho Bola</span>
-            </div>
-            <div class="placar">
-                <span id="placar1">0</span>
-                <span>-</span>
-                <span id="placar2">2</span>
-            </div>
-            <h2>Round 3</h2>
-            <div class="timer" id="timer">60</div> 
-        </div> -->
+    <aside class="duel-sidebar">
+      <section class="panel">
+        <p class="section-label">Chat</p>
+        <div id="chat-messages" class="chat-messages"></div>
+        <form id="chat-form" class="chat-form">
+          <input type="text" id="chat-input" placeholder="Digite uma mensagem">
+          <button type="submit" class="primary-button">Enviar</button>
+        </form>
+      </section>
 
-        <section class="duelo-box">
-            <div class="round-info">
-                <p>Desafio: Crie uma função chamada soma em javascript</p>
-                <p>A função deve receber dois elementos como parametro e retornar a soma entre elas</p>
-            </div>
+      <section class="panel">
+        <p class="section-label">Ajuda externa</p>
+        <p class="muted" id="help-summary">Nenhuma solicitacao enviada.</p>
+      </section>
+    </aside>
+  </main>
 
-            <textarea id="codigo" placeholder="Digite seu código aqui..."></textarea>
+  <div id="popup" class="popup hidden" role="dialog" aria-modal="true">
+    <div class="popup-card">
+      <p class="section-label">TechStart</p>
+      <h3 id="popup-title"></h3>
+      <p id="popup-text"></p>
+      <button type="button" class="primary-button" id="popup-button">Continuar</button>
+    </div>
+  </div>
 
-            <div class="content_botoes">
-                <!-- <button class="botoes" onclick="espiarCodigo()">Espiar</button> -->
-                <button class="botoes" onclick="testarCodigo()">Testar</button>
-                <button class="botoes" onclick="ajudaCodigo()">Ajuda</button>
-
-                <!-- <button class="botoes" onclick="enviarCodigo()">Enviar</button> -->
-            </div>
-
-            <div id="resultado"></div>
-        </section>
-
-    </main>
-
-    
-    <!-- <div class="chat-rapido">
-        <p onclick="enviarEmoji('🔥')">🔥</p>
-        <p onclick="enviarEmoji('😎')">😎</p>
-        <p onclick="enviarEmoji('💀')">💀</p>
-        <p onclick="enviarEmoji('👏')">👏</p>
-    </div> -->
-
-    <footer>
-        <p>&copy; 2025 TechStart</p>
-        <p>Todos os direitos reservados.</p>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-    <script src="script.js"></script>
+  <script src="../../shared/firebase-config.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.7.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.7.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore-compat.js"></script>
+  <script src="../../shared/firebase.js"></script>
+  <script src="../../shared/firebase-client.js"></script>
+  <script src="../../shared/app.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>

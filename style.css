@@ -244,6 +244,14 @@ input {
   line-height: 1.6;
 }
 
+.error {
+  color: #ff4d4d;
+}
+
+.success {
+  color: #2ecc71;
+}
+
 @media (max-width: 900px) {
   .auth-layout {
     grid-template-columns: 1fr;

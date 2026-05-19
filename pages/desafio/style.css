@@ -118,6 +118,10 @@ input {
   margin-bottom: 8px;
 }
 
+.feedback-card p {
+  white-space: pre-line;
+}
+
 .lobby-actions,
 .editor-actions,
 .finish-actions {
@@ -227,6 +231,7 @@ textarea {
 
 .popup-card p:last-of-type {
   margin-bottom: 16px;
+  white-space: pre-line;
 }
 
 @media (max-width: 1080px) {

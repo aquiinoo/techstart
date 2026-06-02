@@ -1,15 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --bg: #0a141d;
-  --panel: rgba(15, 27, 38, 0.84);
+  --bg: #06100f;
+  --panel: rgba(255, 255, 255, 0.06);
   --card: rgba(255, 255, 255, 0.05);
-  --border: rgba(255, 255, 255, 0.12);
-  --text: #edf4fb;
-  --muted: #aebac6;
-  --accent: #ff7a59;
-  --accent-soft: #ffb89d;
-  --success: #3ddc97;
+  --border: rgba(123, 247, 193, 0.18);
+  --text: #eef5f0;
+  --muted: #9caf9e;
+  --accent: #7bf7c1;
+  --accent-soft: #c6ffee;
+  --success: #8ef8b5;
 }
 
 * {
@@ -22,9 +22,9 @@
 body {
   min-height: 100vh;
   background:
-    radial-gradient(circle at top left, rgba(61, 220, 151, 0.16), transparent 24%),
-    radial-gradient(circle at bottom right, rgba(255, 122, 89, 0.18), transparent 28%),
-    linear-gradient(135deg, #071019, #0d1a25 45%, #122435);
+    radial-gradient(circle at top left, rgba(123, 247, 193, 0.16), transparent 24%),
+    radial-gradient(circle at bottom right, rgba(255, 255, 255, 0.08), transparent 24%),
+    linear-gradient(135deg, #06110e, #081313 45%, #0b1715);
   color: var(--text);
 }
 
@@ -38,10 +38,8 @@ textarea {
 .dashboard {
   width: min(1360px, calc(100% - 32px));
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: 280px 1fr;
-  gap: 24px;
-  padding: 24px 0;
+  display: block;
+  padding: 24px 24px 24px 328px;
 }
 
 .sidebar,
@@ -56,13 +54,15 @@ textarea {
 }
 
 .sidebar {
-  min-height: calc(100vh - 48px);
+  height: calc(100vh - 48px);
+  width: 280px;
   padding: 24px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  position: sticky;
+  position: fixed;
   top: 24px;
+  left: 24px;
 }
 
 .section-label {
@@ -124,7 +124,7 @@ textarea {
 }
 
 .menu-item.active {
-  border-color: rgba(255, 122, 89, 0.45);
+  border-color: rgba(123, 247, 193, 0.45);
   color: var(--accent-soft);
 }
 
@@ -134,8 +134,9 @@ textarea {
 }
 
 .primary-button {
-  background: linear-gradient(135deg, var(--accent), #ff9b79);
-  color: white;
+  background: linear-gradient(135deg, var(--accent), #5af4cf);
+  color: #06120f;
+  box-shadow: 0 14px 30px rgba(123, 247, 193, 0.16);
 }
 
 .content {

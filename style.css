@@ -1,18 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --bg: #101820;
-  --panel: rgba(16, 24, 32, 0.84);
-  --panel-strong: #182735;
-  --card: rgba(255, 255, 255, 0.08);
-  --border: rgba(255, 255, 255, 0.14);
-  --text: #f4f7fb;
-  --muted: #b7c3d0;
-  --accent: #ff7a59;
-  --accent-soft: #ffb088;
-  --success: #3ddc97;
-  --danger: #ff7070;
-  --shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+  --bg: #07100d;
+  --panel: rgba(255, 255, 255, 0.06);
+  --panel-strong: rgba(255, 255, 255, 0.08);
+  --card: rgba(255, 255, 255, 0.05);
+  --border: rgba(146, 255, 204, 0.18);
+  --text: #eef5f0;
+  --muted: #9fbaa7;
+  --accent: #7bf7c1;
+  --accent-soft: #c6ffee;
+  --success: #8ef8b5;
+  --danger: #ff6f74;
+  --shadow: 0 24px 60px rgba(0, 0, 0, 0.30);
 }
 
 * {
@@ -25,9 +25,9 @@
 body {
   min-height: 100vh;
   background:
-    radial-gradient(circle at top left, rgba(255, 122, 89, 0.28), transparent 30%),
-    radial-gradient(circle at bottom right, rgba(61, 220, 151, 0.18), transparent 25%),
-    linear-gradient(135deg, #08111a, #132433 55%, #0b141d);
+    radial-gradient(circle at top left, rgba(123, 247, 193, 0.18), transparent 24%),
+    radial-gradient(circle at bottom right, rgba(255, 255, 255, 0.08), transparent 20%),
+    linear-gradient(135deg, #050908, #07120f 45%, #0b1815);
   color: var(--text);
 }
 
@@ -61,8 +61,31 @@ input {
 }
 
 .brand-panel {
-  background: linear-gradient(160deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03));
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(160deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
   padding: 48px;
+}
+
+.brand-panel::before {
+  content: '';
+  position: absolute;
+  width: 128px;
+  height: 128px;
+  border-radius: 50%;
+  background: rgba(123, 247, 193, 0.12);
+  top: -36px;
+  right: -36px;
+}
+
+.brand-panel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(90deg, rgba(123,247,193,0.04) 1px, transparent 1px),
+                    linear-gradient(rgba(123,247,193,0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0.36;
 }
 
 .brand-mark {
@@ -71,7 +94,8 @@ input {
   display: grid;
   place-items: center;
   border-radius: 24px;
-  background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,122,89,0.18));
+  background: radial-gradient(circle at top left, rgba(255,255,255,0.22), rgba(0,0,0,0.15));
+  border: 1px solid rgba(123, 247, 193, 0.24);
   margin-bottom: 20px;
 }
 
@@ -157,9 +181,10 @@ input {
 }
 
 .primary-button {
-  background: linear-gradient(135deg, var(--accent), #ff936b);
-  color: #fff;
-  font-weight: 600;
+  background: linear-gradient(135deg, var(--accent), #5af4cf);
+  color: #06120f;
+  font-weight: 700;
+  box-shadow: 0 14px 30px rgba(123, 247, 193, 0.18);
 }
 
 .secondary-button {

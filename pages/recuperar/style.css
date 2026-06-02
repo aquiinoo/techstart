@@ -1,14 +1,14 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --bg: #0d1821;
-  --card: rgba(13, 24, 33, 0.88);
-  --border: rgba(255, 255, 255, 0.12);
-  --text: #eff4f9;
-  --muted: #b5c0cc;
-  --accent: #ff7a59;
-  --success: #3ddc97;
-  --danger: #ff8080;
+  --bg: #06110f;
+  --card: rgba(255, 255, 255, 0.06);
+  --border: rgba(123, 247, 193, 0.18);
+  --text: #eef5f0;
+  --muted: #9caf9e;
+  --accent: #7bf7c1;
+  --success: #8ef8b5;
+  --danger: #ff6f74;
 }
 
 * {
@@ -24,9 +24,9 @@ body {
   place-items: center;
   padding: 24px;
   background:
-    radial-gradient(circle at top left, rgba(255, 122, 89, 0.22), transparent 24%),
-    radial-gradient(circle at bottom right, rgba(61, 220, 151, 0.16), transparent 24%),
-    linear-gradient(135deg, #09131b, #10202c 55%, #132b3f);
+    radial-gradient(circle at top left, rgba(123, 247, 193, 0.18), transparent 24%),
+    radial-gradient(circle at bottom right, rgba(255, 255, 255, 0.08), transparent 24%),
+    linear-gradient(135deg, #06110e, #081313 55%, #0b1715);
   color: var(--text);
 }
 
@@ -63,7 +63,7 @@ body {
   text-transform: uppercase;
   letter-spacing: 0.18em;
   font-size: 0.72rem;
-  color: #ffb49f;
+  color: var(--accent-soft);
 }
 
 h1 {
@@ -103,10 +103,11 @@ input {
   min-height: 50px;
   border: none;
   border-radius: 16px;
-  background: linear-gradient(135deg, var(--accent), #ff9778);
-  color: #fff;
-  font-weight: 600;
+  background: linear-gradient(135deg, var(--accent), #5af4cf);
+  color: #06120f;
+  font-weight: 700;
   cursor: pointer;
+  box-shadow: 0 14px 28px rgba(123, 247, 193, 0.16);
 }
 
 .feedback {
@@ -119,12 +120,12 @@ input {
   color: var(--success);
 }
 
-.switch-auth {
+..switch-auth {
   margin-top: 8px;
 }
 
 a {
-  color: #ffb49f;
+  color: var(--accent-soft);
 }
 
 .popup {

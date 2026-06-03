@@ -1,466 +1,351 @@
 let duelUser;
-
-import { OPENROUTER_API_KEY } from "./config.js";
+let room;
+let cachedUsers = [];
+let redirected = false;
 
 const params = new URLSearchParams(window.location.search);
-
 const fallbackActiveRoom =
   window.TechStartApp &&
   typeof window.TechStartApp.getActiveRoom === "function"
     ? window.TechStartApp.getActiveRoom()
     : null;
-
-const roomCode = (
-  params.get("room") ||
-  fallbackActiveRoom?.code ||
-  ""
-).toUpperCase();
+const roomCode = (params.get("room") || fallbackActiveRoom?.code || "").toUpperCase();
+const requestedMode = params.get("mode") || "";
 
 const popup = document.getElementById("popup");
 const popupTitle = document.getElementById("popup-title");
 const popupText = document.getElementById("popup-text");
 const popupButton = document.getElementById("popup-button");
 
-
-// ==============================
-// GEMINI IA
-// ==============================
-
-async function analyzeWithAI(code, challenge) {
-
-  try {
-
-    const response = await fetch(
-      "https://openrouter.ai/api/v1/chat/completions",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${OPENROUTER_API_KEY}`
-        },
-        body: JSON.stringify({
-          model: "google/gemini-2.0-flash-001",
-          messages: [
-            {
-              role: "user",
-              content: `
-Você é um juiz de duelo de programação.
-
-Desafio:
-${challenge}
-
-Código:
-${code}
-
-Responda apenas:
-
-Acertos:
-- ...
-
-Erros:
-- ...
-
-Dica:
-- ...
-`
-            }
-          ]
-        })
-      }
-    );
-
-    const data = await response.json();
-
-    console.log(data);
-
-    if (!response.ok) {
-
-      return `
-Erro API:
-${data.error?.message || "Erro desconhecido"}
-`;
-
-    }
-
-    return data.choices[0].message.content;
-
-  } catch (error) {
-
-    console.error(error);
-
-    return "Erro ao conectar com IA.";
-
-  }
-
+function scoreboardUrl() {
+  const url = new URL("../scoreboard/scoreboard.html", window.location.href);
+  url.searchParams.set("room", roomCode);
+  return url.toString();
 }
 
-function showPopup(title, text, callback) {
+function feedbackUrl() {
+  const url = new URL("../feedback/feedback.html", window.location.href);
+  url.searchParams.set("room", roomCode);
+  return url.toString();
+}
 
-  popupTitle.textContent = title;
-  popupText.textContent = text;
+function redirectToScoreboard() {
+  if (redirected) {
+    return;
+  }
+  redirected = true;
+  window.location.assign(scoreboardUrl());
+}
 
-  popup.classList.remove("hidden");
+function redirectToFeedback() {
+  if (redirected) {
+    return;
+  }
+  redirected = true;
+  window.location.assign(feedbackUrl());
+}
 
-  popupButton.onclick = () => {
-
-    popup.classList.add("hidden");
-
-    if (callback) {
-      callback();
-    }
-
-  };
-
+function isOfflineTraining() {
+  return requestedMode === "offline" || room?.mode === "offline";
 }
 
 function redirectToDashboard(reason) {
-
-  try {
-
-    localStorage.setItem(
-      "techstart_last_duel_redirect",
-      String(reason || "sem motivo")
-    );
-
-  } catch (error) {
-
-    console.warn(
-      "Nao foi possivel registrar o motivo do redirecionamento.",
-      error
-    );
-
-  }
-
-  console.warn("Redirecionando para dashboard:", reason);
-
+  localStorage.setItem("techstart_last_duel_redirect", String(reason || "sem motivo"));
   window.location.href = "../dashboard/dashboard.html";
-
 }
 
-if (!roomCode) {
-  redirectToDashboard(
-    "roomCode ausente na URL e sem sala ativa salva"
-  );
+function showPopup(title, text, callback) {
+  popupTitle.textContent = title;
+  popupText.textContent = text;
+  popup.classList.remove("hidden");
+  popupButton.onclick = () => {
+    popup.classList.add("hidden");
+    if (callback) {
+      callback();
+    }
+  };
 }
-
-let room;
 
 function wait(ms) {
-
   return new Promise((resolve) => {
     window.setTimeout(resolve, ms);
   });
-
 }
 
-async function loadRoomWithRetry(
-  code,
-  attempts = 8,
-  delay = 250
-) {
-
+async function loadRoomWithRetry(code, attempts = 8, delay = 250) {
   for (let index = 0; index < attempts; index += 1) {
-
-    const foundRoom =
-      await TechStartApp.getRoomByCodeAsync(code);
-
+    const foundRoom = await TechStartApp.getRoomByCodeAsync(code);
     if (foundRoom) {
       return foundRoom;
     }
-
     await wait(delay);
+  }
+  return null;
+}
 
+function getUser(userId) {
+  return cachedUsers.find((user) => user.id === userId) || null;
+}
+
+function formatClock(totalSeconds) {
+  const minutes = String(Math.floor(totalSeconds / 60)).padStart(2, "0");
+  const seconds = String(totalSeconds % 60).padStart(2, "0");
+  return `${minutes}:${seconds}`;
+}
+
+function setRoundControlsDisabled(disabled) {
+  document.getElementById("test-button").disabled = disabled;
+  document.getElementById("submit-button").disabled = disabled;
+  document.getElementById("help-button").disabled = disabled;
+  document.getElementById("solution-input").disabled = disabled;
+}
+
+async function syncPresence() {
+  if (redirected || !duelUser || !roomCode || isOfflineTraining()) {
+    return;
   }
 
-  return null;
+  const touchedRoom = await TechStartApp.touchPlayerPresenceAsync(roomCode, duelUser.id);
+  if (touchedRoom) {
+    room = touchedRoom;
+  }
 
+  const checkedRoom = await TechStartApp.finishDisconnectedPlayersAsync(roomCode, duelUser.id);
+  if (checkedRoom) {
+    room = checkedRoom;
+  }
+
+  if (room?.status === "finished" && room.finishedReason === "disconnect") {
+    showPopup("Jogador desconectado", "O duelo foi encerrado automaticamente porque um jogador saiu ou fechou a aba.", redirectToScoreboard);
+  }
 }
 
-function getPlayerInfo(player) {
+function handleEditorTab(event) {
+  if (event.key !== "Tab") {
+    return;
+  }
 
-  return cachedUsers.find(
-    (user) => user.id === player.userId
-  );
+  event.preventDefault();
 
+  const textarea = event.target;
+  const indent = "  ";
+  const start = textarea.selectionStart;
+  const end = textarea.selectionEnd;
+  const value = textarea.value;
+  const selectedText = value.slice(start, end);
+
+  if (!selectedText.includes("\n")) {
+    if (event.shiftKey) {
+      const lineStart = value.lastIndexOf("\n", start - 1) + 1;
+      const removable = value.slice(lineStart, lineStart + indent.length);
+
+      if (removable === indent) {
+        textarea.value = value.slice(0, lineStart) + value.slice(lineStart + indent.length);
+        textarea.selectionStart = Math.max(lineStart, start - indent.length);
+        textarea.selectionEnd = Math.max(lineStart, end - indent.length);
+      }
+
+      return;
+    }
+
+    textarea.value = value.slice(0, start) + indent + value.slice(end);
+    textarea.selectionStart = start + indent.length;
+    textarea.selectionEnd = start + indent.length;
+    return;
+  }
+
+  const lineStart = value.lastIndexOf("\n", start - 1) + 1;
+  const blockEnd = end;
+  const block = value.slice(lineStart, blockEnd);
+  const lines = block.split("\n");
+
+  if (event.shiftKey) {
+    let removedCount = 0;
+    const outdented = lines
+      .map((line) => {
+        if (line.startsWith(indent)) {
+          removedCount += indent.length;
+          return line.slice(indent.length);
+        }
+        if (line.startsWith(" ")) {
+          removedCount += 1;
+          return line.slice(1);
+        }
+        return line;
+      })
+      .join("\n");
+
+    textarea.value = value.slice(0, lineStart) + outdented + value.slice(blockEnd);
+    textarea.selectionStart = Math.max(lineStart, start - (value.slice(lineStart, start).startsWith(indent) ? indent.length : 0));
+    textarea.selectionEnd = Math.max(textarea.selectionStart, end - removedCount);
+    return;
+  }
+
+  const indented = lines.map((line) => indent + line).join("\n");
+  textarea.value = value.slice(0, lineStart) + indented + value.slice(blockEnd);
+  textarea.selectionStart = start + indent.length;
+  textarea.selectionEnd = end + indent.length * lines.length;
 }
-
-let cachedUsers = [];
-
-
-// ==============================
-// RENDER ROOM
-// ==============================
 
 async function renderRoom() {
+  if (redirected) {
+    return;
+  }
 
   room = await loadRoomWithRetry(roomCode);
-
   if (!room) {
-
-    showPopup(
-      "Sala indisponivel",
-      "Nao foi possivel carregar a sala deste duelo.",
-      () => {
-        redirectToDashboard(
-          `sala ${roomCode} nao carregou`
-        );
-      }
-    );
-
+    showPopup("Sala indisponivel", "Nao foi possivel carregar a sala deste duelo.", () => {
+      redirectToDashboard(`sala ${roomCode} nao carregou`);
+    });
     return;
+  }
 
+  if (room.status !== "playing") {
+    if (isOfflineTraining()) {
+      redirectToDashboard("treino offline encerrado");
+      return;
+    }
+    if (room.status === "feedback") {
+      redirectToFeedback();
+      return;
+    }
+    redirectToScoreboard();
+    return;
+  }
+
+  const remaining = TechStartApp.getRoundRemainingSeconds(room);
+  if (remaining <= 0) {
+    if (isOfflineTraining()) {
+      redirected = true;
+      await TechStartApp.registerOfflineTrainingAsync(
+        duelUser.id,
+        room.language || duelUser.language || "Java",
+        "Tempo esgotado"
+      );
+      showPopup("Tempo esgotado", "Seu treino offline foi encerrado.", () => {
+        redirectToDashboard("tempo do treino offline esgotado");
+      });
+      return;
+    }
+    await TechStartApp.finishExpiredRoundAsync(room.code);
+    redirectToFeedback();
+    return;
   }
 
   cachedUsers = await TechStartApp.getUsersAsync();
 
+  const challenge = TechStartApp.getChallengeById(room.currentChallengeId);
   const playerOne = room.players[0];
   const playerTwo = room.players[1];
+  const userOne = playerOne ? getUser(playerOne.userId) : null;
+  const userTwo = playerTwo ? getUser(playerTwo.userId) : null;
+  const currentPlayer = room.players.find((player) => player.userId === duelUser.id);
 
-  const userOne = playerOne
-    ? getPlayerInfo(playerOne)
-    : null;
-
-  const userTwo = playerTwo
-    ? getPlayerInfo(playerTwo)
-    : null;
-
-  const challenge =
-    TechStartApp.getChallengeById(
-      room.currentChallengeId
-    );
-
-  const currentPlayer = room.players.find(
-    (player) => player.userId === duelUser.id
-  );
-
-  document.getElementById(
-    "room-chip"
-  ).textContent = `Sala ${room.code}`;
-
-  document.getElementById(
-    "challenge-title"
-  ).textContent =
-    room.status === "playing"
-      ? "Duelo em andamento"
-      : room.status === "finished"
-      ? "Duelo encerrado"
-      : "Lobby da sala";
-
-  document.getElementById(
-    "challenge-description"
-  ).textContent =
-    challenge.description;
-
-  document.getElementById(
-    "challenge-name"
-  ).textContent = challenge.title;
-
-  document.getElementById(
-    "language-chip"
-  ).textContent = room.language;
-
-  document.getElementById(
-    "solution-input"
-  ).placeholder = challenge.starter;
-
-  document.getElementById(
-    "player-one-name"
-  ).textContent = userOne
-    ? userOne.name
-    : "Aguardando jogador";
-
-  document.getElementById(
-    "player-one-status"
-  ).textContent = playerOne
-    ? playerOne.ready
-      ? "PRONTO"
-      : "Aguardando"
-    : "Sem jogador";
-
-  document.getElementById(
-    "player-one-score"
-  ).textContent =
-    `${playerOne ? playerOne.score : 0} pts`;
-
-  document.getElementById(
-    "player-two-name"
-  ).textContent = userTwo
+  document.getElementById("room-chip").textContent = `Sala ${room.code}`;
+  document.getElementById("round-indicator").textContent = isOfflineTraining()
+    ? "Treino offline"
+    : `Round ${room.currentRound}/${room.totalRounds}`;
+  document.getElementById("timer-indicator").textContent = formatClock(remaining);
+  document.getElementById("player-one-name").textContent = userOne ? userOne.name : "Jogador 1";
+  document.getElementById("player-one-score").textContent = `${playerOne ? playerOne.score : 0} pts`;
+  document.getElementById("player-two-name").textContent = isOfflineTraining()
+    ? "Treino solo"
+    : userTwo
     ? userTwo.name
-    : "Aguardando jogador";
+    : "Jogador 2";
+  document.getElementById("player-two-score").textContent = isOfflineTraining()
+    ? "sem adversario"
+    : `${playerTwo ? playerTwo.score : 0} pts`;
+  document.getElementById("challenge-name").textContent = challenge.title;
+  document.getElementById("challenge-description").textContent = challenge.description;
+  document.getElementById("language-chip").textContent = room.language;
+  document.getElementById("solution-input").placeholder = challenge.starter;
 
-  document.getElementById(
-    "player-two-status"
-  ).textContent = playerTwo
-    ? playerTwo.ready
-      ? "PRONTO"
-      : "Aguardando"
-    : "Sem jogador";
-
-  document.getElementById(
-    "player-two-score"
-  ).textContent =
-    `${playerTwo ? playerTwo.score : 0} pts`;
-
-  document.getElementById(
-    "round-indicator"
-  ).textContent =
-    `Round ${room.currentRound}/${room.totalRounds}`;
-
-  document.getElementById(
-    "timer-indicator"
-  ).textContent =
-    room.timerStartedAt
-      ? `Tempo iniciado em ${TechStartApp.formatDate(room.timerStartedAt)}`
-      : "Tempo: aguardando inicio";
-
-  const winner = room.winnerUserId
-    ? cachedUsers.find(
-        (user) => user.id === room.winnerUserId
-      )
-    : null;
-
-  document.getElementById(
-    "winner-indicator"
-  ).textContent = winner
-    ? `Vencedor atual: ${winner.name}`
-    : "Sem vencedor";
-
-  renderChat();
-
+  setRoundControlsDisabled(!currentPlayer || currentPlayer.solutionStatus !== "pending");
 }
 
-
-// ==============================
-// CHAT
-// ==============================
-
-function renderChat() {
-
-  const chat = room.chat || [];
-
-  const container =
-    document.getElementById("chat-messages");
-
-  if (!chat.length) {
-
-    container.innerHTML = `
-      <div class="chat-message">
-        <strong>Chat da sala</strong>
-        <p class="muted">
-          Envie a primeira mensagem.
-        </p>
-      </div>
-    `;
-
+document.getElementById("test-button").addEventListener("click", () => {
+  const code = document.getElementById("solution-input").value;
+  if (!code.trim()) {
+    showPopup("Codigo vazio", "Digite uma solucao antes de testar.");
     return;
-
   }
 
-  container.innerHTML = chat
-    .map((message) => {
+  const preview = TechStartApp.previewSolution(code, room.currentChallengeId);
+  document.getElementById("result-output").textContent = preview.evaluation.message;
+  document.getElementById("ai-output").textContent = preview.aiFeedback;
+});
 
-      const user = cachedUsers.find(
-        (item) => item.id === message.userId
-      );
+document.getElementById("solution-input").addEventListener("keydown", handleEditorTab);
 
-      return `
-        <div class="chat-message">
-          <strong>${user ? user.nick : "Jogador"}</strong>
-          <p>${message.message}</p>
-        </div>
-      `;
+document.getElementById("submit-button").addEventListener("click", async () => {
+  const code = document.getElementById("solution-input").value;
+  if (!code.trim()) {
+    showPopup("Codigo vazio", "Digite sua solucao antes de enviar.");
+    return;
+  }
 
-    })
-    .join("");
+  setRoundControlsDisabled(true);
+  if (isOfflineTraining()) {
+    redirected = true;
+    const preview = TechStartApp.previewSolution(code, room.currentChallengeId);
+    const resultLabel = preview.evaluation.correct ? "Treino concluido" : "Treino revisado";
+    document.getElementById("result-output").textContent = preview.evaluation.message;
+    document.getElementById("ai-output").textContent = preview.aiFeedback;
+    await TechStartApp.registerOfflineTrainingAsync(
+      duelUser.id,
+      room.language || duelUser.language || "Java",
+      resultLabel
+    );
+    showPopup(resultLabel, "Sua solucao foi avaliada sem esperar outro jogador.", () => {
+      redirectToDashboard("treino offline finalizado");
+    });
+    return;
+  }
 
-}
+  const result = await TechStartApp.submitSolutionAsync(room.code, duelUser.id, code);
+  if (!result.ok) {
+    setRoundControlsDisabled(false);
+    showPopup("Nao foi possivel enviar", result.message);
+    return;
+  }
 
+  document.getElementById("result-output").textContent = result.evaluation.message;
+  document.getElementById("ai-output").textContent = result.aiFeedback;
 
-// ==============================
-// BOTAO TESTAR COM IA
-// ==============================
+  if (result.room.status !== "playing") {
+    showPopup("Round finalizado", "Vamos ver o feedback antes do proximo round.", redirectToFeedback);
+    return;
+  }
 
-document
-  .getElementById("test-button")
-  .addEventListener("click", async () => {
+  showPopup("Solucao enviada", "Aguardando o outro jogador concluir o round.");
+  await renderRoom();
+});
 
-    const code =
-      document.getElementById("solution-input").value;
-
-    if (!code.trim()) {
-
-      showPopup(
-        "Codigo vazio",
-        "Digite uma solucao antes de testar."
-      );
-
-      return;
-
-    }
-
-    document.getElementById(
-      "ai-output"
-    ).textContent =
-      "Analisando codigo com Gemini...";
-
-    try {
-
-      const challenge =
-        document.getElementById(
-          "challenge-name"
-        ).textContent;
-
-      const aiResponse =
-        await analyzeWithAI(code, challenge);
-
-      document.getElementById(
-        "ai-output"
-      ).textContent = aiResponse;
-
-      document.getElementById(
-        "result-output"
-      ).textContent =
-        "Analise concluida com sucesso.";
-
-    } catch (error) {
-
-      console.error(error);
-
-      document.getElementById(
-        "ai-output"
-      ).textContent =
-        "Erro ao conectar com Gemini.";
-
-    }
-
-  });
-
-
-// ==============================
-// RESTANTE DO SISTEMA
-// ==============================
+document.getElementById("help-button").addEventListener("click", async () => {
+  const details = document.getElementById("solution-input").value
+    ? "Preciso de ajuda para revisar minha solucao deste round."
+    : "Preciso de ajuda para iniciar este round.";
+  await TechStartApp.requestExternalHelpAsync(room.code, duelUser.id, details);
+  showPopup("Ajuda solicitada", "Sua solicitacao foi enviada para a comunidade.");
+});
 
 (async () => {
+  if (!roomCode) {
+    redirectToDashboard("codigo da sala ausente");
+    return;
+  }
 
-  duelUser =
-    await TechStartApp.requireAuthAsync();
-
+  duelUser = await TechStartApp.requireAuthAsync();
   room = await loadRoomWithRetry(roomCode);
 
   if (!room) {
-
-    redirectToDashboard(
-      `sala ${roomCode} nao encontrada`
-    );
-
+    redirectToDashboard(`sala ${roomCode} nao encontrada`);
     return;
-
   }
 
   await renderRoom();
-
-  window.setInterval(() => {
-    renderRoom();
-  }, 3000);
-
+  await syncPresence();
+  window.setInterval(renderRoom, 1000);
+  window.setInterval(syncPresence, 5000);
 })();

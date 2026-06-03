@@ -1,0 +1,248 @@
+const TechStartChallenges = [
+  {
+    id: "java-soma",
+    title: "Soma de dois numeros",
+    language: "Java",
+    difficulty: "Iniciante",
+    description: "Crie um metodo chamado soma que receba dois inteiros e retorne a soma deles.",
+    starter: `public class Solution {
+  public static int soma(int a, int b) {
+    
+  }
+}`,
+    methodName: "soma",
+    requiredPatterns: ["public static int soma", "return", "+"],
+    tests: [
+      { call: "soma(2, 3)", expected: "5" },
+      { call: "soma(-1, 1)", expected: "0" },
+      { call: "soma(10, 15)", expected: "25" },
+    ],
+    hints: [
+      "O metodo precisa se chamar soma.",
+      "Use int como tipo de retorno.",
+      "Retorne a + b.",
+    ],
+  },
+
+
+  
+  {
+    id: "java-par",
+    title: "Numero par",
+    language: "Java",
+    difficulty: "Iniciante",
+    description: "Crie um metodo chamado ehPar que receba um inteiro e retorne true se ele for par.",
+    starter: `public class Solution {
+  public static boolean ehPar(int numero) {
+    
+  }
+}`,
+    methodName: "ehPar",
+    requiredPatterns: ["public static boolean ehPar", "return", "%", "=="],
+    tests: [
+      { call: "ehPar(2)", expected: "true" },
+      { call: "ehPar(7)", expected: "false" },
+      { call: "ehPar(0)", expected: "true" },
+    ],
+    hints: [
+      "Use o operador % para descobrir o resto da divisao.",
+      "Um numero par tem resto 0 quando dividido por 2.",
+      "Retorne uma expressao booleana.",
+    ],
+  },
+  {
+    id: "java-maior",
+    title: "Maior entre dois numeros",
+    language: "Java",
+    difficulty: "Iniciante",
+    description: "Crie um metodo chamado maior que receba dois inteiros e retorne o maior deles.",
+    starter: `public class Solution {
+  public static int maior(int a, int b) {
+    
+  }
+}`,
+    methodName: "maior",
+    requiredPatterns: ["public static int maior", "return"],
+    acceptedPatterns: [[">", "Math.max"]],
+    tests: [
+      { call: "maior(4, 9)", expected: "9" },
+      { call: "maior(12, 3)", expected: "12" },
+      { call: "maior(5, 5)", expected: "5" },
+    ],
+    hints: [
+      "Compare a e b com if ou use Math.max.",
+      "O retorno precisa ser um int.",
+      "Nao imprima o resultado; retorne o valor.",
+    ],
+  },
+  {
+    id: "java-media",
+    title: "Media simples",
+    language: "Java",
+    difficulty: "Iniciante",
+    description: "Crie um metodo chamado media que receba tres notas double e retorne a media aritmetica.",
+    starter: `public class Solution {
+  public static double media(double n1, double n2, double n3) {
+    
+  }
+}`,
+    methodName: "media",
+    requiredPatterns: ["public static double media", "return", "+", "/"],
+    tests: [
+      { call: "media(7.0, 8.0, 9.0)", expected: "8.0" },
+      { call: "media(5.0, 5.0, 8.0)", expected: "6.0" },
+      { call: "media(10.0, 9.0, 8.0)", expected: "9.0" },
+    ],
+    hints: [
+      "Some as tres notas.",
+      "Divida o total por 3.0 para manter double.",
+      "Retorne o resultado, nao use System.out.println.",
+    ],
+  },
+  {
+    id: "java-positivo",
+    title: "Numero positivo",
+    language: "Java",
+    difficulty: "Iniciante",
+    description: "Crie um metodo chamado ehPositivo que retorne true quando o numero for maior que zero.",
+    starter: `public class Solution {
+  public static boolean ehPositivo(int numero) {
+    
+  }
+}`,
+    methodName: "ehPositivo",
+    requiredPatterns: ["public static boolean ehPositivo", "return", ">"],
+    tests: [
+      { call: "ehPositivo(10)", expected: "true" },
+      { call: "ehPositivo(-3)", expected: "false" },
+      { call: "ehPositivo(0)", expected: "false" },
+    ],
+    hints: [
+      "Compare numero com zero.",
+      "Maior que zero significa positivo.",
+      "Retorne true ou false.",
+    ],
+  },
+  {
+    id: "java-celsius-fahrenheit",
+    title: "Celsius para Fahrenheit",
+    language: "Java",
+    difficulty: "Iniciante",
+    description: "Crie um metodo chamado converter que receba uma temperatura em Celsius e retorne Fahrenheit.",
+    starter: `public class Solution {
+  public static double converter(double celsius) {
+    
+  }
+}`,
+    methodName: "converter",
+    requiredPatterns: ["public static double converter", "return", "*", "+", "32"],
+    tests: [
+      { call: "converter(0.0)", expected: "32.0" },
+      { call: "converter(100.0)", expected: "212.0" },
+      { call: "converter(10.0)", expected: "50.0" },
+    ],
+    hints: [
+      "A formula e celsius * 9 / 5 + 32.",
+      "Use double para evitar divisao inteira.",
+      "Retorne o valor convertido.",
+    ],
+  },
+  {
+    id: "java-contar-caracteres",
+    title: "Contar caracteres",
+    language: "Java",
+    difficulty: "Iniciante",
+    description: "Crie um metodo chamado contarCaracteres que receba uma String e retorne seu tamanho.",
+    starter: `public class Solution {
+  public static int contarCaracteres(String texto) {
+    
+  }
+}`,
+    methodName: "contarCaracteres",
+    requiredPatterns: ["public static int contarCaracteres", "return", ".length()"],
+    tests: [
+      { call: "contarCaracteres(\"Java\")", expected: "4" },
+      { call: "contarCaracteres(\"TechStart\")", expected: "9" },
+      { call: "contarCaracteres(\"\")", expected: "0" },
+    ],
+    hints: [
+      "Strings em Java possuem o metodo length().",
+      "Nao use length sem parenteses.",
+      "Retorne texto.length().",
+    ],
+  },
+  {
+    id: "java-primeira-letra",
+    title: "Primeira letra",
+    language: "Java",
+    difficulty: "Iniciante",
+    description: "Crie um metodo chamado primeiraLetra que receba uma String e retorne o primeiro caractere.",
+    starter: `public class Solution {
+  public static char primeiraLetra(String texto) {
+    
+  }
+}`,
+    methodName: "primeiraLetra",
+    requiredPatterns: ["public static char primeiraLetra", "return", ".charAt(0)"],
+    tests: [
+      { call: "primeiraLetra(\"Java\")", expected: "'J'" },
+      { call: "primeiraLetra(\"TechStart\")", expected: "'T'" },
+      { call: "primeiraLetra(\"codigo\")", expected: "'c'" },
+    ],
+    hints: [
+      "Use charAt(0) para acessar o primeiro caractere.",
+      "O retorno precisa ser char.",
+      "Considere que os testes sempre enviarao texto nao vazio.",
+    ],
+  },
+  {
+    id: "java-repetir-palavra",
+    title: "Repetir palavra",
+    language: "Java",
+    difficulty: "Iniciante",
+    description: "Crie um metodo chamado repetir que receba uma palavra e retorne essa palavra repetida duas vezes.",
+    starter: `public class Solution {
+  public static String repetir(String palavra) {
+    
+  }
+}`,
+    methodName: "repetir",
+    requiredPatterns: ["public static String repetir", "return", "+"],
+    tests: [
+      { call: "repetir(\"oi\")", expected: "\"oioi\"" },
+      { call: "repetir(\"Java\")", expected: "\"JavaJava\"" },
+      { call: "repetir(\"a\")", expected: "\"aa\"" },
+    ],
+    hints: [
+      "Use concatenacao com +.",
+      "Retorne palavra + palavra.",
+      "O retorno precisa ser String.",
+    ],
+  },
+  {
+    id: "java-tabuda",
+    title: "Multiplicar por dez",
+    language: "Java",
+    difficulty: "Iniciante",
+    description: "Crie um metodo chamado vezesDez que receba um inteiro e retorne esse numero multiplicado por 10.",
+    starter: `public class Solution {
+  public static int vezesDez(int numero) {
+    
+  }
+}`,
+    methodName: "vezesDez",
+    requiredPatterns: ["public static int vezesDez", "return", "*", "10"],
+    tests: [
+      { call: "vezesDez(3)", expected: "30" },
+      { call: "vezesDez(0)", expected: "0" },
+      { call: "vezesDez(-2)", expected: "-20" },
+    ],
+    hints: [
+      "Multiplique numero por 10.",
+      "Use o operador *.",
+      "Retorne o resultado da multiplicacao.",
+    ],
+  },
+];
+
+window.TechStartChallenges = TechStartChallenges;

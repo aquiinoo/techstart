@@ -25,6 +25,17 @@ function showPopup(title, text, callback) {
 }
 
 function buildDuelUrl(roomCode, extras = {}) {
+  const url = new URL("../scoreboard/scoreboard.html", window.location.href);
+  url.searchParams.set("room", roomCode);
+  Object.entries(extras).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && value !== "") {
+      url.searchParams.set(key, value);
+    }
+  });
+  return url.toString();
+}
+
+function buildChallengeUrl(roomCode, extras = {}) {
   const url = new URL("../desafio/desafio.html", window.location.href);
   url.searchParams.set("room", roomCode);
   Object.entries(extras).forEach(([key, value]) => {
@@ -46,7 +57,7 @@ function renderProfile(user) {
   document.getElementById("profile-nick").value = user.nick || "";
   document.getElementById("profile-github").value = user.github || "";
   document.getElementById("profile-bio").value = user.bio || "";
-  document.getElementById("profile-language").value = user.language || "JavaScript";
+  document.getElementById("profile-language").value = user.language || "Java";
 }
 
 function renderHistory(user) {
@@ -217,15 +228,9 @@ document.getElementById("support-form").addEventListener("submit", async (event)
 });
 
 document.getElementById("offline-training").addEventListener("click", async () => {
-  const room = await TechStartApp.createRoomAsync(currentUser.id, currentUser.language || "JavaScript");
-  const guest = await TechStartApp.ensureOfflineOpponentAsync();
-  if (guest) {
-    await TechStartApp.joinRoomByCodeAsync(room.code, guest.id);
-    await TechStartApp.setPlayerReadyAsync(room.code, guest.id, true);
-  }
-  await TechStartApp.setPlayerReadyAsync(room.code, currentUser.id, true);
-  await TechStartApp.registerOfflineTrainingAsync(currentUser.id, currentUser.language || "JavaScript", "Treino iniciado");
-  window.location.assign(buildDuelUrl(room.code, { mode: "offline" }));
+  const room = await TechStartApp.createRoomAsync(currentUser.id, currentUser.language || "Java");
+  await TechStartApp.startOfflineTrainingAsync(room.code, currentUser.id);
+  window.location.assign(buildChallengeUrl(room.code, { mode: "offline" }));
 });
 
 document.getElementById("create-room").addEventListener("click", async () => {
@@ -248,7 +253,7 @@ document.getElementById("join-room").addEventListener("click", async () => {
 });
 
 document.getElementById("random-match").addEventListener("click", async () => {
-  const result = await TechStartApp.requestRandomMatchAsync(currentUser.id, currentUser.language || "JavaScript");
+  const result = await TechStartApp.requestRandomMatchAsync(currentUser.id, currentUser.language || "Java");
   if (!result.ok) {
     showPopup("Fila indisponivel", result.message);
     return;

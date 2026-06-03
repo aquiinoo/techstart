@@ -3,97 +3,62 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TechStart | Duelo</title>
+  <title>TechStart | Desafio</title>
   <link rel="stylesheet" href="style.css">
   <link rel="icon" href="../../assets/piscando.png" type="image/png">
 </head>
 <body>
-  <main class="duel-layout">
-    <section class="duel-main">
-      <div class="topbar">
-        <a class="back-link" href="../dashboard/dashboard.html">Voltar</a>
-        <div class="room-chip" id="room-chip"></div>
+  <main class="challenge-layout">
+    <header class="match-topbar">
+      <div>
+        <p class="section-label" id="room-chip">Sala</p>
+        <h1 id="round-indicator">Round</h1>
       </div>
 
-      <section class="panel scoreboard">
+      <div class="score-strip">
         <div>
-          <p class="section-label">Sala</p>
-          <h1 id="challenge-title">Aguardando duelo</h1>
+          <strong id="player-one-name">Jogador 1</strong>
+          <span id="player-one-score">0 pts</span>
+        </div>
+        <div class="timer-box">
+          <span id="timer-indicator">05:00</span>
+        </div>
+        <div>
+          <strong id="player-two-name">Jogador 2</strong>
+          <span id="player-two-score">0 pts</span>
+        </div>
+      </div>
+    </header>
+
+    <section class="panel challenge-panel">
+      <div class="challenge-meta">
+        <div>
+          <p class="section-label">Desafio</p>
+          <h2 id="challenge-name">Preparando round</h2>
           <p id="challenge-description" class="muted"></p>
         </div>
-        <div class="score-grid">
-          <div class="score-card">
-            <strong id="player-one-name">Jogador 1</strong>
-            <p id="player-one-status">Aguardando</p>
-            <span id="player-one-score">0 pts</span>
-          </div>
-          <div class="score-card">
-            <strong id="round-indicator">Round 1</strong>
-            <p id="timer-indicator">Tempo: aguardando início</p>
-            <span id="winner-indicator">Sem vencedor</span>
-          </div>
-          <div class="score-card">
-            <strong id="player-two-name">Jogador 2</strong>
-            <p id="player-two-status">Aguardando</p>
-            <span id="player-two-score">0 pts</span>
-          </div>
-        </div>
-        <div class="lobby-actions">
-          <button id="copy-link" class="secondary-button">Copiar link</button>
-          <button id="ready-button" class="primary-button">PRONTO</button>
-          <button id="give-up-button" class="danger-button">DESISTIR</button>
-        </div>
-      </section>
+        <div class="language-chip" id="language-chip"></div>
+      </div>
 
-      <section class="panel challenge-panel">
-        <div class="challenge-meta">
-          <div>
-            <p class="section-label">Desafio</p>
-            <h2 id="challenge-name">Preparando round</h2>
-          </div>
-          <div class="language-chip" id="language-chip"></div>
-        </div>
-        <textarea id="solution-input" placeholder="Digite sua solução aqui."></textarea>
-        <div class="editor-actions">
-          <button id="test-button" class="secondary-button">Testar</button>
-          <button id="submit-button" class="primary-button">Enviar solução</button>
-          <button id="help-button" class="secondary-button">Solicitar ajuda externa</button>
-        </div>
-        <div class="feedback-grid">
-          <article class="feedback-card">
-            <h3>Resultado</h3>
-            <p id="result-output" class="muted">Os testes e o feedback aparecerão aqui.</p>
-          </article>
-          <article class="feedback-card">
-            <h3>Análise da IA</h3>
-            <p id="ai-output" class="muted">A IA vai analisar sua resposta após o início do exercício.</p>
-          </article>
-        </div>
-      </section>
+      <textarea id="solution-input" placeholder="Digite sua solucao aqui."></textarea>
 
-      <section class="panel finish-panel">
-        <div class="finish-actions">
-          <button id="rematch-button" class="primary-button">Pedir/Aceitar revanche</button>
-          <button id="new-opponent-button" class="secondary-button">Jogar com outro aleatório</button>
-        </div>
-      </section>
+      <div class="editor-actions">
+        <button id="test-button" class="secondary-button">Testar</button>
+        <button id="submit-button" class="primary-button">Enviar solucao</button>
+        <button id="help-button" class="secondary-button">Solicitar ajuda externa</button>
+      </div>
+
+      <div class="feedback-grid">
+        <article class="feedback-card">
+          <h3>Resultado</h3>
+          <p id="result-output" class="muted">Os testes e o feedback aparecerao aqui.</p>
+        </article>
+        <article class="feedback-card">
+          <h3>Analise da IA</h3>
+          <p id="ai-output" class="muted">A IA vai analisar sua resposta apos o inicio do exercicio.</p>
+        </article>
+      </div>
     </section>
-
-    <aside class="duel-sidebar">
-      <section class="panel">
-        <p class="section-label">Chat</p>
-        <div id="chat-messages" class="chat-messages"></div>
-        <form id="chat-form" class="chat-form">
-          <input type="text" id="chat-input" placeholder="Digite uma mensagem">
-          <button type="submit" class="primary-button">Enviar</button>
-        </form>
-      </section>
-
-      <section class="panel">
-        <p class="section-label">Ajuda externa</p>
-        <p class="muted" id="help-summary">Nenhuma solicitação enviada.</p>
-      </section>
-    </aside>
   </main>
 
   <div id="popup" class="popup hidden" role="dialog" aria-modal="true">
@@ -111,6 +76,7 @@
   <script src="https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore-compat.js"></script>
   <script src="../../shared/firebase.js"></script>
   <script src="../../shared/firebase-client.js"></script>
+  <script src="../../shared/challenges.js"></script>
   <script src="../../shared/app.js"></script>
   <script src="script.js"></script>
 </body>

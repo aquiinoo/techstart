@@ -8,80 +8,11 @@ const TechStartApp = (() => {
     activeRoom: "techstart_active_room",
   };
 
-  const DEFAULT_CHALLENGES = [
-    {
-      id: "sum-js",
-      title: "Funcao soma",
-      language: "JavaScript",
-      description: "Crie uma funcao chamada soma que receba dois parametros e retorne a soma entre eles.",
-      starter: "function soma(a, b) {\n  \n}",
-      evaluator(source) {
-        const fn = new Function(`${source}; return typeof soma === "function" ? soma : null;`)();
-        if (!fn) {
-          return { correct: false, message: "Voce precisa criar uma funcao chamada soma." };
-        }
+  const READY_COUNTDOWN_SECONDS = 5;
+  const ROUND_DURATION_SECONDS = 300;
+  const PLAYER_HEARTBEAT_STALE_SECONDS = 20;
 
-        const tests = [
-          { input: [2, 3], expected: 5 },
-          { input: [-1, 1], expected: 0 },
-          { input: [10, 15], expected: 25 },
-        ];
-
-        for (const test of tests) {
-          const result = fn(...test.input);
-          if (result !== test.expected) {
-            return {
-              correct: false,
-              message: `Teste falhou para soma(${test.input.join(", ")}). Resultado esperado: ${test.expected}.`,
-            };
-          }
-        }
-
-        return { correct: true, message: "Todos os testes passaram." };
-      },
-      hints: [
-        "Declare a funcao com o nome exato soma.",
-        "Use dois parametros, por exemplo: a e b.",
-        "Retorne o valor com return a + b.",
-      ],
-    },
-    {
-      id: "even-js",
-      title: "Numero par",
-      language: "JavaScript",
-      description: "Crie uma funcao chamada ehPar que receba um numero e retorne true quando ele for par.",
-      starter: "function ehPar(numero) {\n  \n}",
-      evaluator(source) {
-        const fn = new Function(`${source}; return typeof ehPar === "function" ? ehPar : null;`)();
-        if (!fn) {
-          return { correct: false, message: "Voce precisa criar uma funcao chamada ehPar." };
-        }
-
-        const tests = [
-          { input: [2], expected: true },
-          { input: [7], expected: false },
-          { input: [0], expected: true },
-        ];
-
-        for (const test of tests) {
-          const result = fn(...test.input);
-          if (result !== test.expected) {
-            return {
-              correct: false,
-              message: `Teste falhou para ehPar(${test.input.join(", ")}).`,
-            };
-          }
-        }
-
-        return { correct: true, message: "Todos os testes passaram." };
-      },
-      hints: [
-        "Use o operador % para descobrir o resto da divisao.",
-        "Numeros pares possuem resto 0 quando divididos por 2.",
-        "Retorne true ou false.",
-      ],
-    },
-  ];
+  const DEFAULT_CHALLENGES = window.TechStartChallenges || [];
 
   function read(key, fallback) {
     try {
@@ -117,6 +48,65 @@ const TechStartApp = (() => {
     return new Date().toISOString();
   }
 
+  function secondsSince(date) {
+    if (!date) {
+      return 0;
+    }
+    return Math.max(0, Math.floor((Date.now() - new Date(date).getTime()) / 1000));
+  }
+
+  function ensureRoomDefaults(room) {
+    if (!room) {
+      return room;
+    }
+    room.status = room.status || "waiting";
+    room.currentRound = room.currentRound || 1;
+    room.totalRounds = room.totalRounds || DEFAULT_CHALLENGES.length;
+    room.currentChallengeId = room.currentChallengeId || DEFAULT_CHALLENGES[0].id;
+    room.timerStartedAt = room.timerStartedAt || null;
+    room.countdownStartedAt = room.countdownStartedAt || null;
+    room.roundDurationSeconds =
+      !room.roundDurationSeconds || room.roundDurationSeconds === 120
+        ? ROUND_DURATION_SECONDS
+        : room.roundDurationSeconds;
+    room.readyCountdownSeconds = room.readyCountdownSeconds || READY_COUNTDOWN_SECONDS;
+    room.lastRoundWinnerUserId = room.lastRoundWinnerUserId || null;
+    room.lastRoundNumber = room.lastRoundNumber || null;
+    room.lastRoundChallengeId = room.lastRoundChallengeId || null;
+    room.lastRoundFeedback = room.lastRoundFeedback || [];
+    room.lastRoundFeedbackSeen = room.lastRoundFeedbackSeen || [];
+    room.matchFinishedAfterFeedback = room.matchFinishedAfterFeedback || false;
+    room.finishedReason = room.finishedReason || null;
+    room.disconnectedUserIds = room.disconnectedUserIds || [];
+    room.mode = room.mode || "online";
+    room.players = (room.players || []).map((player) => ({
+      ready: false,
+      score: 0,
+      submittedAt: null,
+      solutionStatus: "pending",
+      lastSeenAt: null,
+      presenceStatus: "offline",
+      ...player,
+    }));
+    return room;
+  }
+
+  function getCountdownRemainingSeconds(room) {
+    const safeRoom = ensureRoomDefaults(room);
+    if (!safeRoom || safeRoom.status !== "countdown" || !safeRoom.countdownStartedAt) {
+      return 0;
+    }
+    return Math.max(0, safeRoom.readyCountdownSeconds - secondsSince(safeRoom.countdownStartedAt));
+  }
+
+  function getRoundRemainingSeconds(room) {
+    const safeRoom = ensureRoomDefaults(room);
+    if (!safeRoom || safeRoom.status !== "playing" || !safeRoom.timerStartedAt) {
+      return safeRoom ? safeRoom.roundDurationSeconds : ROUND_DURATION_SECONDS;
+    }
+    return Math.max(0, safeRoom.roundDurationSeconds - secondsSince(safeRoom.timerStartedAt));
+  }
+
   function seed() {
     const users = read(STORAGE_KEYS.users, null);
     if (users && users.length) {
@@ -132,7 +122,7 @@ const TechStartApp = (() => {
         password: "123456",
         github: "https://github.com/anacode",
         bio: "Front-end e logica competitiva.",
-        language: "JavaScript",
+        language: "Java",
         connections: [],
         rankingPoints: 120,
         duelWins: 4,
@@ -173,7 +163,7 @@ const TechStartApp = (() => {
         password: "guest",
         github: "",
         bio: "Perfil temporario para exploracao do sistema.",
-        language: "JavaScript",
+        language: "Java",
         connections: [],
         rankingPoints: 10,
         duelWins: 0,
@@ -318,7 +308,7 @@ const TechStartApp = (() => {
       password,
       github: normalizeText(data.github),
       bio: normalizeText(data.bio),
-      language: normalizeText(data.language) || "JavaScript",
+      language: normalizeText(data.language) || "Java",
       connections: [],
       rankingPoints: 0,
       duelWins: 0,
@@ -414,7 +404,7 @@ const TechStartApp = (() => {
     const room = {
       id: uid("room"),
       code,
-      language: normalizeText(language) || "JavaScript",
+      language: normalizeText(language) || "Java",
       players: [
         {
           userId: ownerUserId,
@@ -422,6 +412,8 @@ const TechStartApp = (() => {
           score: 0,
           submittedAt: null,
           solutionStatus: "pending",
+          lastSeenAt: null,
+          presenceStatus: "offline",
         },
       ],
       chat: [],
@@ -434,6 +426,18 @@ const TechStartApp = (() => {
       rematchRequests: [],
       helpRequests: [],
       timerStartedAt: null,
+      countdownStartedAt: null,
+      roundDurationSeconds: ROUND_DURATION_SECONDS,
+      readyCountdownSeconds: READY_COUNTDOWN_SECONDS,
+      lastRoundWinnerUserId: null,
+      lastRoundNumber: null,
+      lastRoundChallengeId: null,
+      lastRoundFeedback: [],
+      lastRoundFeedbackSeen: [],
+      matchFinishedAfterFeedback: false,
+      finishedReason: null,
+      disconnectedUserIds: [],
+      mode: "online",
       randomQueue: false,
     };
 
@@ -451,7 +455,7 @@ const TechStartApp = (() => {
       return { ok: false, message: "Sala nao encontrada." };
     }
 
-    const room = rooms[roomIndex];
+    const room = ensureRoomDefaults(rooms[roomIndex]);
     if (room.players.some((player) => player.userId === userId)) {
       return { ok: true, room };
     }
@@ -465,6 +469,8 @@ const TechStartApp = (() => {
       score: 0,
       submittedAt: null,
       solutionStatus: "pending",
+      lastSeenAt: null,
+      presenceStatus: "offline",
     });
     room.status = "lobby";
     saveRooms(rooms);
@@ -473,7 +479,7 @@ const TechStartApp = (() => {
   }
 
   function getRoomByCode(code) {
-    return getRooms().find((room) => room.code === normalizeText(code).toUpperCase()) || null;
+    return ensureRoomDefaults(getRooms().find((room) => room.code === normalizeText(code).toUpperCase()) || null);
   }
 
   function updateRoom(room) {
@@ -487,7 +493,7 @@ const TechStartApp = (() => {
     saveActiveRoom(room);
   }
 
-  function setPlayerReady(roomCode, userId, ready) {
+  function touchPlayerPresence(roomCode, userId) {
     const room = getRoomByCode(roomCode);
     if (!room) {
       return null;
@@ -496,12 +502,124 @@ const TechStartApp = (() => {
     if (!player) {
       return null;
     }
+    player.lastSeenAt = now();
+    player.presenceStatus = "online";
+    updateRoom(room);
+    return room;
+  }
+
+  function finishDisconnectedPlayers(roomCode, activeUserId) {
+    const room = getRoomByCode(roomCode);
+    if (!room || room.mode === "offline" || room.status !== "playing") {
+      return room;
+    }
+
+    const disconnectedPlayers = room.players.filter((player) => {
+      return player.userId !== activeUserId && player.lastSeenAt && secondsSince(player.lastSeenAt) > PLAYER_HEARTBEAT_STALE_SECONDS;
+    });
+
+    if (!disconnectedPlayers.length) {
+      return room;
+    }
+
+    const winner = room.players.find((player) => player.userId === activeUserId) || room.players.find((player) => {
+      return !disconnectedPlayers.some((disconnected) => disconnected.userId === player.userId);
+    });
+
+    disconnectedPlayers.forEach((player) => {
+      player.presenceStatus = "offline";
+      player.solutionStatus = player.solutionStatus === "pending" ? "wrong" : player.solutionStatus;
+      player.evaluationMessage = "Jogador desconectado durante o round.";
+      player.aiFeedback = "O round foi encerrado automaticamente porque este jogador saiu ou fechou a aba.";
+      player.submittedAt = player.submittedAt || now();
+    });
+
+    room.status = "finished";
+    room.timerStartedAt = null;
+    room.countdownStartedAt = null;
+    room.winnerUserId = winner ? winner.userId : activeUserId;
+    room.finishedReason = "disconnect";
+    room.disconnectedUserIds = disconnectedPlayers.map((player) => player.userId);
+    finalizeRoomStats(room);
+    updateRoom(room);
+    return room;
+  }
+
+  function setPlayerReady(roomCode, userId, ready) {
+    const room = getRoomByCode(roomCode);
+    if (!room) {
+      return null;
+    }
+    ensureRoomDefaults(room);
+    const player = room.players.find((item) => item.userId === userId);
+    if (!player) {
+      return null;
+    }
     player.ready = ready;
+    if (!ready && room.status === "countdown") {
+      room.status = "lobby";
+      room.countdownStartedAt = null;
+    }
     const allReady = room.players.length === 2 && room.players.every((item) => item.ready);
     if (allReady) {
-      room.status = "playing";
-      room.timerStartedAt = now();
+      room.status = "countdown";
+      room.countdownStartedAt = room.countdownStartedAt || now();
+      room.timerStartedAt = null;
     }
+    updateRoom(room);
+    return room;
+  }
+
+  function startRound(roomCode) {
+    const room = getRoomByCode(roomCode);
+    if (!room) {
+      return null;
+    }
+    const allReady = room.players.length === 2 && room.players.every((item) => item.ready);
+    if (!allReady || room.status === "playing" || room.status === "finished") {
+      return room;
+    }
+    room.status = "playing";
+    room.countdownStartedAt = null;
+    room.timerStartedAt = now();
+    room.players.forEach((player) => {
+      player.solutionStatus = "pending";
+      player.submittedAt = null;
+      player.lastSeenAt = now();
+      player.presenceStatus = "online";
+    });
+    updateRoom(room);
+    return room;
+  }
+
+  function startOfflineTraining(roomCode, userId) {
+    const room = getRoomByCode(roomCode);
+    if (!room) {
+      return null;
+    }
+    const player = room.players.find((item) => item.userId === userId);
+    if (!player) {
+      return null;
+    }
+    room.mode = "offline";
+    room.status = "playing";
+    room.totalRounds = 1;
+    room.currentRound = 1;
+    room.currentChallengeId = room.currentChallengeId || DEFAULT_CHALLENGES[0].id;
+    room.countdownStartedAt = null;
+    room.timerStartedAt = now();
+    room.winnerUserId = null;
+    room.lastRoundWinnerUserId = null;
+    room.players = [
+      {
+        ...player,
+        ready: true,
+        submittedAt: null,
+        solutionStatus: "pending",
+        lastSeenAt: now(),
+        presenceStatus: "online",
+      },
+    ];
     updateRoom(room);
     return room;
   }
@@ -525,10 +643,49 @@ const TechStartApp = (() => {
     return DEFAULT_CHALLENGES.find((challenge) => challenge.id === challengeId) || DEFAULT_CHALLENGES[0];
   }
 
+  function includesPattern(source, pattern) {
+    const normalizedSource = source.replace(/\s+/g, " ").trim();
+    const normalizedPattern = String(pattern).replace(/\s+/g, " ").trim();
+    return normalizedSource.includes(normalizedPattern);
+  }
+
+  function evaluatePatternChallenge(source, challenge) {
+    const missingPatterns = (challenge.requiredPatterns || []).filter((pattern) => !includesPattern(source, pattern));
+    const missingAcceptedGroups = (challenge.acceptedPatterns || []).filter((group) => {
+      return !group.some((pattern) => includesPattern(source, pattern));
+    });
+
+    if (missingPatterns.length || missingAcceptedGroups.length) {
+      const missing = [
+        ...missingPatterns,
+        ...missingAcceptedGroups.map((group) => group.join(" ou ")),
+      ];
+      return {
+        correct: false,
+        message: `Ainda faltam pontos importantes na solucao: ${missing.join(", ")}.`,
+      };
+    }
+
+    const testSummary = (challenge.tests || [])
+      .map((test) => `${test.call} -> ${test.expected}`)
+      .join("\n");
+
+    return {
+      correct: true,
+      message: `Estrutura esperada encontrada. Casos previstos:\n${testSummary}`,
+    };
+  }
+
   function evaluateChallenge(source, challengeId) {
     const challenge = getChallengeById(challengeId);
     try {
-      return challenge.evaluator(source);
+      if (!challenge) {
+        return { correct: false, message: "Desafio nao encontrado." };
+      }
+      if (typeof challenge.evaluator === "function") {
+        return challenge.evaluator(source);
+      }
+      return evaluatePatternChallenge(source, challenge);
     } catch (error) {
       return {
         correct: false,
@@ -554,12 +711,39 @@ const TechStartApp = (() => {
     };
   }
 
+  function createRoundFeedback(room, player) {
+    const status = player.solutionStatus || "wrong";
+    const evaluationMessage =
+      player.evaluationMessage ||
+      (status === "correct"
+        ? "Solucao aceita neste round."
+        : "O round terminou sem uma solucao aceita.");
+    const aiFeedback =
+      player.aiFeedback ||
+      (status === "correct"
+        ? "Voce resolveu o desafio dentro dos criterios esperados."
+        : "Revise a assinatura do metodo, o retorno e os operadores esperados para este desafio.");
+
+    return {
+      userId: player.userId,
+      round: room.currentRound,
+      challengeId: room.currentChallengeId,
+      solutionStatus: status,
+      submittedAt: player.submittedAt,
+      score: player.score,
+      evaluationMessage,
+      aiFeedback,
+      createdAt: now(),
+    };
+  }
+
   function submitSolution(roomCode, userId, source) {
     const room = getRoomByCode(roomCode);
     if (!room) {
       return { ok: false, message: "Sala nao encontrada." };
     }
 
+    ensureRoomDefaults(room);
     const challenge = getChallengeById(room.currentChallengeId);
     const evaluation = evaluateChallenge(source, room.currentChallengeId);
     const aiFeedback = generateAiFeedback(source, evaluation);
@@ -570,6 +754,8 @@ const TechStartApp = (() => {
 
     player.submittedAt = now();
     player.solutionStatus = evaluation.correct ? "correct" : "wrong";
+    player.evaluationMessage = evaluation.message;
+    player.aiFeedback = aiFeedback;
     if (evaluation.correct) {
       player.score += 1;
     }
@@ -582,22 +768,7 @@ const TechStartApp = (() => {
       room.winnerUserId = room.players[0].userId;
     }
 
-    const finishedRound = room.players.every((item) => item.solutionStatus !== "pending");
-    if (finishedRound && room.currentRound < room.totalRounds) {
-      room.currentRound += 1;
-      room.currentChallengeId = DEFAULT_CHALLENGES[room.currentRound - 1].id;
-      room.timerStartedAt = now();
-      room.players.forEach((item) => {
-        item.ready = true;
-        item.solutionStatus = "pending";
-        item.submittedAt = null;
-      });
-    } else if (finishedRound) {
-      room.status = "finished";
-      const playerWinner = room.players.sort((a, b) => b.score - a.score)[0];
-      room.winnerUserId = playerWinner.userId;
-      finalizeRoomStats(room);
-    }
+    completeRoundIfNeeded(room);
 
     updateRoom(room);
     return {
@@ -607,6 +778,100 @@ const TechStartApp = (() => {
       challenge,
       room,
     };
+  }
+
+  function completeRoundIfNeeded(room, finalizeStats = true) {
+    const finishedRound = room.players.every((item) => item.solutionStatus !== "pending");
+    if (!finishedRound) {
+      return false;
+    }
+
+    const completedRound = room.currentRound;
+    const completedChallengeId = room.currentChallengeId;
+
+    const correctPlayers = room.players.filter((item) => item.solutionStatus === "correct");
+    if (correctPlayers.length) {
+      const winner = [...correctPlayers].sort((a, b) => new Date(a.submittedAt) - new Date(b.submittedAt))[0];
+      room.lastRoundWinnerUserId = winner.userId;
+      room.winnerUserId = winner.userId;
+    } else {
+      room.lastRoundWinnerUserId = null;
+    }
+
+    room.lastRoundNumber = completedRound;
+    room.lastRoundChallengeId = completedChallengeId;
+    room.lastRoundFeedback = room.players.map((player) => createRoundFeedback(room, player));
+    room.lastRoundFeedbackSeen = [];
+
+    if (room.currentRound < room.totalRounds) {
+      room.currentRound += 1;
+      room.currentChallengeId = DEFAULT_CHALLENGES[room.currentRound - 1].id;
+      room.status = "feedback";
+      room.matchFinishedAfterFeedback = false;
+      room.timerStartedAt = null;
+      room.countdownStartedAt = null;
+      room.players.forEach((item) => {
+        item.ready = false;
+        item.solutionStatus = "pending";
+        item.submittedAt = null;
+        item.evaluationMessage = null;
+        item.aiFeedback = null;
+      });
+      return true;
+    }
+
+    room.status = "feedback";
+    room.matchFinishedAfterFeedback = true;
+    room.timerStartedAt = null;
+    room.countdownStartedAt = null;
+    const playerWinner = [...room.players].sort((a, b) => b.score - a.score)[0];
+    room.winnerUserId = playerWinner ? playerWinner.userId : null;
+    if (finalizeStats) {
+      finalizeRoomStats(room);
+    }
+    return true;
+  }
+
+  function markRoundFeedbackSeen(roomCode, userId) {
+    const room = getRoomByCode(roomCode);
+    if (!room) {
+      return null;
+    }
+    ensureRoomDefaults(room);
+    if (!room.lastRoundFeedbackSeen.includes(userId)) {
+      room.lastRoundFeedbackSeen.push(userId);
+    }
+    const allPlayersSawFeedback = room.players.every((player) => room.lastRoundFeedbackSeen.includes(player.userId));
+    if (allPlayersSawFeedback) {
+      room.status = room.matchFinishedAfterFeedback ? "finished" : "lobby";
+      room.matchFinishedAfterFeedback = false;
+      room.players.forEach((player) => {
+        player.ready = false;
+      });
+    }
+    updateRoom(room);
+    return room;
+  }
+
+  function finishExpiredRound(roomCode) {
+    const room = getRoomByCode(roomCode);
+    if (!room) {
+      return null;
+    }
+    if (room.status !== "playing" || getRoundRemainingSeconds(room) > 0) {
+      return room;
+    }
+    room.players.forEach((player) => {
+      if (player.solutionStatus === "pending") {
+        player.solutionStatus = "wrong";
+        player.submittedAt = now();
+        player.evaluationMessage = "Tempo esgotado antes do envio da solucao.";
+        player.aiFeedback = "Organize a solucao pelo metodo pedido, escreva o retorno primeiro e depois ajuste os detalhes.";
+      }
+    });
+    completeRoundIfNeeded(room);
+    updateRoom(room);
+    return room;
   }
 
   function finalizeRoomStats(room) {
@@ -665,6 +930,16 @@ const TechStartApp = (() => {
       room.currentChallengeId = DEFAULT_CHALLENGES[0].id;
       room.winnerUserId = null;
       room.rematchRequests = [];
+      room.timerStartedAt = null;
+      room.countdownStartedAt = null;
+      room.lastRoundWinnerUserId = null;
+      room.lastRoundNumber = null;
+      room.lastRoundChallengeId = null;
+      room.lastRoundFeedback = [];
+      room.lastRoundFeedbackSeen = [];
+      room.matchFinishedAfterFeedback = false;
+      room.finishedReason = null;
+      room.disconnectedUserIds = [];
       room.players.forEach((player) => {
         player.ready = false;
         player.score = 0;
@@ -847,8 +1122,10 @@ const TechStartApp = (() => {
     if (firebaseEnabled()) {
       try {
         const room = await window.TechStartFirebaseClient.createRoom(ownerUserId, language);
-        cacheRoomLocally(room);
-        return room;
+        const safeRoom = ensureRoomDefaults(room);
+        await window.TechStartFirebaseClient.updateRoom(safeRoom);
+        cacheRoomLocally(safeRoom);
+        return safeRoom;
       } catch (error) {
         console.warn("Nao foi possivel criar a sala no Firebase. Usando fallback local.", error);
       }
@@ -863,6 +1140,8 @@ const TechStartApp = (() => {
       try {
         const result = await window.TechStartFirebaseClient.joinRoomByCode(code, userId);
         if (result.ok) {
+          result.room = ensureRoomDefaults(result.room);
+          await window.TechStartFirebaseClient.updateRoom(result.room);
           cacheRoomLocally(result.room);
         }
         return result;
@@ -882,8 +1161,9 @@ const TechStartApp = (() => {
       try {
         const firebaseRoom = await window.TechStartFirebaseClient.getRoomByCode(code);
         if (firebaseRoom) {
-          cacheRoomLocally(firebaseRoom);
-          return firebaseRoom;
+          const safeRoom = ensureRoomDefaults(firebaseRoom);
+          cacheRoomLocally(safeRoom);
+          return safeRoom;
         }
       } catch (error) {
         console.warn("Nao foi possivel ler a sala do Firebase.", error);
@@ -895,7 +1175,7 @@ const TechStartApp = (() => {
     }
     const activeRoom = getActiveRoom();
     if (activeRoom && activeRoom.code === normalizeText(code).toUpperCase()) {
-      return activeRoom;
+      return ensureRoomDefaults(activeRoom);
     }
     return null;
   }
@@ -903,7 +1183,26 @@ const TechStartApp = (() => {
   async function setPlayerReadyAsync(roomCode, userId, ready) {
     if (firebaseEnabled()) {
       try {
-        const room = await window.TechStartFirebaseClient.setPlayerReady(roomCode, userId, ready);
+        const room = await getRoomByCodeAsync(roomCode);
+        if (!room) {
+          return null;
+        }
+        const player = room.players.find((item) => item.userId === userId);
+        if (!player) {
+          return null;
+        }
+        player.ready = ready;
+        if (!ready && room.status === "countdown") {
+          room.status = "lobby";
+          room.countdownStartedAt = null;
+        }
+        const allReady = room.players.length === 2 && room.players.every((item) => item.ready);
+        if (allReady) {
+          room.status = "countdown";
+          room.countdownStartedAt = room.countdownStartedAt || now();
+          room.timerStartedAt = null;
+        }
+        await window.TechStartFirebaseClient.updateRoom(room);
         cacheRoomLocally(room);
         return room;
       } catch (error) {
@@ -911,6 +1210,149 @@ const TechStartApp = (() => {
       }
     }
     const localRoom = setPlayerReady(roomCode, userId, ready);
+    cacheRoomLocally(localRoom);
+    return localRoom;
+  }
+
+  async function touchPlayerPresenceAsync(roomCode, userId) {
+    if (firebaseEnabled()) {
+      try {
+        const room = await getRoomByCodeAsync(roomCode);
+        if (!room) {
+          return null;
+        }
+        const player = room.players.find((item) => item.userId === userId);
+        if (!player) {
+          return null;
+        }
+        player.lastSeenAt = now();
+        player.presenceStatus = "online";
+        await window.TechStartFirebaseClient.updateRoom(room);
+        cacheRoomLocally(room);
+        return room;
+      } catch (error) {
+        console.warn("Nao foi possivel sincronizar a presenca no Firebase. Usando fallback local.", error);
+      }
+    }
+    const localRoom = touchPlayerPresence(roomCode, userId);
+    cacheRoomLocally(localRoom);
+    return localRoom;
+  }
+
+  async function finishDisconnectedPlayersAsync(roomCode, activeUserId) {
+    if (firebaseEnabled()) {
+      try {
+        const room = await getRoomByCodeAsync(roomCode);
+        if (!room || room.mode === "offline" || room.status !== "playing") {
+          return room;
+        }
+
+        const disconnectedPlayers = room.players.filter((player) => {
+          return player.userId !== activeUserId && player.lastSeenAt && secondsSince(player.lastSeenAt) > PLAYER_HEARTBEAT_STALE_SECONDS;
+        });
+
+        if (!disconnectedPlayers.length) {
+          return room;
+        }
+
+        const winner = room.players.find((player) => player.userId === activeUserId) || room.players.find((player) => {
+          return !disconnectedPlayers.some((disconnected) => disconnected.userId === player.userId);
+        });
+
+        disconnectedPlayers.forEach((player) => {
+          player.presenceStatus = "offline";
+          player.solutionStatus = player.solutionStatus === "pending" ? "wrong" : player.solutionStatus;
+          player.evaluationMessage = "Jogador desconectado durante o round.";
+          player.aiFeedback = "O round foi encerrado automaticamente porque este jogador saiu ou fechou a aba.";
+          player.submittedAt = player.submittedAt || now();
+        });
+
+        room.status = "finished";
+        room.timerStartedAt = null;
+        room.countdownStartedAt = null;
+        room.winnerUserId = winner ? winner.userId : activeUserId;
+        room.finishedReason = "disconnect";
+        room.disconnectedUserIds = disconnectedPlayers.map((player) => player.userId);
+        await finalizeFirebaseRoomStats(room);
+        await window.TechStartFirebaseClient.updateRoom(room);
+        cacheRoomLocally(room);
+        return room;
+      } catch (error) {
+        console.warn("Nao foi possivel encerrar por desconexao no Firebase. Usando fallback local.", error);
+      }
+    }
+    const localRoom = finishDisconnectedPlayers(roomCode, activeUserId);
+    cacheRoomLocally(localRoom);
+    return localRoom;
+  }
+
+  async function startRoundAsync(roomCode) {
+    if (firebaseEnabled()) {
+      try {
+        const room = await getRoomByCodeAsync(roomCode);
+        if (!room) {
+          return null;
+        }
+        const allReady = room.players.length === 2 && room.players.every((item) => item.ready);
+        if (allReady && room.status !== "playing" && room.status !== "finished") {
+          room.status = "playing";
+          room.countdownStartedAt = null;
+          room.timerStartedAt = now();
+          room.players.forEach((player) => {
+            player.solutionStatus = "pending";
+            player.submittedAt = null;
+            player.lastSeenAt = now();
+            player.presenceStatus = "online";
+          });
+          await window.TechStartFirebaseClient.updateRoom(room);
+        }
+        cacheRoomLocally(room);
+        return room;
+      } catch (error) {
+        console.warn("Nao foi possivel iniciar o round no Firebase. Usando fallback local.", error);
+      }
+    }
+    const localRoom = startRound(roomCode);
+    cacheRoomLocally(localRoom);
+    return localRoom;
+  }
+
+  async function startOfflineTrainingAsync(roomCode, userId) {
+    if (firebaseEnabled()) {
+      try {
+        const room = await getRoomByCodeAsync(roomCode);
+        if (!room) {
+          return null;
+        }
+        const player = room.players.find((item) => item.userId === userId);
+        if (!player) {
+          return null;
+        }
+        room.mode = "offline";
+        room.status = "playing";
+        room.totalRounds = 1;
+        room.currentRound = 1;
+        room.currentChallengeId = room.currentChallengeId || DEFAULT_CHALLENGES[0].id;
+        room.countdownStartedAt = null;
+        room.timerStartedAt = now();
+        room.winnerUserId = null;
+        room.lastRoundWinnerUserId = null;
+        room.players = [
+          {
+            ...player,
+            ready: true,
+            submittedAt: null,
+            solutionStatus: "pending",
+          },
+        ];
+        await window.TechStartFirebaseClient.updateRoom(room);
+        cacheRoomLocally(room);
+        return room;
+      } catch (error) {
+        console.warn("Nao foi possivel iniciar o treino offline no Firebase. Usando fallback local.", error);
+      }
+    }
+    const localRoom = startOfflineTraining(roomCode, userId);
     cacheRoomLocally(localRoom);
     return localRoom;
   }
@@ -1035,7 +1477,7 @@ const TechStartApp = (() => {
       email: "",
       github: "",
       bio: "Perfil temporario para treino offline.",
-      language: "JavaScript",
+      language: "Java",
       guest: true,
     });
   }
@@ -1086,30 +1528,21 @@ const TechStartApp = (() => {
 
         player.submittedAt = now();
         player.solutionStatus = evaluation.correct ? "correct" : "wrong";
+        player.evaluationMessage = evaluation.message;
+        player.aiFeedback = aiFeedback;
         if (evaluation.correct) {
           player.score += 1;
         }
 
-        const finishedRound = room.players.every((item) => item.solutionStatus !== "pending");
         const correctPlayers = room.players.filter((item) => item.solutionStatus === "correct");
         if (correctPlayers.length) {
           const winner = [...correctPlayers].sort((a, b) => new Date(a.submittedAt) - new Date(b.submittedAt))[0];
           room.winnerUserId = winner.userId;
         }
 
-        if (finishedRound && room.currentRound < room.totalRounds) {
-          room.currentRound += 1;
-          room.currentChallengeId = DEFAULT_CHALLENGES[room.currentRound - 1].id;
-          room.timerStartedAt = now();
-          room.players.forEach((item) => {
-            item.ready = true;
-            item.solutionStatus = "pending";
-            item.submittedAt = null;
-          });
-        } else if (finishedRound) {
-          room.status = "finished";
-          const playerWinner = [...room.players].sort((a, b) => b.score - a.score)[0];
-          room.winnerUserId = playerWinner.userId;
+        const wasFinalRound = room.players.every((item) => item.solutionStatus !== "pending") && room.currentRound >= room.totalRounds;
+        completeRoundIfNeeded(room, false);
+        if (wasFinalRound) {
           await finalizeFirebaseRoomStats(room);
         }
 
@@ -1125,6 +1558,71 @@ const TechStartApp = (() => {
       cacheRoomLocally(localResult.room);
     }
     return localResult;
+  }
+
+  async function finishExpiredRoundAsync(roomCode) {
+    if (firebaseEnabled()) {
+      try {
+        const room = await getRoomByCodeAsync(roomCode);
+        if (!room) {
+          return null;
+        }
+        if (room.status !== "playing" || getRoundRemainingSeconds(room) > 0) {
+          return room;
+        }
+        room.players.forEach((player) => {
+          if (player.solutionStatus === "pending") {
+            player.solutionStatus = "wrong";
+            player.submittedAt = now();
+            player.evaluationMessage = "Tempo esgotado antes do envio da solucao.";
+            player.aiFeedback = "Organize a solucao pelo metodo pedido, escreva o retorno primeiro e depois ajuste os detalhes.";
+          }
+        });
+        const wasFinalRound = room.currentRound >= room.totalRounds;
+        completeRoundIfNeeded(room, false);
+        if (wasFinalRound) {
+          await finalizeFirebaseRoomStats(room);
+        }
+        await window.TechStartFirebaseClient.updateRoom(room);
+        cacheRoomLocally(room);
+        return room;
+      } catch (error) {
+        console.warn("Nao foi possivel finalizar o round expirado no Firebase. Usando fallback local.", error);
+      }
+    }
+    const localRoom = finishExpiredRound(roomCode);
+    cacheRoomLocally(localRoom);
+    return localRoom;
+  }
+
+  async function markRoundFeedbackSeenAsync(roomCode, userId) {
+    if (firebaseEnabled()) {
+      try {
+        const room = await getRoomByCodeAsync(roomCode);
+        if (!room) {
+          return null;
+        }
+        if (!room.lastRoundFeedbackSeen.includes(userId)) {
+          room.lastRoundFeedbackSeen.push(userId);
+        }
+        const allPlayersSawFeedback = room.players.every((player) => room.lastRoundFeedbackSeen.includes(player.userId));
+        if (allPlayersSawFeedback) {
+          room.status = room.matchFinishedAfterFeedback ? "finished" : "lobby";
+          room.matchFinishedAfterFeedback = false;
+          room.players.forEach((player) => {
+            player.ready = false;
+          });
+        }
+        await window.TechStartFirebaseClient.updateRoom(room);
+        cacheRoomLocally(room);
+        return room;
+      } catch (error) {
+        console.warn("Nao foi possivel marcar o feedback como visto no Firebase. Usando fallback local.", error);
+      }
+    }
+    const localRoom = markRoundFeedbackSeen(roomCode, userId);
+    cacheRoomLocally(localRoom);
+    return localRoom;
   }
 
   async function giveUpAsync(roomCode, userId) {
@@ -1166,6 +1664,16 @@ const TechStartApp = (() => {
           room.currentChallengeId = DEFAULT_CHALLENGES[0].id;
           room.winnerUserId = null;
           room.rematchRequests = [];
+          room.timerStartedAt = null;
+          room.countdownStartedAt = null;
+          room.lastRoundWinnerUserId = null;
+          room.lastRoundNumber = null;
+          room.lastRoundChallengeId = null;
+          room.lastRoundFeedback = [];
+          room.lastRoundFeedbackSeen = [];
+          room.matchFinishedAfterFeedback = false;
+          room.finishedReason = null;
+          room.disconnectedUserIds = [];
           room.players.forEach((player) => {
             player.ready = false;
             player.score = 0;
@@ -1246,12 +1754,24 @@ const TechStartApp = (() => {
     getRoomByCode,
     setPlayerReadyAsync,
     setPlayerReady,
+    touchPlayerPresenceAsync,
+    touchPlayerPresence,
+    finishDisconnectedPlayersAsync,
+    finishDisconnectedPlayers,
+    startRoundAsync,
+    startRound,
+    startOfflineTrainingAsync,
+    startOfflineTraining,
     sendChatMessageAsync,
     sendChatMessage,
     getChallengeById,
     previewSolution,
     submitSolutionAsync,
     submitSolution,
+    finishExpiredRoundAsync,
+    finishExpiredRound,
+    markRoundFeedbackSeenAsync,
+    markRoundFeedbackSeen,
     ensureOfflineOpponentAsync,
     giveUpAsync,
     giveUp,
@@ -1270,6 +1790,8 @@ const TechStartApp = (() => {
     registerOfflineTrainingAsync,
     registerOfflineTraining,
     formatDate,
+    getCountdownRemainingSeconds,
+    getRoundRemainingSeconds,
     getActiveRoom,
   };
 })();

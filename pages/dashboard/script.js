@@ -36,7 +36,7 @@ function buildDuelUrl(roomCode, extras = {}) {
 }
 
 function renderGreeting(user) {
-  document.getElementById("greeting").textContent = `Ola, ${user.name}`;
+  document.getElementById("greeting").textContent = `Olá, ${user.name}`;
   document.getElementById("preferred-language").textContent = `Linguagem favorita: ${user.language}`;
   document.getElementById("firebase-status").textContent = TechStartFirebase.status;
 }
@@ -53,7 +53,7 @@ function renderHistory(user) {
   const historyList = document.getElementById("history-list");
   const history = user.history || [];
   if (!history.length) {
-    historyList.innerHTML = `<article class="history-item"><strong>Sem partidas ainda.</strong><p>Assim que voce treinar ou disputar um duelo, o historico aparecera aqui.</p></article>`;
+    historyList.innerHTML = `<article class="history-item"><strong>Sem partidas ainda.</strong><p>Assim que você treinar ou disputar um duelo, o histórico aparecerá aqui.</p></article>`;
     return;
   }
 
@@ -125,12 +125,12 @@ async function renderProfiles(user) {
   document.querySelectorAll("[data-connect-id]").forEach((button) => {
     button.addEventListener("click", async () => {
       if (button.textContent === "Conectado") {
-        showPopup("Conexao existente", "Voce ja esta conectado com este jogador.");
+        showPopup("Conexão existente", "Você já está conectado com este jogador.");
         return;
       }
       await TechStartApp.connectUsersAsync(user.id, button.dataset.connectId);
       await refresh();
-      showPopup("Conexao criada", "Agora voces aparecem no ranking entre amigos.");
+      showPopup("Conexão criada", "Agora vocês aparecem no ranking entre amigos.");
     });
   });
 }
@@ -165,7 +165,7 @@ async function renderHelpRequests(user) {
       }
       await TechStartApp.acceptHelpRequestAsync(button.dataset.helpId, user.id);
       await refresh();
-      showPopup("Ajuda registrada", "Seu auxilio foi vinculado e voce recebeu pontos de colaboracao.");
+      showPopup("Ajuda registrada", "Seu auxílio foi vinculado e você recebeu pontos de colaboração.");
     });
   });
 }

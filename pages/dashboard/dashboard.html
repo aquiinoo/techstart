@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TechStart | Dashboard</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="shortcut icon" href="../../assets/piscando.png" type="image/x-icon">
+  <link rel="icon" href="../../assets/piscando.png" type="image/png">
 </head>
 <body>
   <main class="dashboard">
@@ -13,13 +13,13 @@
       <div>
         <p class="section-label">TechStart</p>
         <h1>Painel do jogador</h1>
-        <p class="sidebar-copy">Acesse duelistas, ranking, historico, perfil e suporte em um unico lugar.</p>
+        <p class="sidebar-copy">Acesse duelistas, ranking, histórico, perfil e suporte em um único lugar.</p>
       </div>
 
       <nav class="menu">
-        <button type="button" class="menu-item active" data-target="home">Inicio</button>
+        <button type="button" class="menu-item active" data-target="home">Início</button>
         <button type="button" class="menu-item" data-target="profile">Perfil</button>
-        <button type="button" class="menu-item" data-target="history">Historico</button>
+        <button type="button" class="menu-item" data-target="history">Histórico</button>
         <button type="button" class="menu-item" data-target="ranking">Ranking</button>
         <button type="button" class="menu-item" data-target="support">Suporte</button>
         <button type="button" class="menu-item" data-target="community">Jogadores</button>
@@ -33,7 +33,7 @@
         <div class="hero-top">
           <div>
             <p class="section-label">Bem-vindo</p>
-            <h2 id="greeting">Ola, jogador</h2>
+            <h2 id="greeting">Olá, jogador</h2>
             <p id="firebase-status" class="muted"></p>
           </div>
           <div class="hero-chip" id="preferred-language"></div>
@@ -42,13 +42,13 @@
         <div class="hero-grid">
           <article class="card action-card">
             <h3>Treinar offline</h3>
-            <p>Pratique sozinho e receba um desafio com feedback automatico.</p>
+            <p>Pratique sozinho e receba um desafio com feedback automático.</p>
             <button type="button" id="offline-training" class="primary-button">Treinar offline</button>
           </article>
 
           <article class="card action-card">
             <h3>Criar sala</h3>
-            <p>Escolha uma linguagem, gere um link copiavel e convide outro jogador.</p>
+            <p>Escolha uma linguagem, gere um link copiável e convide outro jogador.</p>
             <div class="inline-form">
               <select id="room-language">
                 <option>JavaScript</option>
@@ -63,16 +63,16 @@
 
           <article class="card action-card">
             <h3>Entrar em duelo</h3>
-            <p>Use o link ou codigo de uma sala existente.</p>
+            <p>Use o link ou código de uma sala existente.</p>
             <div class="inline-form">
-              <input type="text" id="join-room-code" placeholder="Codigo da sala">
+              <input type="text" id="join-room-code" placeholder="Código da sala">
               <button type="button" id="join-room" class="primary-button">Entrar</button>
             </div>
           </article>
 
           <article class="card action-card">
-            <h3>Jogar com aleatorio</h3>
-            <p>Entre em uma fila publica com a linguagem escolhida no seu perfil.</p>
+            <h3>Jogar com aleatório</h3>
+            <p>Entre em uma fila pública com a linguagem escolhida no seu perfil.</p>
             <button type="button" id="random-match" class="secondary-button">Buscar jogador</button>
           </article>
         </div>
@@ -119,7 +119,7 @@
       <section class="panel" id="panel-history">
         <div class="panel-header">
           <div>
-            <p class="section-label">Historico</p>
+            <p class="section-label">Histórico</p>
             <h2>Duelo e treino</h2>
           </div>
         </div>
@@ -174,7 +174,7 @@
         <div id="profiles-list" class="profile-grid"></div>
 
         <div class="card">
-          <h3>Solicitacoes de ajuda</h3>
+          <h3>Solicitações de ajuda</h3>
           <div id="help-requests" class="stack compact"></div>
         </div>
       </section>
@@ -184,7 +184,7 @@
   <div id="popup" class="popup hidden" role="dialog" aria-modal="true">
     <div class="popup-card">
       <p class="section-label">Aviso</p>
-      <h3 id="popup-title">Acao realizada</h3>
+      <h3 id="popup-title">Ação realizada</h3>
       <p id="popup-text"></p>
       <button type="button" class="primary-button" id="popup-button">Continuar</button>
     </div>

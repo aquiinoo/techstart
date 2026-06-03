@@ -1,15 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --bg: #06110f;
+  --bg: #08111c;
   --panel: rgba(255, 255, 255, 0.06);
   --card: rgba(255, 255, 255, 0.05);
-  --border: rgba(123, 247, 193, 0.18);
-  --text: #eef5f0;
-  --muted: #9caf9e;
-  --accent: #7bf7c1;
-  --success: #8ef8b5;
-  --danger: #ff6f74;
+  --border: rgba(110, 168, 255, 0.18);
+  --text: #f5fbff;
+  --muted: #aac6df;
+  --accent: #6ea8ff;
+  --success: #7bd7a0;
+  --danger: #ff9578;
 }
 
 * {
@@ -22,67 +22,48 @@
 body {
   min-height: 100vh;
   background:
-    radial-gradient(circle at top left, rgba(123, 247, 193, 0.16), transparent 24%),
-    radial-gradient(circle at bottom right, rgba(255, 255, 255, 0.08), transparent 22%),
-    linear-gradient(135deg, #06110e, #081313 50%, #0b1715);
+    radial-gradient(circle at top left, rgba(110, 168, 255, 0.16), transparent 24%),
+    radial-gradient(circle at bottom right, rgba(123, 215, 160, 0.16), transparent 22%),
+    linear-gradient(135deg, var(--bg), #0e1d2d 50%, #142942);
   color: var(--text);
 }
 
 button,
-textarea,
-input {
+textarea {
   font: inherit;
 }
 
-.duel-layout {
-  width: min(1380px, calc(100% - 32px));
+.challenge-layout {
+  width: min(1120px, calc(100% - 32px));
   margin: 0 auto;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 340px;
   gap: 20px;
   padding: 24px 0;
 }
 
-.duel-main,
-.duel-sidebar {
-  display: grid;
-  gap: 20px;
-}
-
+.match-topbar,
 .panel,
 .popup-card {
   background: var(--panel);
-  border-radius: 24px;
+  border-radius: 20px;
   border: 1px solid var(--border);
   box-shadow: 0 24px 48px rgba(0, 0, 0, 0.26);
   backdrop-filter: blur(16px);
-  padding: 24px;
+  padding: 20px;
 }
 
-.topbar {
-  display: flex;
-  justify-content: space-between;
+.match-topbar {
+  display: grid;
+  grid-template-columns: minmax(180px, 0.5fr) minmax(0, 1fr);
   align-items: center;
-}
-
-.back-link {
-  color: var(--muted);
-  text-decoration: none;
-}
-
-.room-chip,
-.language-chip {
-  padding: 10px 14px;
-  border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.05);
+  gap: 18px;
 }
 
 .section-label {
   text-transform: uppercase;
   letter-spacing: 0.18em;
   font-size: 0.72rem;
-  color: var(--accent-soft);
+  color: #9fc6ff;
 }
 
 .muted {
@@ -90,69 +71,43 @@ input {
   line-height: 1.6;
 }
 
-.score-grid,
-.feedback-grid,
-.editor-actions,
-.lobby-actions,
-.finish-actions {
+.score-strip {
   display: grid;
-  gap: 14px;
+  grid-template-columns: minmax(0, 1fr) 128px minmax(0, 1fr);
+  gap: 12px;
+  align-items: stretch;
 }
 
-.score-grid {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  margin: 22px 0 18px;
-}
-
-.score-card,
+.score-strip > div,
+.language-chip,
 .feedback-card {
-  border-radius: 18px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.03);
-  padding: 16px;
-}
-
-.score-card strong,
-.feedback-card h3 {
-  display: block;
-  margin-bottom: 8px;
-}
-
-.feedback-card p {
-  white-space: pre-line;
-}
-
-.lobby-actions,
-.editor-actions,
-.finish-actions {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-}
-
-.primary-button,
-.secondary-button,
-.danger-button {
-  min-height: 48px;
   border-radius: 16px;
-  border: 1px solid transparent;
-  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--card);
+  padding: 14px;
 }
 
-.primary-button {
-  background: linear-gradient(135deg, var(--accent), #5af4cf);
-  color: #06120f;
-  box-shadow: 0 14px 28px rgba(123, 247, 193, 0.16);
+.score-strip strong,
+.score-strip span {
+  display: block;
 }
 
-.secondary-button {
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--text);
-  border-color: rgba(255, 255, 255, 0.08);
+.score-strip span {
+  color: var(--muted);
+  margin-top: 4px;
 }
 
-.danger-button {
-  background: rgba(255, 112, 112, 0.12);
-  color: #ffd2d2;
-  border-color: rgba(255, 112, 112, 0.24);
+.timer-box {
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+
+.timer-box #timer-indicator {
+  color: #d9e8ff;
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
 }
 
 .challenge-meta {
@@ -163,50 +118,65 @@ input {
   margin-bottom: 14px;
 }
 
+.language-chip {
+  white-space: nowrap;
+}
+
 textarea {
   width: 100%;
-  min-height: 280px;
+  min-height: 340px;
   padding: 18px;
   border-radius: 18px;
   border: 1px solid var(--border);
-  background: rgba(2, 8, 14, 0.46);
+  background: rgba(3, 10, 20, 0.48);
   color: var(--text);
   resize: vertical;
 }
 
+.editor-actions,
 .feedback-grid {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  display: grid;
+  gap: 14px;
   margin-top: 18px;
 }
 
-.chat-messages {
-  min-height: 260px;
-  max-height: 360px;
-  overflow: auto;
-  display: grid;
-  gap: 10px;
-  margin: 18px 0;
+.editor-actions {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-.chat-message {
-  border-radius: 16px;
-  padding: 12px 14px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+.feedback-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-.chat-form {
-  display: grid;
-  gap: 12px;
+.feedback-card p {
+  margin-top: 8px;
+  white-space: pre-line;
 }
 
-.chat-form input {
+.primary-button,
+.secondary-button {
   min-height: 48px;
-  padding: 0 14px;
-  border-radius: 14px;
-  border: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.05);
+  padding: 0 20px;
+  border-radius: 16px;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.primary-button {
+  background: linear-gradient(135deg, var(--accent), #8dd7ff);
+  color: #06111f;
+  font-weight: 700;
+}
+
+.secondary-button {
+  background: rgba(255, 255, 255, 0.06);
   color: var(--text);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
 }
 
 .popup {
@@ -235,24 +205,24 @@ textarea {
   white-space: pre-line;
 }
 
-@media (max-width: 1080px) {
-  .duel-layout {
-    grid-template-columns: 1fr;
-  }
-}
-
 @media (max-width: 780px) {
-  .score-grid,
-  .lobby-actions,
+  .match-topbar,
+  .score-strip,
   .editor-actions,
-  .feedback-grid,
-  .finish-actions {
+  .feedback-grid {
     grid-template-columns: 1fr;
   }
 
-  .challenge-meta,
-  .topbar {
-    flex-direction: column;
-    align-items: start;
+  .challenge-meta {
+    display: grid;
+  }
+
+  .panel,
+  .popup-card {
+    padding: 20px;
+  }
+
+  textarea {
+    min-height: 220px;
   }
 }

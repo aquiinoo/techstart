@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TechStart | Scoreboard</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="shortcut icon" href="../../assets/piscando.png" type="image/x-icon">
+</head>
+<body>
+  <main class="scoreboard-layout">
+    <section class="scoreboard-main">
+      <div class="topbar">
+        <a class="back-link" href="../dashboard/dashboard.html">Voltar</a>
+        <div class="room-chip" id="room-chip">Sala</div>
+      </div>
+
+      <section class="panel ready-panel">
+        <div class="ready-header">
+          <div>
+            <p class="section-label">Painel de pronto</p>
+            <h1 id="room-title">Aguardando duelo</h1>
+            <p class="muted" id="room-description"></p>
+          </div>
+          <div class="round-pill" id="round-indicator">Round 1</div>
+        </div>
+
+        <div class="players-grid">
+          <article class="player-card">
+            <p class="section-label">Jogador 1</p>
+            <h2 id="player-one-name">Aguardando</h2>
+            <strong id="player-one-score">0 pts</strong>
+            <span id="player-one-status">Aguardando</span>
+          </article>
+
+          <article class="countdown-card">
+            <p class="section-label">Status</p>
+            <strong id="match-status">Aguardando jogadores</strong>
+            <span id="countdown-indicator">--</span>
+            <p class="muted" id="last-round-summary"></p>
+          </article>
+
+          <article class="player-card">
+            <p class="section-label">Jogador 2</p>
+            <h2 id="player-two-name">Aguardando</h2>
+            <strong id="player-two-score">0 pts</strong>
+            <span id="player-two-status">Aguardando</span>
+          </article>
+        </div>
+
+        <div class="ready-actions">
+          <button id="copy-link" class="secondary-button">Copiar link</button>
+          <button id="ready-button" class="primary-button">PRONTO</button>
+          <button id="give-up-button" class="danger-button">DESISTIR</button>
+        </div>
+      </section>
+
+      <section class="panel finish-panel hidden" id="finish-panel">
+        <div>
+          <p class="section-label">Fim do duelo</p>
+          <h2 id="winner-title">Duelo encerrado</h2>
+          <p class="muted" id="winner-summary"></p>
+        </div>
+        <div class="finish-actions">
+          <button id="rematch-button" class="primary-button">Pedir/Aceitar revanche</button>
+          <button id="new-opponent-button" class="secondary-button">Jogar com outro aleatorio</button>
+        </div>
+      </section>
+    </section>
+
+    <aside class="scoreboard-sidebar">
+      <section class="panel">
+        <p class="section-label">Chat</p>
+        <div id="chat-messages" class="chat-messages"></div>
+        <form id="chat-form" class="chat-form">
+          <input type="text" id="chat-input" placeholder="Digite uma mensagem">
+          <button type="submit" class="primary-button">Enviar</button>
+        </form>
+      </section>
+    </aside>
+  </main>
+
+  <div id="popup" class="popup hidden" role="dialog" aria-modal="true">
+    <div class="popup-card">
+      <p class="section-label">TechStart</p>
+      <h3 id="popup-title"></h3>
+      <p id="popup-text"></p>
+      <button type="button" class="primary-button" id="popup-button">Continuar</button>
+    </div>
+  </div>
+
+  <script src="../../shared/firebase-config.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.7.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.7.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore-compat.js"></script>
+  <script src="../../shared/firebase.js"></script>
+  <script src="../../shared/firebase-client.js"></script>
+  <script src="../../shared/challenges.js"></script>
+  <script src="../../shared/app.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

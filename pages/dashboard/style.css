@@ -1,15 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --bg: #06100f;
+  --bg: #08111c;
   --panel: rgba(255, 255, 255, 0.06);
   --card: rgba(255, 255, 255, 0.05);
-  --border: rgba(123, 247, 193, 0.18);
+  --border: rgba(110, 168, 255, 0.18);
   --text: #eef5f0;
-  --muted: #9caf9e;
-  --accent: #7bf7c1;
-  --accent-soft: #c6ffee;
-  --success: #8ef8b5;
+  --muted: #aac6df;
+  --accent: #6ea8ff;
+  --accent-soft: #a2cffc;
+  --success: #7bd7a0;
 }
 
 * {
@@ -22,7 +22,7 @@
 body {
   min-height: 100vh;
   background:
-    radial-gradient(circle at top left, rgba(123, 247, 193, 0.16), transparent 24%),
+    radial-gradient(circle at top left, rgba(110, 168, 255, 0.16), transparent 24%),
     radial-gradient(circle at bottom right, rgba(255, 255, 255, 0.08), transparent 24%),
     linear-gradient(135deg, #06110e, #081313 45%, #0b1715);
   color: var(--text);
@@ -97,6 +97,7 @@ textarea {
 .accept-button,
 .connect-button {
   min-height: 46px;
+  padding: 0 20px;
   border-radius: 16px;
   border: 1px solid transparent;
   cursor: pointer;
@@ -124,7 +125,7 @@ textarea {
 }
 
 .menu-item.active {
-  border-color: rgba(123, 247, 193, 0.45);
+  border-color: rgba(110, 168, 255, 0.45);
   color: var(--accent-soft);
 }
 
@@ -134,9 +135,9 @@ textarea {
 }
 
 .primary-button {
-  background: linear-gradient(135deg, var(--accent), #5af4cf);
+  background: linear-gradient(135deg, var(--accent), #8cc9ff);
   color: #06120f;
-  box-shadow: 0 14px 30px rgba(123, 247, 193, 0.16);
+  box-shadow: 0 14px 30px rgba(110, 168, 255, 0.16);
 }
 
 .content {
@@ -147,6 +148,10 @@ textarea {
 .panel {
   display: none;
   padding: 24px;
+}
+
+.panel > * + * {
+  margin-top: 24px;
 }
 
 .active-panel {
@@ -186,6 +191,10 @@ textarea {
   padding: 20px;
 }
 
+.card > * + * {
+  margin-top: 18px;
+}
+
 .action-card h3,
 .card h3 {
   margin-bottom: 10px;
@@ -214,14 +223,55 @@ label {
   color: var(--muted);
 }
 
+.form-card label {
+  margin-bottom: 16px;
+}
+
+.form-card .primary-button {
+  margin-top: 20px;
+}
+
 input,
 select,
 textarea {
   border-radius: 14px;
   border: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.08);
   color: var(--text);
   padding: 14px 16px;
+  font: inherit;
+}
+
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 42px;
+  background-image: linear-gradient(45deg, transparent 50%, var(--text) 50%),
+                    linear-gradient(135deg, var(--text) 50%, transparent 50%);
+  background-position: right 18px center;
+  background-size: 8px 8px;
+  background-repeat: no-repeat;
+}
+
+select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(110, 168, 255, 0.16);
+  background-color: rgba(255, 255, 255, 0.12);
+}
+
+input:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(110, 168, 255, 0.16);
+  background-color: rgba(255, 255, 255, 0.12);
+}
+
+select option {
+  background: #08111c;
+  color: var(--text);
 }
 
 textarea {
@@ -312,6 +362,36 @@ textarea {
   }
 }
 
+@media (max-width: 1080px) {
+  .dashboard {
+    padding: 24px 16px 16px;
+  }
+
+  .sidebar {
+    position: static;
+    width: 100%;
+    height: auto;
+    margin-bottom: 24px;
+  }
+
+  .dashboard {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .content {
+    gap: 18px;
+  }
+
+  .hero-top,
+  .hero-grid,
+  .profile-grid,
+  .double-column,
+  .inline-form {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 720px) {
   .hero-grid,
   .grid,
@@ -320,5 +400,40 @@ textarea {
   .inline-form,
   .hero-top {
     grid-template-columns: 1fr;
+  }
+
+  .dashboard {
+    padding: 16px 12px 12px;
+  }
+
+  .sidebar {
+    padding: 20px;
+  }
+
+  .panel,
+  .card {
+    padding: 18px;
+  }
+
+  .hero-chip {
+    min-width: auto;
+  }
+
+  .score-grid,
+  .lobby-actions,
+  .editor-actions,
+  .feedback-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .topbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .room-chip,
+  .language-chip {
+    width: auto;
   }
 }

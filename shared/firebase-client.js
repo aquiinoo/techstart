@@ -37,7 +37,7 @@
       email: authUser.email || existing.email || "",
       github: extra.github ?? existing.github ?? "",
       bio: extra.bio ?? existing.bio ?? "",
-      language: extra.language || existing.language || "JavaScript",
+      language: extra.language || existing.language || "Java",
       connections: existing.connections || [],
       rankingPoints: existing.rankingPoints || 0,
       duelWins: existing.duelWins || 0,
@@ -187,7 +187,7 @@
     const room = {
       id: code,
       code,
-      language: language || "JavaScript",
+      language: language || "Java",
       players: [
         {
           userId: ownerUserId,
@@ -195,18 +195,32 @@
           score: 0,
           submittedAt: null,
           solutionStatus: "pending",
+          lastSeenAt: null,
+          presenceStatus: "offline",
         },
       ],
       chat: [],
       status: "waiting",
       currentRound: 1,
-      totalRounds: 2,
-      currentChallengeId: "sum-js",
+      totalRounds: window.TechStartChallenges?.length || 10,
+      currentChallengeId: window.TechStartChallenges?.[0]?.id || "java-soma",
       createdAt: new Date().toISOString(),
       winnerUserId: null,
       rematchRequests: [],
       helpRequests: [],
       timerStartedAt: null,
+      countdownStartedAt: null,
+      roundDurationSeconds: 300,
+      readyCountdownSeconds: 5,
+      lastRoundWinnerUserId: null,
+      lastRoundNumber: null,
+      lastRoundChallengeId: null,
+      lastRoundFeedback: [],
+      lastRoundFeedbackSeen: [],
+      matchFinishedAfterFeedback: false,
+      finishedReason: null,
+      disconnectedUserIds: [],
+      mode: "online",
       randomQueue: false,
     };
     await roomsCollection.doc(code).set(room);
@@ -240,6 +254,8 @@
       score: 0,
       submittedAt: null,
       solutionStatus: "pending",
+      lastSeenAt: null,
+      presenceStatus: "offline",
     });
     room.status = "lobby";
     await updateRoom(room);
@@ -256,9 +272,14 @@
       return null;
     }
     player.ready = ready;
+    if (!ready && room.status === "countdown") {
+      room.status = "lobby";
+      room.countdownStartedAt = null;
+    }
     if (room.players.length === 2 && room.players.every((item) => item.ready)) {
-      room.status = "playing";
-      room.timerStartedAt = new Date().toISOString();
+      room.status = "countdown";
+      room.countdownStartedAt = room.countdownStartedAt || new Date().toISOString();
+      room.timerStartedAt = null;
     }
     await updateRoom(room);
     return room;

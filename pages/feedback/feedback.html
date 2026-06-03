@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TechStart | Feedback do round</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="shortcut icon" href="../../assets/piscando.png" type="image/x-icon">
+</head>
+<body>
+  <main class="feedback-layout">
+    <section class="panel feedback-hero">
+      <div>
+        <p class="section-label" id="room-chip">Sala</p>
+        <h1 id="feedback-title">Feedback do round</h1>
+        <p class="muted" id="challenge-summary"></p>
+      </div>
+      <div class="score-pill" id="score-pill">0 x 0</div>
+    </section>
+
+    <section class="feedback-grid">
+      <article class="panel result-panel">
+        <p class="section-label">Seu resultado</p>
+        <h2 id="result-title">Analisando</h2>
+        <p id="evaluation-output" class="muted"></p>
+      </article>
+
+      <article class="panel result-panel">
+        <p class="section-label">Feedback da IA</p>
+        <h2 id="feedback-subtitle">Pontos de melhoria</h2>
+        <p id="ai-output" class="muted"></p>
+      </article>
+    </section>
+
+    <section class="panel players-panel">
+      <div>
+        <p class="section-label">Resumo</p>
+        <h2 id="round-winner">Round encerrado</h2>
+        <p class="muted" id="continue-status"></p>
+      </div>
+      <div class="players-grid" id="players-summary"></div>
+      <button type="button" id="continue-button" class="primary-button">Continuar</button>
+    </section>
+  </main>
+
+  <script src="../../shared/firebase-config.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.7.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.7.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore-compat.js"></script>
+  <script src="../../shared/firebase.js"></script>
+  <script src="../../shared/firebase-client.js"></script>
+  <script src="../../shared/challenges.js"></script>
+  <script src="../../shared/app.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

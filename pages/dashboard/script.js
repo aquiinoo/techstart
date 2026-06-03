@@ -25,6 +25,17 @@ function showPopup(title, text, callback) {
 }
 
 function buildDuelUrl(roomCode, extras = {}) {
+  const url = new URL("../scoreboard/scoreboard.html", window.location.href);
+  url.searchParams.set("room", roomCode);
+  Object.entries(extras).forEach(([key, value]) => {
+    if (value !== undefined && value !== null && value !== "") {
+      url.searchParams.set(key, value);
+    }
+  });
+  return url.toString();
+}
+
+function buildChallengeUrl(roomCode, extras = {}) {
   const url = new URL("../desafio/desafio.html", window.location.href);
   url.searchParams.set("room", roomCode);
   Object.entries(extras).forEach(([key, value]) => {
@@ -36,7 +47,7 @@ function buildDuelUrl(roomCode, extras = {}) {
 }
 
 function renderGreeting(user) {
-  document.getElementById("greeting").textContent = `Ola, ${user.name}`;
+  document.getElementById("greeting").textContent = `Olá, ${user.name}`;
   document.getElementById("preferred-language").textContent = `Linguagem favorita: ${user.language}`;
   document.getElementById("firebase-status").textContent = TechStartFirebase.status;
 }
@@ -46,14 +57,14 @@ function renderProfile(user) {
   document.getElementById("profile-nick").value = user.nick || "";
   document.getElementById("profile-github").value = user.github || "";
   document.getElementById("profile-bio").value = user.bio || "";
-  document.getElementById("profile-language").value = user.language || "JavaScript";
+  document.getElementById("profile-language").value = user.language || "Java";
 }
 
 function renderHistory(user) {
   const historyList = document.getElementById("history-list");
   const history = user.history || [];
   if (!history.length) {
-    historyList.innerHTML = `<article class="history-item"><strong>Sem partidas ainda.</strong><p>Assim que voce treinar ou disputar um duelo, o historico aparecera aqui.</p></article>`;
+    historyList.innerHTML = `<article class="history-item"><strong>Sem partidas ainda.</strong><p>Assim que você treinar ou disputar um duelo, o histórico aparecerá aqui.</p></article>`;
     return;
   }
 
@@ -125,12 +136,12 @@ async function renderProfiles(user) {
   document.querySelectorAll("[data-connect-id]").forEach((button) => {
     button.addEventListener("click", async () => {
       if (button.textContent === "Conectado") {
-        showPopup("Conexao existente", "Voce ja esta conectado com este jogador.");
+        showPopup("Conexão existente", "Você já está conectado com este jogador.");
         return;
       }
       await TechStartApp.connectUsersAsync(user.id, button.dataset.connectId);
       await refresh();
-      showPopup("Conexao criada", "Agora voces aparecem no ranking entre amigos.");
+      showPopup("Conexão criada", "Agora vocês aparecem no ranking entre amigos.");
     });
   });
 }
@@ -165,7 +176,7 @@ async function renderHelpRequests(user) {
       }
       await TechStartApp.acceptHelpRequestAsync(button.dataset.helpId, user.id);
       await refresh();
-      showPopup("Ajuda registrada", "Seu auxilio foi vinculado e voce recebeu pontos de colaboracao.");
+      showPopup("Ajuda registrada", "Seu auxílio foi vinculado e você recebeu pontos de colaboração.");
     });
   });
 }
@@ -217,15 +228,9 @@ document.getElementById("support-form").addEventListener("submit", async (event)
 });
 
 document.getElementById("offline-training").addEventListener("click", async () => {
-  const room = await TechStartApp.createRoomAsync(currentUser.id, currentUser.language || "JavaScript");
-  const guest = await TechStartApp.ensureOfflineOpponentAsync();
-  if (guest) {
-    await TechStartApp.joinRoomByCodeAsync(room.code, guest.id);
-    await TechStartApp.setPlayerReadyAsync(room.code, guest.id, true);
-  }
-  await TechStartApp.setPlayerReadyAsync(room.code, currentUser.id, true);
-  await TechStartApp.registerOfflineTrainingAsync(currentUser.id, currentUser.language || "JavaScript", "Treino iniciado");
-  window.location.assign(buildDuelUrl(room.code, { mode: "offline" }));
+  const room = await TechStartApp.createRoomAsync(currentUser.id, currentUser.language || "Java");
+  await TechStartApp.startOfflineTrainingAsync(room.code, currentUser.id);
+  window.location.assign(buildChallengeUrl(room.code, { mode: "offline" }));
 });
 
 document.getElementById("create-room").addEventListener("click", async () => {
@@ -248,7 +253,7 @@ document.getElementById("join-room").addEventListener("click", async () => {
 });
 
 document.getElementById("random-match").addEventListener("click", async () => {
-  const result = await TechStartApp.requestRandomMatchAsync(currentUser.id, currentUser.language || "JavaScript");
+  const result = await TechStartApp.requestRandomMatchAsync(currentUser.id, currentUser.language || "Java");
   if (!result.ok) {
     showPopup("Fila indisponivel", result.message);
     return;

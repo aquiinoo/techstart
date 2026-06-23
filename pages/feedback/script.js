@@ -63,7 +63,11 @@ function renderPlayers() {
     .map((player) => {
       const user = getUser(player.userId);
       const feedback = feedbackByUser.get(player.userId);
-      const status = feedback?.solutionStatus === "correct" ? "Acertou" : "Nao pontuou";
+      const status = feedback?.scoredThisRound
+        ? "Pontuou primeiro"
+        : feedback?.solutionStatus === "correct"
+        ? "Acertou depois"
+        : "Nao pontuou";
       const css = feedback?.solutionStatus === "correct" ? "correct" : "wrong";
       return `
         <article class="player-summary ${css}">
@@ -101,8 +105,11 @@ async function renderRoom() {
   document.getElementById("feedback-title").textContent = `Feedback do round ${room.lastRoundNumber || room.currentRound}`;
   document.getElementById("challenge-summary").textContent = `${challenge.title} - ${challenge.description}`;
   document.getElementById("score-pill").textContent = `${playerOne?.score || 0} x ${playerTwo?.score || 0}`;
-  document.getElementById("result-title").textContent =
-    userFeedback?.solutionStatus === "correct" ? "Voce acertou" : "Ainda nao foi dessa vez";
+  document.getElementById("result-title").textContent = userFeedback?.scoredThisRound
+    ? "Voce pontuou"
+    : userFeedback?.solutionStatus === "correct"
+    ? "Voce acertou, mas chegou depois"
+    : "Ainda nao foi dessa vez";
   document.getElementById("evaluation-output").textContent =
     userFeedback?.evaluationMessage || "Nao encontramos uma submissao sua neste round.";
   document.getElementById("ai-output").textContent =
@@ -139,6 +146,7 @@ document.getElementById("continue-button").addEventListener("click", async () =>
     return;
   }
 
+  await TechStartApp.loadChallengesAsync();
   currentUser = await TechStartApp.requireAuthAsync();
   await renderRoom();
   window.setInterval(renderRoom, 1000);

@@ -263,6 +263,7 @@ document.getElementById("random-match").addEventListener("click", async () => {
 });
 
 (async () => {
+  await TechStartApp.loadChallengesAsync();
   currentUser = await TechStartApp.requireAuthAsync();
   await refresh();
   openPanel("home");

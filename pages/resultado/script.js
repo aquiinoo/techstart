@@ -126,6 +126,7 @@ document.getElementById("new-opponent-button").addEventListener("click", async (
     redirectToDashboard("codigo da sala ausente");
     return;
   }
+  await TechStartApp.loadChallengesAsync();
   currentUser = await TechStartApp.requireAuthAsync();
   await renderRoom();
   window.setInterval(renderRoom, 1500);

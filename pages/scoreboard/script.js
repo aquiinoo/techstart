@@ -198,13 +198,22 @@ document.getElementById("ready-button").addEventListener("click", async () => {
     showPopup("Jogador ausente", "Voce nao esta nesta sala.");
     return;
   }
-  await TechStartApp.setPlayerReadyAsync(room.code, currentUser.id, !currentPlayer.ready);
+  const nextReady = !currentPlayer.ready;
+  await TechStartApp.setPlayerReadyAsync(room.code, currentUser.id, nextReady);
   await renderRoom();
+  showPopup(
+    nextReady ? "Pronto confirmado" : "Pronto cancelado",
+    nextReady
+      ? "Quando o outro jogador tambem estiver pronto, a contagem vai comecar."
+      : "Voce pode apertar pronto novamente quando quiser iniciar o round."
+  );
 });
 
 document.getElementById("give-up-button").addEventListener("click", async () => {
   await TechStartApp.giveUpAsync(room.code, currentUser.id);
-  await renderRoom();
+  showPopup("Desistencia registrada", "O duelo foi encerrado e o resultado sera atualizado.", () => {
+    window.location.assign(resultUrl());
+  });
 });
 
 document.getElementById("chat-form").addEventListener("submit", async (event) => {
@@ -239,6 +248,7 @@ document.getElementById("new-opponent-button").addEventListener("click", async (
     redirectToDashboard("codigo da sala ausente");
     return;
   }
+  await TechStartApp.loadChallengesAsync();
   currentUser = await TechStartApp.requireAuthAsync();
   await renderRoom();
   window.setInterval(renderRoom, 1000);

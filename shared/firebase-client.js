@@ -187,6 +187,10 @@
 
   async function createRoom(ownerUserId, language) {
     const code = Math.random().toString(36).slice(2, 8).toUpperCase();
+    const challenges = window.TechStartChallenges || [];
+    const challengeDeck = [...challenges]
+      .sort(() => Math.random() - 0.5)
+      .map((challenge) => challenge.id);
     const room = {
       id: code,
       code,
@@ -198,6 +202,7 @@
           score: 0,
           submittedAt: null,
           solutionStatus: "pending",
+          scoredThisRound: false,
           lastSeenAt: null,
           presenceStatus: "offline",
         },
@@ -206,7 +211,8 @@
       status: "waiting",
       currentRound: 1,
       totalRounds: 3,
-      currentChallengeId: window.TechStartChallenges?.[0]?.id || "java-soma",
+      challengeDeck,
+      currentChallengeId: challengeDeck[0] || "java-soma",
       createdAt: new Date().toISOString(),
       winnerUserId: null,
       rematchRequests: [],
@@ -257,6 +263,7 @@
       score: 0,
       submittedAt: null,
       solutionStatus: "pending",
+      scoredThisRound: false,
       lastSeenAt: null,
       presenceStatus: "offline",
     });

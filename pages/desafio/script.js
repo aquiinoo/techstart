@@ -332,16 +332,23 @@ async function renderRoom() {
   setRoundControlsDisabled(!currentPlayer || currentPlayer.solutionStatus !== "pending");
 }
 
-document.getElementById("test-button").addEventListener("click", () => {
+document.getElementById("test-button").addEventListener("click", async () => {
   const code = document.getElementById("solution-input").value;
   if (!code.trim()) {
     showPopup("Codigo vazio", "Digite uma solucao antes de testar.");
     return;
   }
 
-  const preview = TechStartApp.previewSolution(code, room.currentChallengeId);
+  document.getElementById("ai-output").textContent = "Analisando sua solucao...";
+  const preview = await TechStartApp.previewSolutionAsync(code, room.currentChallengeId);
   document.getElementById("result-output").textContent = preview.evaluation.message;
   document.getElementById("ai-output").textContent = preview.aiFeedback;
+  showPopup(
+    preview.evaluation.correct ? "Boa, estrutura aceita" : "Ainda precisa ajustar",
+    preview.evaluation.correct
+      ? "A analise encontrou os pontos principais esperados para este desafio."
+      : "Confira o feedback antes de enviar a solucao final."
+  );
 });
 
 document.getElementById("solution-input").addEventListener("keydown", handleEditorKeydown);
@@ -356,7 +363,7 @@ document.getElementById("submit-button").addEventListener("click", async () => {
   setRoundControlsDisabled(true);
   if (isOfflineTraining()) {
     redirected = true;
-    const preview = TechStartApp.previewSolution(code, room.currentChallengeId);
+    const preview = await TechStartApp.previewSolutionAsync(code, room.currentChallengeId);
     const resultLabel = preview.evaluation.correct ? "Treino concluido" : "Treino revisado";
     document.getElementById("result-output").textContent = preview.evaluation.message;
     document.getElementById("ai-output").textContent = preview.aiFeedback;
@@ -404,6 +411,7 @@ document.getElementById("help-button").addEventListener("click", async () => {
     return;
   }
 
+  await TechStartApp.loadChallengesAsync();
   duelUser = await TechStartApp.requireAuthAsync();
   room = await loadRoomWithRetry(roomCode);
 

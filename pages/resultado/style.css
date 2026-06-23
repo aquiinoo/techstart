@@ -57,8 +57,17 @@ button {
 
 .back-link {
   width: fit-content;
+  min-height: 52px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 22px;
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.08);
   color: var(--muted);
   text-decoration: none;
+  font-weight: 700;
 }
 
 .section-label {

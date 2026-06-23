@@ -14,7 +14,34 @@ const TechStartApp = (() => {
   const MATCH_TOTAL_ROUNDS = 3;
   const PLAYER_HEARTBEAT_STALE_SECONDS = 20;
 
-  const DEFAULT_CHALLENGES = window.TechStartChallenges || [];
+  let challengeCatalog = window.TechStartChallenges || [];
+
+  function getChallenges() {
+    return challengeCatalog.length ? challengeCatalog : window.TechStartChallenges || [];
+  }
+
+  async function loadChallengesAsync() {
+    if (window.TechStartChallengesLoader) {
+      challengeCatalog = await window.TechStartChallengesLoader;
+    } else {
+      challengeCatalog = window.TechStartChallenges || challengeCatalog;
+    }
+    return challengeCatalog;
+  }
+
+  function shuffleList(items) {
+    const shuffled = [...items];
+    for (let index = shuffled.length - 1; index > 0; index -= 1) {
+      const randomIndex = Math.floor(Math.random() * (index + 1));
+      [shuffled[index], shuffled[randomIndex]] = [shuffled[randomIndex], shuffled[index]];
+    }
+    return shuffled;
+  }
+
+  function buildChallengeDeck() {
+    const challenges = getChallenges();
+    return shuffleList(challenges).map((challenge) => challenge.id);
+  }
 
   function read(key, fallback) {
     try {
@@ -61,10 +88,12 @@ const TechStartApp = (() => {
     if (!room) {
       return room;
     }
+    const challenges = getChallenges();
     room.status = room.status || "waiting";
     room.currentRound = room.currentRound || 1;
     room.totalRounds = MATCH_TOTAL_ROUNDS;
-    room.currentChallengeId = room.currentChallengeId || DEFAULT_CHALLENGES[0].id;
+    room.challengeDeck = room.challengeDeck?.length ? room.challengeDeck : buildChallengeDeck();
+    room.currentChallengeId = room.currentChallengeId || room.challengeDeck[0] || challenges[0]?.id;
     room.timerStartedAt = room.timerStartedAt || null;
     room.countdownStartedAt = room.countdownStartedAt || null;
     room.roundDurationSeconds =
@@ -86,6 +115,7 @@ const TechStartApp = (() => {
       score: 0,
       submittedAt: null,
       solutionStatus: "pending",
+      scoredThisRound: false,
       lastSeenAt: null,
       presenceStatus: "offline",
       ...player,
@@ -403,6 +433,7 @@ const TechStartApp = (() => {
 
   function createRoom(ownerUserId, language) {
     const code = Math.random().toString(36).slice(2, 8).toUpperCase();
+    const challengeDeck = buildChallengeDeck();
     const room = {
       id: uid("room"),
       code,
@@ -414,6 +445,7 @@ const TechStartApp = (() => {
           score: 0,
           submittedAt: null,
           solutionStatus: "pending",
+          scoredThisRound: false,
           lastSeenAt: null,
           presenceStatus: "offline",
         },
@@ -422,7 +454,8 @@ const TechStartApp = (() => {
       status: "waiting",
       currentRound: 1,
       totalRounds: MATCH_TOTAL_ROUNDS,
-      currentChallengeId: DEFAULT_CHALLENGES[0].id,
+      challengeDeck,
+      currentChallengeId: challengeDeck[0] || getChallenges()[0]?.id,
       createdAt: now(),
       winnerUserId: null,
       rematchRequests: [],
@@ -471,6 +504,7 @@ const TechStartApp = (() => {
       score: 0,
       submittedAt: null,
       solutionStatus: "pending",
+      scoredThisRound: false,
       lastSeenAt: null,
       presenceStatus: "offline",
     });
@@ -587,6 +621,7 @@ const TechStartApp = (() => {
     room.players.forEach((player) => {
       player.solutionStatus = "pending";
       player.submittedAt = null;
+      player.scoredThisRound = false;
       player.lastSeenAt = now();
       player.presenceStatus = "online";
     });
@@ -607,7 +642,7 @@ const TechStartApp = (() => {
     room.status = "playing";
     room.totalRounds = 1;
     room.currentRound = 1;
-    room.currentChallengeId = room.currentChallengeId || DEFAULT_CHALLENGES[0].id;
+    room.currentChallengeId = room.currentChallengeId || room.challengeDeck?.[0] || getChallenges()[0]?.id;
     room.countdownStartedAt = null;
     room.timerStartedAt = now();
     room.winnerUserId = null;
@@ -618,6 +653,7 @@ const TechStartApp = (() => {
         ready: true,
         submittedAt: null,
         solutionStatus: "pending",
+        scoredThisRound: false,
         lastSeenAt: now(),
         presenceStatus: "online",
       },
@@ -642,7 +678,8 @@ const TechStartApp = (() => {
   }
 
   function getChallengeById(challengeId) {
-    return DEFAULT_CHALLENGES.find((challenge) => challenge.id === challengeId) || DEFAULT_CHALLENGES[0];
+    const challenges = getChallenges();
+    return challenges.find((challenge) => challenge.id === challengeId) || challenges[0];
   }
 
   function includesPattern(source, pattern) {
@@ -705,6 +742,45 @@ const TechStartApp = (() => {
     return feedback.join(" ");
   }
 
+  async function generateAiFeedbackAsync(source, evaluation, challenge) {
+    const fallback = generateAiFeedback(source, evaluation);
+    const endpoint = window.TechStartAiFeedbackEndpoint;
+
+    if (!endpoint) {
+      return fallback;
+    }
+
+    try {
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          source,
+          evaluation,
+          challenge: {
+            id: challenge?.id,
+            title: challenge?.title,
+            description: challenge?.description,
+            language: challenge?.language,
+            tests: challenge?.tests || [],
+          },
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Endpoint de IA indisponivel.");
+      }
+
+      const data = await response.json();
+      return data.feedback || data.message || fallback;
+    } catch (error) {
+      console.warn("Nao foi possivel obter feedback da IA. Usando feedback local.", error);
+      return fallback;
+    }
+  }
+
   function previewSolution(source, challengeId) {
     const evaluation = evaluateChallenge(source, challengeId);
     return {
@@ -713,9 +789,18 @@ const TechStartApp = (() => {
     };
   }
 
+  async function previewSolutionAsync(source, challengeId) {
+    const challenge = getChallengeById(challengeId);
+    const evaluation = evaluateChallenge(source, challengeId);
+    return {
+      evaluation,
+      aiFeedback: await generateAiFeedbackAsync(source, evaluation, challenge),
+    };
+  }
+
   function createRoundFeedback(room, player) {
     const status = player.solutionStatus || "wrong";
-    const evaluationMessage =
+    let evaluationMessage =
       player.evaluationMessage ||
       (status === "correct"
         ? "Solucao aceita neste round."
@@ -726,11 +811,18 @@ const TechStartApp = (() => {
         ? "Voce resolveu o desafio dentro dos criterios esperados."
         : "Revise a assinatura do metodo, o retorno e os operadores esperados para este desafio.");
 
+    if (status === "correct" && player.scoredThisRound) {
+      evaluationMessage = `${evaluationMessage}\nVoce foi o primeiro a acertar e recebeu o ponto do round.`;
+    } else if (status === "correct") {
+      evaluationMessage = `${evaluationMessage}\nSua solucao estava correta, mas outro jogador acertou antes e recebeu o ponto.`;
+    }
+
     return {
       userId: player.userId,
       round: room.currentRound,
       challengeId: room.currentChallengeId,
       solutionStatus: status,
+      scoredThisRound: Boolean(player.scoredThisRound),
       submittedAt: player.submittedAt,
       score: player.score,
       evaluationMessage,
@@ -758,16 +850,14 @@ const TechStartApp = (() => {
     player.solutionStatus = evaluation.correct ? "correct" : "wrong";
     player.evaluationMessage = evaluation.message;
     player.aiFeedback = aiFeedback;
-    if (evaluation.correct) {
-      player.score += 1;
-    }
+    player.scoredThisRound = false;
 
     const correctPlayers = room.players.filter((item) => item.solutionStatus === "correct");
     if (correctPlayers.length) {
       const winner = correctPlayers.sort((a, b) => new Date(a.submittedAt) - new Date(b.submittedAt))[0];
       room.winnerUserId = winner.userId;
     } else if (room.players.every((item) => item.solutionStatus !== "pending")) {
-      room.winnerUserId = room.players[0].userId;
+      room.winnerUserId = null;
     }
 
     completeRoundIfNeeded(room);
@@ -796,8 +886,15 @@ const TechStartApp = (() => {
       const winner = [...correctPlayers].sort((a, b) => new Date(a.submittedAt) - new Date(b.submittedAt))[0];
       room.lastRoundWinnerUserId = winner.userId;
       room.winnerUserId = winner.userId;
+      room.players.forEach((player) => {
+        player.scoredThisRound = player.userId === winner.userId;
+      });
+      winner.score += 1;
     } else {
       room.lastRoundWinnerUserId = null;
+      room.players.forEach((player) => {
+        player.scoredThisRound = false;
+      });
     }
 
     room.lastRoundNumber = completedRound;
@@ -811,7 +908,7 @@ const TechStartApp = (() => {
 
     if (!hasMatchWinner && !reachedRoundLimit) {
       room.currentRound += 1;
-      room.currentChallengeId = DEFAULT_CHALLENGES[(room.currentRound - 1) % DEFAULT_CHALLENGES.length].id;
+      room.currentChallengeId = room.challengeDeck[(room.currentRound - 1) % room.challengeDeck.length] || getChallenges()[0]?.id;
       room.status = "feedback";
       room.matchFinishedAfterFeedback = false;
       room.timerStartedAt = null;
@@ -820,6 +917,7 @@ const TechStartApp = (() => {
         item.ready = false;
         item.solutionStatus = "pending";
         item.submittedAt = null;
+        item.scoredThisRound = false;
         item.evaluationMessage = null;
         item.aiFeedback = null;
       });
@@ -938,7 +1036,8 @@ const TechStartApp = (() => {
     if (room.rematchRequests.length === 2) {
       room.status = "lobby";
       room.currentRound = 1;
-      room.currentChallengeId = DEFAULT_CHALLENGES[0].id;
+      room.challengeDeck = buildChallengeDeck();
+      room.currentChallengeId = room.challengeDeck[0] || getChallenges()[0]?.id;
       room.totalRounds = MATCH_TOTAL_ROUNDS;
       room.winnerUserId = null;
       room.rematchRequests = [];
@@ -1344,7 +1443,7 @@ const TechStartApp = (() => {
         room.status = "playing";
         room.totalRounds = 1;
         room.currentRound = 1;
-        room.currentChallengeId = room.currentChallengeId || DEFAULT_CHALLENGES[0].id;
+        room.currentChallengeId = room.currentChallengeId || room.challengeDeck?.[0] || getChallenges()[0]?.id;
         room.countdownStartedAt = null;
         room.timerStartedAt = now();
         room.winnerUserId = null;
@@ -1533,8 +1632,9 @@ const TechStartApp = (() => {
           return { ok: false, message: "Sala nao encontrada." };
         }
 
+        const challenge = getChallengeById(room.currentChallengeId);
         const evaluation = evaluateChallenge(source, room.currentChallengeId);
-        const aiFeedback = generateAiFeedback(source, evaluation);
+        const aiFeedback = await generateAiFeedbackAsync(source, evaluation, challenge);
         const player = room.players.find((item) => item.userId === userId);
         if (!player) {
           return { ok: false, message: "Jogador nao encontrado na sala." };
@@ -1544,9 +1644,7 @@ const TechStartApp = (() => {
         player.solutionStatus = evaluation.correct ? "correct" : "wrong";
         player.evaluationMessage = evaluation.message;
         player.aiFeedback = aiFeedback;
-        if (evaluation.correct) {
-          player.score += 1;
-        }
+        player.scoredThisRound = false;
 
         const correctPlayers = room.players.filter((item) => item.solutionStatus === "correct");
         if (correctPlayers.length) {
@@ -1554,12 +1652,8 @@ const TechStartApp = (() => {
           room.winnerUserId = winner.userId;
         }
 
-        const leader = [...room.players].sort((a, b) => b.score - a.score)[0];
-        const matchWillFinish =
-          room.players.every((item) => item.solutionStatus !== "pending") &&
-          (room.currentRound >= room.totalRounds || (leader && leader.score >= MATCH_WIN_SCORE));
         completeRoundIfNeeded(room, false);
-        if (matchWillFinish) {
+        if (room.matchFinishedAfterFeedback) {
           await finalizeFirebaseRoomStats(room);
         }
 
@@ -1572,6 +1666,17 @@ const TechStartApp = (() => {
     }
     const localResult = submitSolution(roomCode, userId, source);
     if (localResult.ok) {
+      const aiFeedback = await generateAiFeedbackAsync(source, localResult.evaluation, localResult.challenge);
+      localResult.aiFeedback = aiFeedback;
+      const player = localResult.room.players.find((item) => item.userId === userId);
+      if (player) {
+        player.aiFeedback = aiFeedback;
+      }
+      const roundFeedback = (localResult.room.lastRoundFeedback || []).find((item) => item.userId === userId);
+      if (roundFeedback) {
+        roundFeedback.aiFeedback = aiFeedback;
+      }
+      updateRoom(localResult.room);
       cacheRoomLocally(localResult.room);
     }
     return localResult;
@@ -1595,10 +1700,8 @@ const TechStartApp = (() => {
             player.aiFeedback = "Organize a solucao pelo metodo pedido, escreva o retorno primeiro e depois ajuste os detalhes.";
           }
         });
-        const leader = [...room.players].sort((a, b) => b.score - a.score)[0];
-        const matchWillFinish = room.currentRound >= room.totalRounds || (leader && leader.score >= MATCH_WIN_SCORE);
         completeRoundIfNeeded(room, false);
-        if (matchWillFinish) {
+        if (room.matchFinishedAfterFeedback) {
           await finalizeFirebaseRoomStats(room);
         }
         await window.TechStartFirebaseClient.updateRoom(room);
@@ -1679,7 +1782,8 @@ const TechStartApp = (() => {
         if (room.rematchRequests.length === 2) {
           room.status = "lobby";
           room.currentRound = 1;
-          room.currentChallengeId = DEFAULT_CHALLENGES[0].id;
+          room.challengeDeck = buildChallengeDeck();
+          room.currentChallengeId = room.challengeDeck[0] || getChallenges()[0]?.id;
           room.totalRounds = MATCH_TOTAL_ROUNDS;
           room.winnerUserId = null;
           room.rematchRequests = [];
@@ -1745,6 +1849,7 @@ const TechStartApp = (() => {
 
   return {
     seed,
+    loadChallengesAsync,
     getCurrentUserAsync,
     requireAuthAsync,
     getCurrentUser,
@@ -1785,6 +1890,7 @@ const TechStartApp = (() => {
     sendChatMessage,
     getChallengeById,
     previewSolution,
+    previewSolutionAsync,
     submitSolutionAsync,
     submitSolution,
     finishExpiredRoundAsync,

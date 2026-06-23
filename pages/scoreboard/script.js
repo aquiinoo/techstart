@@ -27,6 +27,12 @@ function feedbackUrl() {
   return url.toString();
 }
 
+function resultUrl() {
+  const url = new URL("../resultado/resultado.html", window.location.href);
+  url.searchParams.set("room", roomCode);
+  return url.toString();
+}
+
 function scoreboardUrl() {
   const url = new URL("scoreboard.html", window.location.href);
   url.searchParams.set("room", roomCode);
@@ -135,7 +141,6 @@ async function renderRoom() {
   const playerOne = room.players[0];
   const playerTwo = room.players[1];
   const currentPlayer = room.players.find((player) => player.userId === currentUser.id);
-  const winner = room.winnerUserId ? getUser(room.winnerUserId) : null;
   const lastRoundWinner = room.lastRoundWinnerUserId ? getUser(room.lastRoundWinnerUserId) : null;
   const countdown = TechStartApp.getCountdownRemainingSeconds(room);
 
@@ -152,14 +157,8 @@ async function renderRoom() {
   document.getElementById("finish-panel").classList.toggle("hidden", room.status !== "finished");
 
   if (room.status === "finished") {
-    document.getElementById("room-title").textContent = "Duelo encerrado";
-    document.getElementById("match-status").textContent = "Resultado final";
-    document.getElementById("countdown-indicator").textContent = `${playerOne?.score || 0} x ${playerTwo?.score || 0}`;
-    document.getElementById("winner-title").textContent = winner ? `${winner.name} venceu` : "Duelo encerrado";
-    document.getElementById("winner-summary").textContent =
-      room.finishedReason === "disconnect"
-        ? `Partida encerrada por desconexao. Placar final: ${playerOne?.score || 0} x ${playerTwo?.score || 0}`
-        : `Placar final: ${playerOne?.score || 0} x ${playerTwo?.score || 0}`;
+    window.location.assign(resultUrl());
+    return;
   } else if (room.status === "countdown") {
     document.getElementById("room-title").textContent = "Todos prontos";
     document.getElementById("match-status").textContent = "O round vai comecar";
@@ -225,7 +224,7 @@ document.getElementById("rematch-button").addEventListener("click", async () => 
 });
 
 document.getElementById("new-opponent-button").addEventListener("click", async () => {
-  const result = await TechStartApp.requestRandomMatchAsync(currentUser.id, currentUser.language || "Java");
+  const result = await TechStartApp.requestRandomMatchAsync(currentUser.id, "Java");
   if (!result.ok) {
     showPopup("Fila indisponivel", result.message);
     return;

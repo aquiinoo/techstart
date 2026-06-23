@@ -16,6 +16,12 @@ function scoreboardUrl() {
   return url.toString();
 }
 
+function resultUrl() {
+  const url = new URL("../resultado/resultado.html", window.location.href);
+  url.searchParams.set("room", roomCode);
+  return url.toString();
+}
+
 function redirectToDashboard(reason) {
   localStorage.setItem("techstart_last_duel_redirect", String(reason || "sem motivo"));
   window.location.href = "../dashboard/dashboard.html";
@@ -77,7 +83,7 @@ async function renderRoom() {
   }
 
   if (room.status !== "feedback") {
-    window.location.assign(scoreboardUrl());
+    window.location.assign(room.status === "finished" ? resultUrl() : scoreboardUrl());
     return;
   }
 
@@ -121,7 +127,7 @@ document.getElementById("continue-button").addEventListener("click", async () =>
   button.textContent = "Aguardando...";
   const updatedRoom = await TechStartApp.markRoundFeedbackSeenAsync(room.code, currentUser.id);
   if (updatedRoom && updatedRoom.status !== "feedback") {
-    window.location.assign(scoreboardUrl());
+    window.location.assign(updatedRoom.status === "finished" ? resultUrl() : scoreboardUrl());
     return;
   }
   await renderRoom();

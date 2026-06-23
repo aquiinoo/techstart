@@ -121,17 +121,17 @@ async function syncPresence() {
 }
 
 function handleEditorTab(event) {
-  if (event.key !== "Tab") {
-    return;
-  }
-
-  event.preventDefault();
-
   const textarea = event.target;
   const indent = "  ";
   const start = textarea.selectionStart;
   const end = textarea.selectionEnd;
   const value = textarea.value;
+
+  if (event.key !== "Tab") {
+    return false;
+  }
+
+  event.preventDefault();
   const selectedText = value.slice(start, end);
 
   if (!selectedText.includes("\n")) {
@@ -185,6 +185,74 @@ function handleEditorTab(event) {
   textarea.value = value.slice(0, lineStart) + indented + value.slice(blockEnd);
   textarea.selectionStart = start + indent.length;
   textarea.selectionEnd = end + indent.length * lines.length;
+  return true;
+}
+
+function getLineIndent(value, position) {
+  const lineStart = value.lastIndexOf("\n", position - 1) + 1;
+  const line = value.slice(lineStart, position);
+  return line.match(/^\s*/)[0];
+}
+
+function handleEditorPairs(event) {
+  const pairs = {
+    "(": ")",
+    "[": "]",
+    "{": "}",
+  };
+  const closing = Object.values(pairs);
+  const textarea = event.target;
+  const start = textarea.selectionStart;
+  const end = textarea.selectionEnd;
+  const value = textarea.value;
+
+  if (pairs[event.key]) {
+    event.preventDefault();
+    const selectedText = value.slice(start, end);
+    textarea.value = value.slice(0, start) + event.key + selectedText + pairs[event.key] + value.slice(end);
+    textarea.selectionStart = start + 1;
+    textarea.selectionEnd = end + 1;
+    return true;
+  }
+
+  if (closing.includes(event.key) && value[start] === event.key && start === end) {
+    event.preventDefault();
+    textarea.selectionStart = start + 1;
+    textarea.selectionEnd = start + 1;
+    return true;
+  }
+
+  if (event.key === "Backspace" && start === end && pairs[value[start - 1]] === value[start]) {
+    event.preventDefault();
+    textarea.value = value.slice(0, start - 1) + value.slice(start + 1);
+    textarea.selectionStart = start - 1;
+    textarea.selectionEnd = start - 1;
+    return true;
+  }
+
+  if (event.key === "Enter") {
+    const opener = value[start - 1];
+    const closer = value[start];
+    if (pairs[opener] === closer && start === end) {
+      event.preventDefault();
+      const currentIndent = getLineIndent(value, start);
+      const innerIndent = currentIndent + "  ";
+      const insertion = `\n${innerIndent}\n${currentIndent}`;
+      textarea.value = value.slice(0, start) + insertion + value.slice(end);
+      textarea.selectionStart = start + 1 + innerIndent.length;
+      textarea.selectionEnd = textarea.selectionStart;
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function handleEditorKeydown(event) {
+  if (handleEditorTab(event)) {
+    return;
+  }
+  handleEditorPairs(event);
 }
 
 async function renderRoom() {
@@ -276,7 +344,7 @@ document.getElementById("test-button").addEventListener("click", () => {
   document.getElementById("ai-output").textContent = preview.aiFeedback;
 });
 
-document.getElementById("solution-input").addEventListener("keydown", handleEditorTab);
+document.getElementById("solution-input").addEventListener("keydown", handleEditorKeydown);
 
 document.getElementById("submit-button").addEventListener("click", async () => {
   const code = document.getElementById("solution-input").value;

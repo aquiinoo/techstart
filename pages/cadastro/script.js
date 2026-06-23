@@ -4,9 +4,25 @@ const registerForm = document.getElementById("register-form");
 const feedback = document.getElementById("register-feedback");
 const popup = document.getElementById("success-popup");
 const popupConfirm = document.getElementById("popup-confirm");
+const passwordInput = document.getElementById("password");
+const confirmPasswordInput = document.getElementById("confirm-password");
+
+function validatePasswordMatch() {
+  const mismatch = confirmPasswordInput.value && passwordInput.value !== confirmPasswordInput.value;
+  confirmPasswordInput.setCustomValidity(mismatch ? "As senhas nao coincidem." : "");
+  feedback.textContent = mismatch ? "As senhas precisam ser iguais." : "";
+  feedback.classList.remove("success");
+}
+
+passwordInput.addEventListener("input", validatePasswordMatch);
+confirmPasswordInput.addEventListener("input", validatePasswordMatch);
 
 registerForm.addEventListener("submit", async (event) => {
   event.preventDefault();
+  validatePasswordMatch();
+  if (!registerForm.reportValidity()) {
+    return;
+  }
 
   const result = await TechStartApp.registerAsync({
     name: document.getElementById("name").value,

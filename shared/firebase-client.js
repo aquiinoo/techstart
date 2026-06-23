@@ -109,6 +109,9 @@
   }
 
   async function register(data) {
+    if (String(data.password || "") !== String(data.confirmPassword || "")) {
+      return { ok: false, message: "As senhas nao coincidem." };
+    }
     try {
       const credential = await auth.createUserWithEmailAndPassword(data.email, data.password);
       if (data.name) {
@@ -202,7 +205,7 @@
       chat: [],
       status: "waiting",
       currentRound: 1,
-      totalRounds: window.TechStartChallenges?.length || 10,
+      totalRounds: 3,
       currentChallengeId: window.TechStartChallenges?.[0]?.id || "java-soma",
       createdAt: new Date().toISOString(),
       winnerUserId: null,

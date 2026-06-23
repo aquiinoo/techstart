@@ -10,6 +10,8 @@ const TechStartApp = (() => {
 
   const READY_COUNTDOWN_SECONDS = 5;
   const ROUND_DURATION_SECONDS = 300;
+  const MATCH_WIN_SCORE = 2;
+  const MATCH_TOTAL_ROUNDS = 3;
   const PLAYER_HEARTBEAT_STALE_SECONDS = 20;
 
   const DEFAULT_CHALLENGES = window.TechStartChallenges || [];
@@ -61,7 +63,7 @@ const TechStartApp = (() => {
     }
     room.status = room.status || "waiting";
     room.currentRound = room.currentRound || 1;
-    room.totalRounds = room.totalRounds || DEFAULT_CHALLENGES.length;
+    room.totalRounds = MATCH_TOTAL_ROUNDS;
     room.currentChallengeId = room.currentChallengeId || DEFAULT_CHALLENGES[0].id;
     room.timerStartedAt = room.timerStartedAt || null;
     room.countdownStartedAt = room.countdownStartedAt || null;
@@ -419,7 +421,7 @@ const TechStartApp = (() => {
       chat: [],
       status: "waiting",
       currentRound: 1,
-      totalRounds: DEFAULT_CHALLENGES.length,
+      totalRounds: MATCH_TOTAL_ROUNDS,
       currentChallengeId: DEFAULT_CHALLENGES[0].id,
       createdAt: now(),
       winnerUserId: null,
@@ -803,9 +805,13 @@ const TechStartApp = (() => {
     room.lastRoundFeedback = room.players.map((player) => createRoundFeedback(room, player));
     room.lastRoundFeedbackSeen = [];
 
-    if (room.currentRound < room.totalRounds) {
+    const leader = [...room.players].sort((a, b) => b.score - a.score)[0];
+    const hasMatchWinner = Boolean(leader && leader.score >= MATCH_WIN_SCORE);
+    const reachedRoundLimit = room.currentRound >= room.totalRounds;
+
+    if (!hasMatchWinner && !reachedRoundLimit) {
       room.currentRound += 1;
-      room.currentChallengeId = DEFAULT_CHALLENGES[room.currentRound - 1].id;
+      room.currentChallengeId = DEFAULT_CHALLENGES[(room.currentRound - 1) % DEFAULT_CHALLENGES.length].id;
       room.status = "feedback";
       room.matchFinishedAfterFeedback = false;
       room.timerStartedAt = null;
@@ -824,8 +830,12 @@ const TechStartApp = (() => {
     room.matchFinishedAfterFeedback = true;
     room.timerStartedAt = null;
     room.countdownStartedAt = null;
-    const playerWinner = [...room.players].sort((a, b) => b.score - a.score)[0];
-    room.winnerUserId = playerWinner ? playerWinner.userId : null;
+    const [firstPlayer, secondPlayer] = [...room.players].sort((a, b) => b.score - a.score);
+    room.winnerUserId =
+      firstPlayer && secondPlayer && firstPlayer.score > secondPlayer.score
+        ? firstPlayer.userId
+        : null;
+    room.finishedReason = room.winnerUserId ? null : "draw";
     if (finalizeStats) {
       finalizeRoomStats(room);
     }
@@ -883,11 +893,12 @@ const TechStartApp = (() => {
       }
       const opponent = room.players.find((item) => item.userId !== player.userId);
       const opponentUser = opponent ? findUserById(opponent.userId) : null;
-      const victory = player.userId === winnerId;
+      const draw = !winnerId;
+      const victory = !draw && player.userId === winnerId;
       addHistoryEntry(player.userId, {
         type: "duel",
         opponent: opponentUser ? opponentUser.nick : "Sem adversario",
-        result: victory ? "Vitoria" : "Derrota",
+        result: draw ? "Empate" : victory ? "Vitoria" : "Derrota",
         score: `${player.score} x ${opponent ? opponent.score : 0}`,
       });
 
@@ -896,9 +907,9 @@ const TechStartApp = (() => {
       if (index === -1) {
         return;
       }
-      users[index].rankingPoints += victory ? 20 : 5;
+      users[index].rankingPoints += draw ? 10 : victory ? 20 : 5;
       users[index].duelWins += victory ? 1 : 0;
-      users[index].duelLosses += victory ? 0 : 1;
+      users[index].duelLosses += draw || victory ? 0 : 1;
       saveUsers(users);
     });
   }
@@ -928,6 +939,7 @@ const TechStartApp = (() => {
       room.status = "lobby";
       room.currentRound = 1;
       room.currentChallengeId = DEFAULT_CHALLENGES[0].id;
+      room.totalRounds = MATCH_TOTAL_ROUNDS;
       room.winnerUserId = null;
       room.rematchRequests = [];
       room.timerStartedAt = null;
@@ -1491,22 +1503,24 @@ const TechStartApp = (() => {
       if (!profile) {
         continue;
       }
+      const draw = !room.winnerUserId;
+      const victory = !draw && duelPlayer.userId === room.winnerUserId;
       const updatedHistory = [
         {
           id: uid("history"),
           date: now(),
           type: "duel",
           opponent: opponentProfile ? opponentProfile.nick : "Sem adversario",
-          result: duelPlayer.userId === room.winnerUserId ? "Vitoria" : "Derrota",
+          result: draw ? "Empate" : victory ? "Vitoria" : "Derrota",
           score: `${duelPlayer.score} x ${opponent ? opponent.score : 0}`,
         },
         ...(profile.history || []),
       ];
       await updateProfileAsync(duelPlayer.userId, {
         history: updatedHistory,
-        rankingPoints: (profile.rankingPoints || 0) + (duelPlayer.userId === room.winnerUserId ? 20 : 5),
-        duelWins: (profile.duelWins || 0) + (duelPlayer.userId === room.winnerUserId ? 1 : 0),
-        duelLosses: (profile.duelLosses || 0) + (duelPlayer.userId === room.winnerUserId ? 0 : 1),
+        rankingPoints: (profile.rankingPoints || 0) + (draw ? 10 : victory ? 20 : 5),
+        duelWins: (profile.duelWins || 0) + (victory ? 1 : 0),
+        duelLosses: (profile.duelLosses || 0) + (draw || victory ? 0 : 1),
       });
     }
   }
@@ -1540,9 +1554,12 @@ const TechStartApp = (() => {
           room.winnerUserId = winner.userId;
         }
 
-        const wasFinalRound = room.players.every((item) => item.solutionStatus !== "pending") && room.currentRound >= room.totalRounds;
+        const leader = [...room.players].sort((a, b) => b.score - a.score)[0];
+        const matchWillFinish =
+          room.players.every((item) => item.solutionStatus !== "pending") &&
+          (room.currentRound >= room.totalRounds || (leader && leader.score >= MATCH_WIN_SCORE));
         completeRoundIfNeeded(room, false);
-        if (wasFinalRound) {
+        if (matchWillFinish) {
           await finalizeFirebaseRoomStats(room);
         }
 
@@ -1578,9 +1595,10 @@ const TechStartApp = (() => {
             player.aiFeedback = "Organize a solucao pelo metodo pedido, escreva o retorno primeiro e depois ajuste os detalhes.";
           }
         });
-        const wasFinalRound = room.currentRound >= room.totalRounds;
+        const leader = [...room.players].sort((a, b) => b.score - a.score)[0];
+        const matchWillFinish = room.currentRound >= room.totalRounds || (leader && leader.score >= MATCH_WIN_SCORE);
         completeRoundIfNeeded(room, false);
-        if (wasFinalRound) {
+        if (matchWillFinish) {
           await finalizeFirebaseRoomStats(room);
         }
         await window.TechStartFirebaseClient.updateRoom(room);
@@ -1662,6 +1680,7 @@ const TechStartApp = (() => {
           room.status = "lobby";
           room.currentRound = 1;
           room.currentChallengeId = DEFAULT_CHALLENGES[0].id;
+          room.totalRounds = MATCH_TOTAL_ROUNDS;
           room.winnerUserId = null;
           room.rematchRequests = [];
           room.timerStartedAt = null;

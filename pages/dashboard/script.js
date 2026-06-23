@@ -228,14 +228,13 @@ document.getElementById("support-form").addEventListener("submit", async (event)
 });
 
 document.getElementById("offline-training").addEventListener("click", async () => {
-  const room = await TechStartApp.createRoomAsync(currentUser.id, currentUser.language || "Java");
+  const room = await TechStartApp.createRoomAsync(currentUser.id, "Java");
   await TechStartApp.startOfflineTrainingAsync(room.code, currentUser.id);
   window.location.assign(buildChallengeUrl(room.code, { mode: "offline" }));
 });
 
 document.getElementById("create-room").addEventListener("click", async () => {
-  const language = document.getElementById("room-language").value;
-  const room = await TechStartApp.createRoomAsync(currentUser.id, language);
+  const room = await TechStartApp.createRoomAsync(currentUser.id, "Java");
   const duelUrl = buildDuelUrl(room.code);
   document.getElementById("room-link").innerHTML = `Link copiavel: <strong>${duelUrl}</strong>`;
   navigator.clipboard?.writeText(duelUrl).catch(() => {});
@@ -253,7 +252,7 @@ document.getElementById("join-room").addEventListener("click", async () => {
 });
 
 document.getElementById("random-match").addEventListener("click", async () => {
-  const result = await TechStartApp.requestRandomMatchAsync(currentUser.id, currentUser.language || "Java");
+  const result = await TechStartApp.requestRandomMatchAsync(currentUser.id, "Java");
   if (!result.ok) {
     showPopup("Fila indisponivel", result.message);
     return;

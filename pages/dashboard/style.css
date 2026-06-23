@@ -247,6 +247,8 @@ select {
   -webkit-appearance: none;
   -moz-appearance: none;
   padding-right: 42px;
+  background-color: #08111c;
+  color: var(--text);
   background-image: linear-gradient(45deg, transparent 50%, var(--text) 50%),
                     linear-gradient(135deg, var(--text) 50%, transparent 50%);
   background-position: right 18px center;
@@ -270,8 +272,8 @@ textarea:focus {
 }
 
 select option {
-  background: #08111c;
-  color: var(--text);
+  background-color: #08111c;
+  color: #eef5f0;
 }
 
 textarea {

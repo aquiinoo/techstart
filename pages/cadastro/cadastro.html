@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TechStart | Cadastro</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="../../assets/piscando.png" type="image/png">
+</head>
+<body>
+  <main class="register-layout">
+    <section class="register-card">
+      <div class="header-row">
+        <a class="back-link" href="../../index.html">Voltar</a>
+        <a class="login-link" href="../../index.html">Login</a>
+      </div>
+
+      <p class="section-label">Cadastro</p>
+      <h1>Crie sua conta</h1>
+      <p class="intro">Campos marcados com * sao obrigatorios para entrar na plataforma.</p>
+
+      <form id="register-form" class="register-form">
+        <div class="grid">
+          <label>
+            Nome completo *
+            <input type="text" id="name" required>
+          </label>
+          <label>
+            Nick *
+            <input type="text" id="nick" required>
+          </label>
+        </div>
+
+        <div class="grid">
+          <label>
+            E-mail *
+            <input type="email" id="email" required>
+          </label>
+          <label>
+            Linguagem preferida
+            <select id="language">
+              <option>Java</option>
+              <option>JavaScript</option>
+              <option>Python</option>
+              <option>C#</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="grid">
+          <label>
+            Senha *
+            <input type="password" id="password" required>
+          </label>
+          <label>
+            Confirmar senha *
+            <input type="password" id="confirm-password" required>
+          </label>
+        </div>
+
+        <label>
+          Link do GitHub
+          <input type="url" id="github" placeholder="https://github.com/seuusuario">
+        </label>
+
+        <label>
+          Bio
+          <textarea id="bio" rows="4" placeholder="Conte um pouco sobre você."></textarea>
+        </label>
+
+        <button type="submit" class="primary-button">Cadastrar</button>
+      </form>
+
+      <p id="register-feedback" class="feedback" aria-live="polite"></p>
+      <p class="switch-auth">Já possui conta? <a href="../../index.html">Login</a></p>
+    </section>
+  </main>
+
+  <div id="success-popup" class="popup hidden" role="dialog" aria-modal="true">
+    <div class="popup-card">
+      <p class="section-label">Conta criada</p>
+      <h2>Cadastro efetuado com sucesso</h2>
+      <p>Você será redirecionado para a tela do usuário.</p>
+      <button type="button" class="primary-button" id="popup-confirm">Ir para o dashboard</button>
+    </div>
+  </div>
+
+  <script src="../../shared/firebase-config.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.7.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.7.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore-compat.js"></script>
+  <script src="../../shared/firebase.js"></script>
+  <script src="../../shared/firebase-client.js"></script>
+  <script src="../../shared/challenges.js"></script>
+  <script src="../../shared/app.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

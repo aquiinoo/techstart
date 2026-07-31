@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TechStart | Recuperar senha</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="../../assets/piscando.png" type="image/png">
+</head>
+<body>
+  <main class="recovery-layout">
+    <section class="recovery-card">
+      <div class="header-row">
+        <a class="back-link" href="../../index.html">Voltar</a>
+        <a class="login-link" href="../../index.html">Login</a>
+      </div>
+
+      <p class="section-label">Recuperação</p>
+      <h1>Esqueceu sua senha?</h1>
+      <p class="intro">
+        Informe o e-mail cadastrado para receber um link de redefinição e voltar para a plataforma com segurança.
+      </p>
+
+      <form id="recovery-form" class="recovery-form">
+        <label>
+          E-mail cadastrado
+          <input type="email" id="email" placeholder="seu@email.com" required>
+        </label>
+
+        <button type="submit" class="primary-button">Enviar link de recuperação</button>
+      </form>
+
+      <p id="recovery-feedback" class="feedback" aria-live="polite"></p>
+      <p class="switch-auth">Lembrou sua senha? <a href="../../index.html">Voltar ao login</a></p>
+    </section>
+  </main>
+
+  <div id="success-popup" class="popup hidden" role="dialog" aria-modal="true">
+    <div class="popup-card">
+      <p class="section-label">E-mail enviado</p>
+      <h2>Confira sua caixa de entrada</h2>
+      <p>Se o e-mail estiver cadastrado, você receberá um link para redefinir a senha.</p>
+      <button type="button" class="primary-button" id="popup-confirm">Voltar ao login</button>
+    </div>
+  </div>
+
+  <script src="../../shared/firebase-config.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.7.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.7.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore-compat.js"></script>
+  <script src="../../shared/firebase.js"></script>
+  <script src="../../shared/firebase-client.js"></script>
+  <script src="../../shared/challenges.js"></script>
+  <script src="../../shared/app.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TechStart | Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="../../assets/piscando.png" type="image/png">
+</head>
+<body>
+  <main class="dashboard">
+    <aside class="sidebar">
+      <div>
+        <p class="section-label">TechStart</p>
+        <h1>Painel do jogador</h1>
+        <p class="sidebar-copy">Acesse duelistas, ranking, histórico, perfil e suporte em um único lugar.</p>
+      </div>
+
+      <nav class="menu">
+        <button type="button" class="menu-item active" data-target="home">Início</button>
+        <button type="button" class="menu-item" data-target="profile">Perfil</button>
+        <button type="button" class="menu-item" data-target="history">Histórico</button>
+        <button type="button" class="menu-item" data-target="ranking">Ranking</button>
+        <button type="button" class="menu-item" data-target="support">Suporte</button>
+        <button type="button" class="menu-item" data-target="community">Jogadores</button>
+      </nav>
+
+      <button type="button" id="logout-button" class="logout-button">Sair</button>
+    </aside>
+
+    <section class="content">
+      <section class="hero panel active-panel" id="panel-home">
+        <div class="hero-top">
+          <div>
+            <p class="section-label">Bem-vindo</p>
+            <h2 id="greeting">Olá, jogador</h2>
+            <p id="firebase-status" class="muted"></p>
+          </div>
+          <div class="hero-chip" id="preferred-language"></div>
+        </div>
+
+        <div class="hero-grid">
+          <article class="card action-card">
+            <h3>Treinar</h3>
+            <p>Pratique sozinho e receba um desafio com feedback automático.</p>
+            <button type="button" id="offline-training" class="primary-button">Treinar</button>
+          </article>
+
+          <article class="card action-card">
+            <h3>Criar sala</h3>
+            <p>Gere um link copiável e convide outro jogador para um duelo em Java.</p>
+            <div class="inline-form">
+              <button type="button" id="create-room" class="primary-button">Criar</button>
+            </div>
+            <p id="room-link" class="muted small"></p>
+          </article>
+
+          <article class="card action-card">
+            <h3>Entrar em duelo</h3>
+            <p>Use o link ou código de uma sala existente.</p>
+            <div class="inline-form">
+              <input type="text" id="join-room-code" placeholder="Código da sala">
+              <button type="button" id="join-room" class="primary-button">Entrar</button>
+            </div>
+          </article>
+
+          <article class="card action-card">
+            <h3>Jogar com aleatório</h3>
+            <p>Entre em uma fila pública para duelos em Java.</p>
+            <button type="button" id="random-match" class="secondary-button">Buscar jogador</button>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel" id="panel-profile">
+        <div class="panel-header">
+          <div>
+            <p class="section-label">Perfil</p>
+            <h2>Meu perfil</h2>
+          </div>
+        </div>
+
+        <form id="profile-form" class="card form-card">
+          <div class="grid">
+            <label>Nome
+              <input type="text" id="profile-name">
+            </label>
+            <label>Nick
+              <input type="text" id="profile-nick">
+            </label>
+          </div>
+          <div class="grid">
+            <label>GitHub
+              <input type="url" id="profile-github">
+            </label>
+            <label>Linguagem
+              <select id="profile-language">
+                <option>Java</option>
+                <option>JavaScript</option>
+                <option>Python</option>
+                <option>C#</option>
+              </select>
+            </label>
+          </div>
+          <label>Bio
+            <textarea id="profile-bio" rows="4"></textarea>
+          </label>
+          <button type="submit" class="primary-button">Salvar perfil</button>
+          <p id="profile-feedback" class="muted small"></p>
+        </form>
+      </section>
+
+      <section class="panel" id="panel-history">
+        <div class="panel-header">
+          <div>
+            <p class="section-label">Histórico</p>
+            <h2>Duelo e treino</h2>
+          </div>
+        </div>
+        <div id="history-list" class="stack"></div>
+      </section>
+
+      <section class="panel" id="panel-ranking">
+        <div class="panel-header">
+          <div>
+            <p class="section-label">Ranking</p>
+            <h2>Geral e entre amigos</h2>
+          </div>
+        </div>
+        <div class="double-column">
+          <div class="card">
+            <h3>Ranking geral</h3>
+            <div id="ranking-general" class="stack compact"></div>
+          </div>
+          <div class="card">
+            <h3>Ranking entre amigos</h3>
+            <div id="ranking-friends" class="stack compact"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" id="panel-support">
+        <div class="panel-header">
+          <div>
+            <p class="section-label">Suporte</p>
+            <h2>Contato com a equipe TechStart</h2>
+          </div>
+        </div>
+        <form id="support-form" class="card form-card">
+          <label>Assunto
+            <input type="text" id="support-subject" placeholder="Ex.: Erro para entrar na sala">
+          </label>
+          <label>Mensagem
+            <textarea id="support-message" rows="5" placeholder="Como podemos ajudar?"></textarea>
+          </label>
+          <button type="submit" class="primary-button">Enviar para o suporte</button>
+          <p id="support-feedback" class="muted small"></p>
+        </form>
+      </section>
+
+      <section class="panel" id="panel-community">
+        <div class="panel-header">
+          <div>
+            <p class="section-label">Comunidade</p>
+            <h2>Perfis de outros jogadores</h2>
+          </div>
+        </div>
+        <div id="profiles-list" class="profile-grid"></div>
+
+        <div class="card">
+          <h3>Solicitações de ajuda</h3>
+          <div id="help-requests" class="stack compact"></div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <div id="popup" class="popup hidden" role="dialog" aria-modal="true">
+    <div class="popup-card">
+      <p class="section-label">Aviso</p>
+      <h3 id="popup-title">Ação realizada</h3>
+      <p id="popup-text"></p>
+      <button type="button" class="primary-button" id="popup-button">Continuar</button>
+    </div>
+  </div>
+
+  <script src="../../shared/firebase-config.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.7.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.7.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore-compat.js"></script>
+  <script src="../../shared/firebase.js"></script>
+  <script src="../../shared/firebase-client.js"></script>
+  <script src="../../shared/challenges.js"></script>
+  <script src="../../shared/app.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

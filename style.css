@@ -1,0 +1,361 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --bg: #08111c;
+  --panel: rgba(255, 255, 255, 0.06);
+  --panel-strong: rgba(255, 255, 255, 0.08);
+  --card: rgba(255, 255, 255, 0.05);
+  --border: rgba(110, 168, 255, 0.18);
+  --text: #eef5f0;
+  --muted: #aac6df;
+  --accent: #6ea8ff;
+  --accent-soft: #a2cffc;
+  --success: #7bd7a0;
+  --danger: #ff9578;
+  --shadow: 0 24px 60px rgba(0, 0, 0, 0.30);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Outfit', sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(110, 168, 255, 0.18), transparent 24%),
+    radial-gradient(circle at bottom right, rgba(255, 255, 255, 0.08), transparent 20%),
+    linear-gradient(135deg, #050908, #07120f 45%, #0b1815);
+  color: var(--text);
+}
+
+a {
+  color: var(--accent-soft);
+}
+
+button,
+input {
+  font: inherit;
+}
+
+.auth-layout {
+  width: min(1180px, calc(100% - 32px));
+  min-height: 100vh;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 24px;
+  align-items: center;
+  padding: 32px 0;
+}
+
+.brand-panel,
+.auth-card,
+.popup-card {
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(18px);
+}
+
+.brand-panel {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(160deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+  padding: 48px;
+}
+
+.brand-panel::before {
+  content: '';
+  position: absolute;
+  width: 128px;
+  height: 128px;
+  border-radius: 50%;
+  background: rgba(110, 168, 255, 0.12);
+  top: -36px;
+  right: -36px;
+}
+
+.brand-panel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(90deg, rgba(110, 168, 255, 0.04) 1px, transparent 1px),
+                    linear-gradient(rgba(110, 168, 255, 0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0.36;
+}
+
+.brand-mark {
+  width: 96px;
+  height: 96px;
+  display: grid;
+  place-items: center;
+  border-radius: 24px;
+  background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.76), rgba(0, 0, 0, 0));
+  border: 1px solid rgba(110, 168, 255, 0.473);
+  margin-bottom: 20px;
+}
+
+.brand-mark img {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+}
+
+.eyebrow,
+.section-label {
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.72rem;
+  color: var(--accent-soft);
+}
+
+.brand-panel h1 {
+  font-size: clamp(2.8rem, 6vw, 5rem);
+  margin: 10px 0 16px;
+}
+
+.brand-copy {
+  max-width: 560px;
+  line-height: 1.7;
+  color: var(--muted);
+  font-size: 1.06rem;
+}
+
+.brand-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.brand-badges span {
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.auth-card {
+  background: var(--panel);
+  padding: 36px;
+}
+
+.auth-header h2 {
+  margin: 10px 0 8px;
+  font-size: 2rem;
+}
+
+.auth-header p {
+  color: var(--muted);
+}
+
+.top-actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 28px 0 24px;
+}
+
+.primary-button,
+.secondary-button,
+.ghost-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 20px;
+  border-radius: 16px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+
+.primary-button:hover,
+.secondary-button:hover,
+.ghost-button:hover {
+  transform: translateY(-1px);
+}
+
+.primary-button {
+  background: linear-gradient(135deg, var(--accent), #8cc9ff);
+  color: #06120f;
+  font-weight: 700;
+  box-shadow: 0 14px 30px rgba(110, 168, 255, 0.18);
+}
+
+.secondary-button {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.ghost-button {
+  background: transparent;
+  color: var(--accent-soft);
+  border-color: rgba(255, 176, 136, 0.34);
+}
+
+.auth-form {
+  display: grid;
+  gap: 10px;
+}
+
+.auth-form label {
+  font-size: 0.95rem;
+  color: var(--muted);
+}
+
+.auth-form input {
+  min-height: 50px;
+  padding: 0 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(7, 15, 25, 0.65);
+  color: var(--text);
+}
+
+.auth-form input:focus,
+.auth-form textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(110, 168, 255, 0.16);
+  background-color: rgba(255, 255, 255, 0.12);
+}
+
+.auth-form .primary-button {
+  margin-top: 16px;
+}
+
+.feedback {
+  min-height: 24px;
+  margin-top: 14px;
+  color: var(--danger);
+}
+
+.feedback.success {
+  color: var(--success);
+}
+
+.auth-links {
+  margin-top: 20px;
+  display: grid;
+  gap: 10px;
+  color: var(--muted);
+}
+
+.popup {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 8, 14, 0.75);
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+
+.popup.hidden {
+  display: none;
+}
+
+.popup-card {
+  width: min(420px, 100%);
+  background: var(--panel-strong);
+  padding: 28px;
+}
+
+.popup-card h3 {
+  margin: 12px 0;
+  font-size: 1.8rem;
+}
+
+.popup-card p:last-of-type {
+  color: var(--muted);
+  margin-bottom: 18px;
+  line-height: 1.6;
+}
+
+.error {
+  color: #ff4d4d;
+}
+
+.success {
+  color: #2ecc71;
+}
+
+@media (max-width: 1080px) {
+  .auth-layout {
+    grid-template-columns: 1fr;
+    padding: 24px 16px;
+  }
+
+  .brand-panel,
+  .auth-card {
+    width: 100%;
+  }
+
+  .brand-panel {
+    padding: 36px;
+  }
+
+  .brand-panel.login-brand-panel {
+    background-position: 80% 60%;
+    background-size: 180px auto;
+  }
+
+  .top-actions,
+  .auth-links {
+    grid-template-columns: 1fr;
+  }
+
+  .top-actions {
+    gap: 12px;
+  }
+}
+
+@media (max-width: 720px) {
+  .auth-layout {
+    padding: 18px 12px;
+  }
+
+  .brand-panel {
+    padding: 28px;
+  }
+
+  .brand-panel.login-brand-panel {
+    background-image: none;
+  }
+
+  .brand-panel h1 {
+    font-size: clamp(2.4rem, 8vw, 3.6rem);
+  }
+
+  .brand-copy {
+    font-size: 1rem;
+    max-width: 100%;
+  }
+
+  .brand-badges {
+    gap: 10px;
+  }
+
+  .brand-badges span {
+    width: 100%;
+    text-align: center;
+  }
+
+  .top-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .auth-card {
+    padding: 24px;
+  }
+
+  .auth-header p {
+    font-size: 0.98rem;
+  }
+}

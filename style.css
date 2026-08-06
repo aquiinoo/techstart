@@ -2,7 +2,9 @@
 
 :root {
   --bg: #08111c;
-  --panel: rgba(255, 255, 255, 0.06);
+  --panel: radial-gradient(circle at top left, rgba(110, 168, 255, 0.18), transparent 24%),
+    radial-gradient(circle at bottom right, rgba(11, 103, 240, 0.18), transparent 20%),
+    linear-gradient(135deg, #00213f, #00213f3d 45%, #00213f48);
   --panel-strong: rgba(255, 255, 255, 0.08);
   --card: rgba(255, 255, 255, 0.05);
   --border: rgba(110, 168, 255, 0.18);
@@ -45,9 +47,9 @@ input {
   min-height: 100vh;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: 24px;
+  grid-template-columns: 1fr 1fr; 
   align-items: center;
+  gap: 25px;
   padding: 32px 0;
 }
 
@@ -63,8 +65,13 @@ input {
 .brand-panel {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(160deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
-  padding: 48px;
+  background: var(--panel);
+  padding: 20px;
+  min-height: 70%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .brand-panel::before {
@@ -142,6 +149,7 @@ input {
 .auth-card {
   background: var(--panel);
   padding: 36px;
+  width: 100%;
 }
 
 .auth-header h2 {
@@ -192,12 +200,6 @@ input {
   background: rgba(255, 255, 255, 0.08);
   color: var(--text);
   border-color: rgba(255, 255, 255, 0.12);
-}
-
-.ghost-button {
-  background: transparent;
-  color: var(--accent-soft);
-  border-color: rgba(255, 176, 136, 0.34);
 }
 
 .auth-form {

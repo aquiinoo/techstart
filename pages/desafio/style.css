@@ -203,6 +203,28 @@ button:disabled {
   display: none;
 }
 
+.text-button {
+  position: fixed;
+  top: 18px;
+  left: 18px;
+  z-index: 20;
+  background: transparent;
+  border: 0;
+  padding: 0;
+  color: #9fc6ff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.text-button:hover {
+  color: #f5fbff;
+}
+
+.text-button.hidden {
+  display: none;
+}
+
 .popup-card {
   width: min(420px, 100%);
 }

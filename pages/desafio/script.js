@@ -16,6 +16,7 @@ const popup = document.getElementById("popup");
 const popupTitle = document.getElementById("popup-title");
 const popupText = document.getElementById("popup-text");
 const popupButton = document.getElementById("popup-button");
+const offlineBackButton = document.getElementById("offline-back-button");
 
 function scoreboardUrl() {
   const url = new URL("../scoreboard/scoreboard.html", window.location.href);
@@ -47,6 +48,15 @@ function redirectToFeedback() {
 
 function isOfflineTraining() {
   return requestedMode === "offline" || room?.mode === "offline";
+}
+
+function toggleOfflineBackButton() {
+  if (isOfflineTraining()) {
+    offlineBackButton.classList.remove("hidden");
+    return;
+  }
+
+  offlineBackButton.classList.add("hidden");
 }
 
 function redirectToDashboard(reason) {
@@ -329,8 +339,13 @@ async function renderRoom() {
   document.getElementById("language-chip").textContent = room.language;
   document.getElementById("solution-input").placeholder = challenge.starter;
 
+  toggleOfflineBackButton();
   setRoundControlsDisabled(!currentPlayer || currentPlayer.solutionStatus !== "pending");
 }
+
+document.getElementById("offline-back-button").addEventListener("click", () => {
+  redirectToDashboard("voltar do treino offline");
+});
 
 document.getElementById("test-button").addEventListener("click", async () => {
   const code = document.getElementById("solution-input").value;

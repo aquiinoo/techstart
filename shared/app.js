@@ -12,13 +12,9 @@ const TechStartApp = (() => {
   const ROUND_DURATION_SECONDS = 300;
   const MATCH_WIN_SCORE = 2;
   const MATCH_TOTAL_ROUNDS = 3;
-<<<<<<< HEAD
-  const PLAYER_HEARTBEAT_STALE_SECONDS = 20;
-=======
   // A aba pode ficar em segundo plano ou passar por uma oscilacao curta de rede.
   // Um intervalo maior evita encerrar uma partida valida por um falso positivo.
   const PLAYER_HEARTBEAT_STALE_SECONDS = 90;
->>>>>>> main
 
   let challengeCatalog = window.TechStartChallenges || [];
 
@@ -878,8 +874,6 @@ const TechStartApp = (() => {
     };
   }
 
-<<<<<<< HEAD
-=======
   function giveUpRound(roomCode, userId) {
     const room = getRoomByCode(roomCode);
     if (!room || room.status !== "playing") {
@@ -899,7 +893,6 @@ const TechStartApp = (() => {
     return { ok: true, room };
   }
 
->>>>>>> main
   function completeRoundIfNeeded(room, finalizeStats = true) {
     const finishedRound = room.players.every((item) => item.solutionStatus !== "pending");
     if (!finishedRound) {
@@ -1543,11 +1536,7 @@ const TechStartApp = (() => {
         cacheRoomLocally(room);
         return room;
       } catch (error) {
-<<<<<<< HEAD
-        console.warn("Nao foi possivel iniciar o treino offline no Firebase. Usando fallback local.", error);
-=======
         console.warn("Nao foi possivel iniciar o treino no Firebase. Usando fallback local.", error);
->>>>>>> main
       }
     }
     const localRoom = startOfflineTraining(roomCode, userId);
@@ -1674,11 +1663,7 @@ const TechStartApp = (() => {
       nick: "guest",
       email: "",
       github: "",
-<<<<<<< HEAD
-      bio: "Perfil temporario para treino offline.",
-=======
       bio: "Perfil temporario para treino.",
->>>>>>> main
       language: "Java",
       guest: true,
     });
@@ -1807,8 +1792,6 @@ const TechStartApp = (() => {
     return localRoom;
   }
 
-<<<<<<< HEAD
-=======
   async function giveUpRoundAsync(roomCode, userId) {
     if (firebaseEnabled()) {
       try {
@@ -1843,7 +1826,6 @@ const TechStartApp = (() => {
     return localResult;
   }
 
->>>>>>> main
   async function markRoundFeedbackSeenAsync(roomCode, userId) {
     if (firebaseEnabled()) {
       try {
@@ -2029,11 +2011,8 @@ const TechStartApp = (() => {
     previewSolutionAsync,
     submitSolutionAsync,
     submitSolution,
-<<<<<<< HEAD
-=======
     giveUpRoundAsync,
     giveUpRound,
->>>>>>> main
     finishExpiredRoundAsync,
     finishExpiredRound,
     markRoundFeedbackSeenAsync,

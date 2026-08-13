@@ -16,7 +16,6 @@ const popup = document.getElementById("popup");
 const popupTitle = document.getElementById("popup-title");
 const popupText = document.getElementById("popup-text");
 const popupButton = document.getElementById("popup-button");
-const offlineBackButton = document.getElementById("offline-back-button");
 
 function scoreboardUrl() {
   const url = new URL("../scoreboard/scoreboard.html", window.location.href);
@@ -24,16 +23,10 @@ function scoreboardUrl() {
   return url.toString();
 }
 
-<<<<<<< HEAD
-function feedbackUrl() {
-  const url = new URL("../feedback/feedback.html", window.location.href);
-  url.searchParams.set("room", roomCode);
-=======
 function feedbackUrl(training = false) {
   const url = new URL("../feedback/feedback.html", window.location.href);
   url.searchParams.set("room", roomCode);
   if (training) url.searchParams.set("training", "1");
->>>>>>> main
   return url.toString();
 }
 
@@ -57,15 +50,6 @@ function isOfflineTraining() {
   return requestedMode === "offline" || room?.mode === "offline";
 }
 
-<<<<<<< HEAD
-function toggleOfflineBackButton() {
-  if (isOfflineTraining()) {
-    offlineBackButton.classList.remove("hidden");
-    return;
-  }
-
-  offlineBackButton.classList.add("hidden");
-=======
 function saveTrainingFeedback(preview, reason) {
   localStorage.setItem("techstart_training_feedback", JSON.stringify({
     challengeId: room.currentChallengeId,
@@ -79,28 +63,11 @@ function saveTrainingFeedback(preview, reason) {
 function redirectToTrainingFeedback() {
   redirected = true;
   window.location.assign(feedbackUrl(true));
->>>>>>> main
 }
 
 function redirectToDashboard(reason) {
   localStorage.setItem("techstart_last_duel_redirect", String(reason || "sem motivo"));
   window.location.href = "../dashboard/dashboard.html";
-<<<<<<< HEAD
-}
-
-function showPopup(title, text, callback) {
-  popupTitle.textContent = title;
-  popupText.textContent = text;
-  popup.classList.remove("hidden");
-  popupButton.onclick = () => {
-    popup.classList.add("hidden");
-    if (callback) {
-      callback();
-    }
-  };
-}
-
-=======
 }
 
 function showPopup(title, text, callback) {
@@ -236,7 +203,6 @@ async function compileJava(source, challenge) {
   };
 }
 
->>>>>>> main
 function wait(ms) {
   return new Promise((resolve) => {
     window.setTimeout(resolve, ms);
@@ -267,11 +233,7 @@ function formatClock(totalSeconds) {
 function setRoundControlsDisabled(disabled) {
   document.getElementById("test-button").disabled = disabled;
   document.getElementById("submit-button").disabled = disabled;
-<<<<<<< HEAD
-  document.getElementById("help-button").disabled = disabled;
-=======
   document.getElementById("give-up-round-button").disabled = disabled;
->>>>>>> main
   document.getElementById("solution-input").disabled = disabled;
 }
 
@@ -283,10 +245,7 @@ async function syncPresence() {
   const touchedRoom = await TechStartApp.touchPlayerPresenceAsync(roomCode, duelUser.id);
   if (touchedRoom) {
     room = touchedRoom;
-<<<<<<< HEAD
-=======
     document.getElementById("connection-status").textContent = "Conexão estável";
->>>>>>> main
   }
 
   const checkedRoom = await TechStartApp.finishDisconnectedPlayersAsync(roomCode, duelUser.id);
@@ -449,11 +408,7 @@ async function renderRoom() {
 
   if (room.status !== "playing") {
     if (isOfflineTraining()) {
-<<<<<<< HEAD
-      redirectToDashboard("treino offline encerrado");
-=======
       redirectToDashboard("treino encerrado");
->>>>>>> main
       return;
     }
     if (room.status === "feedback") {
@@ -468,23 +423,14 @@ async function renderRoom() {
   if (remaining <= 0) {
     if (isOfflineTraining()) {
       redirected = true;
-<<<<<<< HEAD
-=======
       const preview = await TechStartApp.previewSolutionAsync(document.getElementById("solution-input").value, room.currentChallengeId);
->>>>>>> main
       await TechStartApp.registerOfflineTrainingAsync(
         duelUser.id,
         room.language || duelUser.language || "Java",
         "Tempo esgotado"
       );
-<<<<<<< HEAD
-      showPopup("Tempo esgotado", "Seu treino offline foi encerrado.", () => {
-        redirectToDashboard("tempo do treino offline esgotado");
-      });
-=======
       saveTrainingFeedback(preview, "time");
       redirectToTrainingFeedback();
->>>>>>> main
       return;
     }
     await TechStartApp.finishExpiredRoundAsync(room.code);
@@ -503,11 +449,7 @@ async function renderRoom() {
 
   document.getElementById("room-chip").textContent = `Sala ${room.code}`;
   document.getElementById("round-indicator").textContent = isOfflineTraining()
-<<<<<<< HEAD
-    ? "Treino offline"
-=======
     ? "Treino"
->>>>>>> main
     : `Round ${room.currentRound}/${room.totalRounds}`;
   document.getElementById("timer-indicator").textContent = formatClock(remaining);
   document.getElementById("player-one-name").textContent = userOne ? userOne.name : "Jogador 1";
@@ -522,19 +464,6 @@ async function renderRoom() {
     : `${playerTwo ? playerTwo.score : 0} pts`;
   document.getElementById("challenge-name").textContent = challenge.title;
   document.getElementById("challenge-description").textContent = challenge.description;
-<<<<<<< HEAD
-  document.getElementById("language-chip").textContent = room.language;
-  document.getElementById("solution-input").placeholder = challenge.starter;
-
-  toggleOfflineBackButton();
-  setRoundControlsDisabled(!currentPlayer || currentPlayer.solutionStatus !== "pending");
-}
-
-document.getElementById("offline-back-button").addEventListener("click", () => {
-  redirectToDashboard("voltar do treino offline");
-});
-
-=======
   renderChallengeDetails(challenge);
   document.getElementById("language-chip").textContent = room.language;
   document.getElementById("solution-input").placeholder = challenge.starter;
@@ -544,7 +473,6 @@ document.getElementById("offline-back-button").addEventListener("click", () => {
   renderChat();
 }
 
->>>>>>> main
 document.getElementById("test-button").addEventListener("click", async () => {
   const code = document.getElementById("solution-input").value;
   if (!code.trim()) {
@@ -552,72 +480,6 @@ document.getElementById("test-button").addEventListener("click", async () => {
     return;
   }
 
-<<<<<<< HEAD
-  document.getElementById("ai-output").textContent = "Analisando sua solucao...";
-  const preview = await TechStartApp.previewSolutionAsync(code, room.currentChallengeId);
-  document.getElementById("result-output").textContent = preview.evaluation.message;
-  document.getElementById("ai-output").textContent = preview.aiFeedback;
-  showPopup(
-    preview.evaluation.correct ? "Boa, estrutura aceita" : "Ainda precisa ajustar",
-    preview.evaluation.correct
-      ? "A analise encontrou os pontos principais esperados para este desafio."
-      : "Confira o feedback antes de enviar a solucao final."
-  );
-});
-
-document.getElementById("solution-input").addEventListener("keydown", handleEditorKeydown);
-
-document.getElementById("submit-button").addEventListener("click", async () => {
-  const code = document.getElementById("solution-input").value;
-  if (!code.trim()) {
-    showPopup("Codigo vazio", "Digite sua solucao antes de enviar.");
-    return;
-  }
-
-  setRoundControlsDisabled(true);
-  if (isOfflineTraining()) {
-    redirected = true;
-    const preview = await TechStartApp.previewSolutionAsync(code, room.currentChallengeId);
-    const resultLabel = preview.evaluation.correct ? "Treino concluido" : "Treino revisado";
-    document.getElementById("result-output").textContent = preview.evaluation.message;
-    document.getElementById("ai-output").textContent = preview.aiFeedback;
-    await TechStartApp.registerOfflineTrainingAsync(
-      duelUser.id,
-      room.language || duelUser.language || "Java",
-      resultLabel
-    );
-    showPopup(resultLabel, "Sua solucao foi avaliada sem esperar outro jogador.", () => {
-      redirectToDashboard("treino offline finalizado");
-    });
-    return;
-  }
-
-  const result = await TechStartApp.submitSolutionAsync(room.code, duelUser.id, code);
-  if (!result.ok) {
-    setRoundControlsDisabled(false);
-    showPopup("Nao foi possivel enviar", result.message);
-    return;
-  }
-
-  document.getElementById("result-output").textContent = result.evaluation.message;
-  document.getElementById("ai-output").textContent = result.aiFeedback;
-
-  if (result.room.status !== "playing") {
-    showPopup("Round finalizado", "Vamos ver o feedback antes do proximo round.", redirectToFeedback);
-    return;
-  }
-
-  showPopup("Solucao enviada", "Aguardando o outro jogador concluir o round.");
-  await renderRoom();
-});
-
-document.getElementById("help-button").addEventListener("click", async () => {
-  const details = document.getElementById("solution-input").value
-    ? "Preciso de ajuda para revisar minha solucao deste round."
-    : "Preciso de ajuda para iniciar este round.";
-  await TechStartApp.requestExternalHelpAsync(room.code, duelUser.id, details);
-  showPopup("Ajuda solicitada", "Sua solicitacao foi enviada para a comunidade.");
-=======
   const challenge = TechStartApp.getChallengeById(room.currentChallengeId);
   setBusy(true, "Compilando e executando os testes...");
   document.getElementById("ai-output").textContent = "Avaliando sua solução...";
@@ -721,7 +583,6 @@ document.getElementById("give-up-round-button").addEventListener("click", async 
     return;
   }
   showPopup("Round encerrado", "Você desistiu deste round. Aguardando o outro jogador terminar.");
->>>>>>> main
 });
 
 (async () => {

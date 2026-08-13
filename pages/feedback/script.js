@@ -9,8 +9,6 @@ const fallbackActiveRoom =
     ? window.TechStartApp.getActiveRoom()
     : null;
 const roomCode = (params.get("room") || fallbackActiveRoom?.code || "").toUpperCase();
-<<<<<<< HEAD
-=======
 const isTrainingFeedback = params.get("training") === "1";
 const TRAINING_FEEDBACK_KEY = "techstart_training_feedback";
 
@@ -26,7 +24,6 @@ const referenceSolutions = {
   "java-repetir-palavra": "public class Solution {\n  public static String repetir(String palavra) {\n    return palavra + palavra;\n  }\n}",
   "java-tabuda": "public class Solution {\n  public static int vezesDez(int numero) {\n    return numero * 10;\n  }\n}",
 };
->>>>>>> main
 
 function scoreboardUrl() {
   const url = new URL("../scoreboard/scoreboard.html", window.location.href);
@@ -75,8 +72,6 @@ function getUser(userId) {
   return cachedUsers.find((user) => user.id === userId) || null;
 }
 
-<<<<<<< HEAD
-=======
 function getTrainingPayload() {
   try {
     return JSON.parse(localStorage.getItem(TRAINING_FEEDBACK_KEY) || "null");
@@ -118,7 +113,6 @@ function renderTrainingFeedback() {
   document.getElementById("reference-solution").textContent = referenceSolutions[payload.challengeId] || challenge?.starter || "Solução de referência indisponível.";
 }
 
->>>>>>> main
 function renderPlayers() {
   const feedbackByUser = new Map((room.lastRoundFeedback || []).map((item) => [item.userId, item]));
   document.getElementById("players-summary").innerHTML = room.players
@@ -172,11 +166,8 @@ async function renderRoom() {
     : userFeedback?.solutionStatus === "correct"
     ? "Voce acertou, mas chegou depois"
     : "Ainda nao foi dessa vez";
-<<<<<<< HEAD
-=======
   document.querySelector(".result-panel").classList.toggle("round-success", Boolean(userFeedback?.scoredThisRound));
   document.querySelector(".result-panel").classList.toggle("round-warning", !userFeedback?.scoredThisRound);
->>>>>>> main
   document.getElementById("evaluation-output").textContent =
     userFeedback?.evaluationMessage || "Nao encontramos uma submissao sua neste round.";
   document.getElementById("ai-output").textContent =
@@ -207,8 +198,6 @@ document.getElementById("continue-button").addEventListener("click", async () =>
   await renderRoom();
 });
 
-<<<<<<< HEAD
-=======
 document.getElementById("train-again-button").addEventListener("click", async () => {
   const button = document.getElementById("train-again-button");
   button.disabled = true;
@@ -221,7 +210,6 @@ document.getElementById("train-again-button").addEventListener("click", async ()
   window.location.assign(url.toString());
 });
 
->>>>>>> main
 (async () => {
   if (!roomCode) {
     redirectToDashboard("codigo da sala ausente");
@@ -230,13 +218,10 @@ document.getElementById("train-again-button").addEventListener("click", async ()
 
   await TechStartApp.loadChallengesAsync();
   currentUser = await TechStartApp.requireAuthAsync();
-<<<<<<< HEAD
-=======
   if (isTrainingFeedback) {
     renderTrainingFeedback();
     return;
   }
->>>>>>> main
   await renderRoom();
   window.setInterval(renderRoom, 1000);
 })();

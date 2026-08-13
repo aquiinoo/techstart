@@ -108,10 +108,6 @@ async function renderRoom() {
 }
 
 document.getElementById("rematch-button").addEventListener("click", async () => {
-<<<<<<< HEAD
-  await TechStartApp.requestRematchAsync(room.code, currentUser.id);
-  window.location.assign(scoreboardUrl(room.code));
-=======
   const updated = await TechStartApp.requestRematchAsync(room.code, currentUser.id);
   const button = document.getElementById("rematch-button");
   if (updated?.status === "lobby") {
@@ -123,7 +119,6 @@ document.getElementById("rematch-button").addEventListener("click", async () => 
   button.disabled = true;
   button.textContent = "Aguardando adversário...";
   showPopup("Revanche solicitada", "Você aceitou a revanche. Quando o outro jogador aceitar, a partida será reiniciada.");
->>>>>>> main
 });
 
 document.getElementById("new-opponent-button").addEventListener("click", async () => {

@@ -180,6 +180,14 @@ async function renderRoom() {
     document.getElementById("countdown-indicator").textContent = "--";
   }
 
+<<<<<<< HEAD
+=======
+  const rematchPending = (room.rematchRequests || []).length === 1;
+  if (rematchPending) {
+    document.getElementById("last-round-summary").textContent = "Revanche solicitada: aguardando o outro jogador aceitar.";
+  }
+
+>>>>>>> main
   document.getElementById("last-round-summary").textContent = lastRoundWinner
     ? `Ultimo round: ${lastRoundWinner.name} pontuou.`
     : "Quando ambos estiverem prontos, a contagem comeca.";
@@ -216,6 +224,21 @@ document.getElementById("give-up-button").addEventListener("click", async () => 
   });
 });
 
+<<<<<<< HEAD
+=======
+document.querySelector(".back-link").addEventListener("click", async (event) => {
+  if (!room || room.status === "playing") return;
+  event.preventDefault();
+  const result = await TechStartApp.leaveRoomAsync(room.code, currentUser.id);
+  if (result?.ok) {
+    redirectToDashboard("jogador saiu da sala antes do duelo");
+  } else {
+    showPopup("Não foi possível sair", result?.message || "Tente novamente.");
+  }
+});
+
+
+>>>>>>> main
 document.getElementById("chat-form").addEventListener("submit", async (event) => {
   event.preventDefault();
   const input = document.getElementById("chat-input");

@@ -8,6 +8,7 @@
   <link rel="icon" href="../../assets/piscando.png" type="image/png">
 </head>
 <body>
+<<<<<<< HEAD
   <button id="offline-back-button" class="text-button hidden" type="button">Voltar</button>
 
   <main class="challenge-layout">
@@ -15,6 +16,14 @@
       <div>
         <p class="section-label" id="room-chip">Sala</p>
         <h1 id="round-indicator">Round</h1>
+=======
+  <main class="challenge-layout">
+    <header class="match-topbar">
+      <div>
+          <p class="section-label" id="room-chip">Sala</p>
+          <h1 id="round-indicator">Round</h1>
+          <p class="connection-status" id="connection-status" aria-live="polite">Conectando...</p>
+>>>>>>> main
       </div>
 
       <div class="score-strip">
@@ -30,6 +39,10 @@
           <span id="player-two-score">0 pts</span>
         </div>
       </div>
+<<<<<<< HEAD
+=======
+      <button id="leave-training-button" class="secondary-button hidden" type="button">Voltar ao painel</button>
+>>>>>>> main
     </header>
 
     <section class="panel challenge-panel">
@@ -38,6 +51,7 @@
           <p class="section-label">Desafio</p>
           <h2 id="challenge-name">Preparando round</h2>
           <p id="challenge-description" class="muted"></p>
+          <div id="challenge-details" class="challenge-details"></div>
         </div>
         <div class="language-chip" id="language-chip"></div>
       </div>
@@ -45,9 +59,15 @@
       <textarea id="solution-input" placeholder="Digite sua solucao aqui."></textarea>
 
       <div class="editor-actions">
+<<<<<<< HEAD
         <button id="test-button" class="secondary-button">Testar</button>
         <button id="submit-button" class="primary-button">Enviar solucao</button>
         <button id="help-button" class="secondary-button">Solicitar ajuda externa</button>
+=======
+        <button id="test-button" class="secondary-button">Compilar e testar Java</button>
+        <button id="submit-button" class="primary-button">Enviar solucao</button>
+        <button id="give-up-round-button" class="secondary-button">Desistir do round</button>
+>>>>>>> main
       </div>
 
       <div class="feedback-grid">
@@ -62,6 +82,22 @@
       </div>
     </section>
   </main>
+
+  <aside class="floating-chat is-minimized" id="floating-chat" aria-label="Chat da sala">
+    <button class="chat-toggle" id="chat-toggle" type="button" aria-expanded="false">💬 Chat da sala <span id="chat-count"></span></button>
+    <div class="floating-chat-body">
+      <div id="chat-messages" class="chat-messages"></div>
+      <form id="chat-form" class="chat-form">
+        <input id="chat-input" maxlength="500" placeholder="Mensagem para seu oponente" autocomplete="off">
+        <button class="primary-button" type="submit">Enviar</button>
+      </form>
+    </div>
+  </aside>
+
+  <div class="loading-overlay" id="loading-overlay" aria-live="polite">
+    <img src="../../assets/carregando.png" alt="Panda preparando o desafio">
+    <p>O panda está preparando seu feedback...</p>
+  </div>
 
   <div id="popup" class="popup hidden" role="dialog" aria-modal="true">
     <div class="popup-card">
@@ -78,6 +114,10 @@
   <script src="https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore-compat.js"></script>
   <script src="../../shared/firebase.js"></script>
   <script src="../../shared/firebase-client.js"></script>
+<<<<<<< HEAD
+=======
+  <script src="../../shared/compiler-config.js"></script>
+>>>>>>> main
   <script src="../../shared/challenges.js"></script>
   <script src="../../shared/app.js"></script>
   <script src="script.js"></script>

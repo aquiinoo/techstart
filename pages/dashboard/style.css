@@ -1,15 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
 
 :root {
-  --bg: #08111c;
+  --bg: #09111e;
   --panel: rgba(255, 255, 255, 0.06);
   --card: rgba(255, 255, 255, 0.05);
   --border: rgba(110, 168, 255, 0.18);
-  --text: #eef5f0;
+  --text: #eef4ff;
   --muted: #aac6df;
   --accent: #6ea8ff;
   --accent-soft: #a2cffc;
   --success: #7bd7a0;
+  --red: #ff6b7a;
 }
 
 * {
@@ -22,9 +23,9 @@
 body {
   min-height: 100vh;
   background:
-    radial-gradient(circle at top left, rgba(110, 168, 255, 0.16), transparent 24%),
-    radial-gradient(circle at bottom right, rgba(255, 255, 255, 0.08), transparent 24%),
-    linear-gradient(135deg, #06110e, #081313 45%, #0b1715);
+    radial-gradient(circle at top left, rgba(110, 168, 255, 0.22), transparent 24%),
+    radial-gradient(circle at bottom right, rgba(255, 95, 109, 0.18), transparent 26%),
+    linear-gradient(135deg, #07111f, #10151f 45%, #190e14);
   color: var(--text);
 }
 
@@ -135,8 +136,8 @@ textarea {
 }
 
 .primary-button {
-  background: linear-gradient(135deg, var(--accent), #8cc9ff);
-  color: #06120f;
+  background: linear-gradient(135deg, var(--accent), var(--red));
+  color: #fff;
   box-shadow: 0 14px 30px rgba(110, 168, 255, 0.16);
 }
 
@@ -247,7 +248,11 @@ select {
   -webkit-appearance: none;
   -moz-appearance: none;
   padding-right: 42px;
+<<<<<<< HEAD
   background-color: #08111c;
+=======
+  background-color: #09111e;
+>>>>>>> main
   color: var(--text);
   background-image: linear-gradient(45deg, transparent 50%, var(--text) 50%),
                     linear-gradient(135deg, var(--text) 50%, transparent 50%);

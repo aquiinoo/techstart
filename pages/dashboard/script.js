@@ -73,7 +73,7 @@ function renderHistory(user) {
       (entry) => `
         <article class="history-item">
           <strong>${entry.result}</strong>
-          <p>${entry.type === "offline" ? "Treino offline" : "Duelo"} - ${entry.opponent}</p>
+          <p>${entry.type === "offline" ? "Treino" : "Duelo"} - ${entry.opponent}</p>
           <p>Placar/Linguagem: ${entry.score}</p>
           <p>${TechStartApp.formatDate(entry.date)}</p>
         </article>

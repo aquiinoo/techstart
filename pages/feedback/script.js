@@ -9,6 +9,24 @@ const fallbackActiveRoom =
     ? window.TechStartApp.getActiveRoom()
     : null;
 const roomCode = (params.get("room") || fallbackActiveRoom?.code || "").toUpperCase();
+<<<<<<< HEAD
+=======
+const isTrainingFeedback = params.get("training") === "1";
+const TRAINING_FEEDBACK_KEY = "techstart_training_feedback";
+
+const referenceSolutions = {
+  "java-soma": "public class Solution {\n  public static int soma(int a, int b) {\n    return a + b;\n  }\n}",
+  "java-par": "public class Solution {\n  public static boolean ehPar(int numero) {\n    return numero % 2 == 0;\n  }\n}",
+  "java-maior": "public class Solution {\n  public static int maior(int a, int b) {\n    return a > b ? a : b;\n  }\n}",
+  "java-media": "public class Solution {\n  public static double media(double n1, double n2, double n3) {\n    return (n1 + n2 + n3) / 3.0;\n  }\n}",
+  "java-positivo": "public class Solution {\n  public static boolean ehPositivo(int numero) {\n    return numero > 0;\n  }\n}",
+  "java-celsius-fahrenheit": "public class Solution {\n  public static double converter(double celsius) {\n    return celsius * 9 / 5 + 32;\n  }\n}",
+  "java-contar-caracteres": "public class Solution {\n  public static int contarCaracteres(String texto) {\n    return texto.length();\n  }\n}",
+  "java-primeira-letra": "public class Solution {\n  public static char primeiraLetra(String texto) {\n    return texto.charAt(0);\n  }\n}",
+  "java-repetir-palavra": "public class Solution {\n  public static String repetir(String palavra) {\n    return palavra + palavra;\n  }\n}",
+  "java-tabuda": "public class Solution {\n  public static int vezesDez(int numero) {\n    return numero * 10;\n  }\n}",
+};
+>>>>>>> main
 
 function scoreboardUrl() {
   const url = new URL("../scoreboard/scoreboard.html", window.location.href);
@@ -57,6 +75,50 @@ function getUser(userId) {
   return cachedUsers.find((user) => user.id === userId) || null;
 }
 
+<<<<<<< HEAD
+=======
+function getTrainingPayload() {
+  try {
+    return JSON.parse(localStorage.getItem(TRAINING_FEEDBACK_KEY) || "null");
+  } catch (error) {
+    return null;
+  }
+}
+
+function renderTrainingFeedback() {
+  const payload = getTrainingPayload();
+  if (!payload) {
+    redirectToDashboard("feedback de treino indisponivel");
+    return;
+  }
+  const challenge = TechStartApp.getChallengeById(payload.challengeId);
+  const timedOut = payload.reason === "time";
+  const gaveUp = payload.reason === "gaveup";
+  const correct = Boolean(payload.evaluation?.correct);
+
+  document.getElementById("room-chip").textContent = "Treino";
+  document.getElementById("feedback-title").textContent = timedOut ? "Tempo esgotado" : gaveUp ? "Treino interrompido" : correct ? "Treino concluído" : "Treino revisado";
+  document.getElementById("challenge-summary").textContent = `${challenge?.title || "Desafio"} — ${challenge?.description || ""}`;
+  document.getElementById("score-pill").textContent = timedOut ? "00:00" : correct ? "✓" : "↻";
+  document.getElementById("result-title").textContent = timedOut ? "O tempo acabou" : gaveUp ? "Você encerrou o treino" : correct ? "Boa solução!" : "Você está no caminho";
+  document.getElementById("evaluation-output").textContent = timedOut
+    ? "O treino foi encerrado pelo tempo. Compare uma solução de referência com a sua ideia e tente novamente."
+    : gaveUp
+    ? "O treino foi encerrado por você. Use a solução de referência como ponto de partida e tente outro desafio."
+    : payload.evaluation?.message || "Revise o método solicitado.";
+  document.getElementById("ai-output").textContent = payload.aiFeedback || "Use as dicas e os casos de teste para ajustar sua solução.";
+  document.querySelector(".result-panel").classList.toggle("round-success", correct && !timedOut);
+  document.querySelector(".result-panel").classList.toggle("round-warning", !correct || timedOut);
+  document.querySelector(".players-panel").classList.add("hidden");
+  document.getElementById("training-panel").classList.remove("hidden");
+  document.getElementById("training-note").textContent = timedOut ? "Veja uma forma possível de resolver" : "Continue praticando para ganhar velocidade";
+  document.getElementById("training-detail").textContent = timedOut
+    ? "A solução abaixo é apenas uma referência. Tente reescrevê-la com suas próprias palavras no próximo treino."
+    : "Você pode iniciar outro desafio agora ou voltar ao painel.";
+  document.getElementById("reference-solution").textContent = referenceSolutions[payload.challengeId] || challenge?.starter || "Solução de referência indisponível.";
+}
+
+>>>>>>> main
 function renderPlayers() {
   const feedbackByUser = new Map((room.lastRoundFeedback || []).map((item) => [item.userId, item]));
   document.getElementById("players-summary").innerHTML = room.players
@@ -110,6 +172,11 @@ async function renderRoom() {
     : userFeedback?.solutionStatus === "correct"
     ? "Voce acertou, mas chegou depois"
     : "Ainda nao foi dessa vez";
+<<<<<<< HEAD
+=======
+  document.querySelector(".result-panel").classList.toggle("round-success", Boolean(userFeedback?.scoredThisRound));
+  document.querySelector(".result-panel").classList.toggle("round-warning", !userFeedback?.scoredThisRound);
+>>>>>>> main
   document.getElementById("evaluation-output").textContent =
     userFeedback?.evaluationMessage || "Nao encontramos uma submissao sua neste round.";
   document.getElementById("ai-output").textContent =
@@ -140,6 +207,21 @@ document.getElementById("continue-button").addEventListener("click", async () =>
   await renderRoom();
 });
 
+<<<<<<< HEAD
+=======
+document.getElementById("train-again-button").addEventListener("click", async () => {
+  const button = document.getElementById("train-again-button");
+  button.disabled = true;
+  button.textContent = "Preparando desafio...";
+  const newRoom = await TechStartApp.createRoomAsync(currentUser.id, "Java");
+  await TechStartApp.startOfflineTrainingAsync(newRoom.code, currentUser.id);
+  const url = new URL("../desafio/desafio.html", window.location.href);
+  url.searchParams.set("room", newRoom.code);
+  url.searchParams.set("mode", "offline");
+  window.location.assign(url.toString());
+});
+
+>>>>>>> main
 (async () => {
   if (!roomCode) {
     redirectToDashboard("codigo da sala ausente");
@@ -148,6 +230,13 @@ document.getElementById("continue-button").addEventListener("click", async () =>
 
   await TechStartApp.loadChallengesAsync();
   currentUser = await TechStartApp.requireAuthAsync();
+<<<<<<< HEAD
+=======
+  if (isTrainingFeedback) {
+    renderTrainingFeedback();
+    return;
+  }
+>>>>>>> main
   await renderRoom();
   window.setInterval(renderRoom, 1000);
 })();

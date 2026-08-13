@@ -31,6 +31,11 @@ button {
   font: inherit;
 }
 
+<<<<<<< HEAD
+=======
+.hidden { display: none !important; }
+
+>>>>>>> main
 .feedback-layout {
   width: min(1120px, calc(100% - 32px));
   margin: 0 auto;
@@ -41,7 +46,11 @@ button {
 
 .panel {
   background: var(--panel);
+<<<<<<< HEAD
   border-radius: 20px;
+=======
+  border-radius: 28px;
+>>>>>>> main
   border: 1px solid var(--border);
   box-shadow: 0 24px 48px rgba(0, 0, 0, 0.26);
   backdrop-filter: blur(16px);
@@ -75,7 +84,11 @@ button {
   place-items: center;
   border-radius: 18px;
   border: 1px solid rgba(79, 156, 255, 0.36);
+<<<<<<< HEAD
   background: rgba(255, 255, 255, 0.05);
+=======
+  background: linear-gradient(90deg, rgba(79, 156, 255, 0.28), rgba(255, 95, 109, 0.28));
+>>>>>>> main
   color: #d7e8ff;
   font-size: 2rem;
   font-weight: 700;
@@ -95,6 +108,12 @@ button {
   min-height: 230px;
 }
 
+<<<<<<< HEAD
+=======
+.result-panel.round-success { border-color: rgba(61, 220, 151, .55); background: linear-gradient(145deg, rgba(61,220,151,.13), var(--panel)); }
+.result-panel.round-warning { border-color: rgba(255, 180, 171, .3); }
+
+>>>>>>> main
 .result-panel h2,
 .players-panel h2 {
   margin: 8px 0 10px;
@@ -136,13 +155,39 @@ button {
 
 .primary-button {
   min-height: 48px;
+<<<<<<< HEAD
   border-radius: 16px;
+=======
+  border-radius: 999px;
+>>>>>>> main
   border: 1px solid transparent;
   cursor: pointer;
   background: linear-gradient(135deg, var(--accent), var(--red));
   color: white;
 }
 
+<<<<<<< HEAD
+=======
+.secondary-button {
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 0 20px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,.06);
+  color: var(--text);
+  text-decoration: none;
+}
+
+.training-panel { display: grid; gap: 14px; }
+.training-panel h2 { font-size: clamp(1.5rem, 3vw, 2.2rem); }
+.reference-solution { padding: 16px; border-radius: 18px; background: rgba(79,156,255,.1); border: 1px solid rgba(79,156,255,.28); }
+.reference-solution pre { margin-top: 10px; overflow: auto; color: #dceaff; font: 0.9rem/1.55 ui-monospace, SFMono-Regular, Consolas, monospace; white-space: pre-wrap; }
+.training-actions { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; }
+
+>>>>>>> main
 .primary-button:disabled {
   cursor: not-allowed;
   opacity: 0.55;
@@ -155,7 +200,12 @@ button {
   }
 
   .feedback-grid,
+<<<<<<< HEAD
   .players-grid {
+=======
+  .players-grid,
+  .training-actions {
+>>>>>>> main
     grid-template-columns: 1fr;
   }
 }

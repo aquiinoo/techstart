@@ -12,7 +12,13 @@ const TechStartApp = (() => {
   const ROUND_DURATION_SECONDS = 300;
   const MATCH_WIN_SCORE = 2;
   const MATCH_TOTAL_ROUNDS = 3;
+<<<<<<< HEAD
   const PLAYER_HEARTBEAT_STALE_SECONDS = 20;
+=======
+  // A aba pode ficar em segundo plano ou passar por uma oscilacao curta de rede.
+  // Um intervalo maior evita encerrar uma partida valida por um falso positivo.
+  const PLAYER_HEARTBEAT_STALE_SECONDS = 90;
+>>>>>>> main
 
   let challengeCatalog = window.TechStartChallenges || [];
 
@@ -872,6 +878,28 @@ const TechStartApp = (() => {
     };
   }
 
+<<<<<<< HEAD
+=======
+  function giveUpRound(roomCode, userId) {
+    const room = getRoomByCode(roomCode);
+    if (!room || room.status !== "playing") {
+      return { ok: false, message: "Este round não está disponível." };
+    }
+    const player = room.players.find((item) => item.userId === userId);
+    if (!player || player.solutionStatus !== "pending") {
+      return { ok: false, message: "Você já enviou uma resposta neste round." };
+    }
+    player.submittedAt = now();
+    player.solutionStatus = "wrong";
+    player.scoredThisRound = false;
+    player.evaluationMessage = "Você desistiu deste round.";
+    player.aiFeedback = "Use o feedback e a solução de referência para tentar novamente no próximo desafio.";
+    completeRoundIfNeeded(room);
+    updateRoom(room);
+    return { ok: true, room };
+  }
+
+>>>>>>> main
   function completeRoundIfNeeded(room, finalizeStats = true) {
     const finishedRound = room.players.every((item) => item.solutionStatus !== "pending");
     if (!finishedRound) {
@@ -1018,11 +1046,36 @@ const TechStartApp = (() => {
       return null;
     }
     const opponent = room.players.find((player) => player.userId !== userId);
+    if (!opponent) {
+      room.status = "abandoned";
+      room.winnerUserId = null;
+      room.finishedReason = "abandoned";
+      updateRoom(room);
+      return room;
+    }
     room.status = "finished";
-    room.winnerUserId = opponent ? opponent.userId : userId;
+    room.winnerUserId = opponent.userId;
     finalizeRoomStats(room);
     updateRoom(room);
     return room;
+  }
+
+  function leaveRoom(roomCode, userId) {
+    const room = getRoomByCode(roomCode);
+    if (!room) {
+      return null;
+    }
+    if (room.status === "playing" && room.mode !== "offline") {
+      return { ok: false, message: "Use desistir depois que o duelo comecar." };
+    }
+    room.players = room.players.filter((player) => player.userId !== userId);
+    room.rematchRequests = (room.rematchRequests || []).filter((id) => id !== userId);
+    room.lastRoundFeedbackSeen = (room.lastRoundFeedbackSeen || []).filter((id) => id !== userId);
+    room.status = room.players.length ? "waiting" : "abandoned";
+    room.countdownStartedAt = null;
+    room.timerStartedAt = null;
+    updateRoom(room);
+    return { ok: true, room };
   }
 
   function requestRematch(roomCode, userId) {
@@ -1291,6 +1344,36 @@ const TechStartApp = (() => {
     return null;
   }
 
+  async function leaveRoomAsync(roomCode, userId) {
+    if (firebaseEnabled()) {
+      try {
+        const room = await getRoomByCodeAsync(roomCode);
+        if (!room) {
+          return null;
+        }
+        if (room.status === "playing" && room.mode !== "offline") {
+          return { ok: false, message: "Use desistir depois que o duelo comecar." };
+        }
+        room.players = room.players.filter((player) => player.userId !== userId);
+        room.rematchRequests = (room.rematchRequests || []).filter((id) => id !== userId);
+        room.lastRoundFeedbackSeen = (room.lastRoundFeedbackSeen || []).filter((id) => id !== userId);
+        room.status = room.players.length ? "waiting" : "abandoned";
+        room.countdownStartedAt = null;
+        room.timerStartedAt = null;
+        await window.TechStartFirebaseClient.updateRoom(room);
+        cacheRoomLocally(room);
+        return { ok: true, room };
+      } catch (error) {
+        console.warn("Nao foi possivel sair da sala no Firebase.", error);
+      }
+    }
+    const localResult = leaveRoom(roomCode, userId);
+    if (localResult?.room) {
+      cacheRoomLocally(localResult.room);
+    }
+    return localResult;
+  }
+
   async function setPlayerReadyAsync(roomCode, userId, ready) {
     if (firebaseEnabled()) {
       try {
@@ -1460,7 +1543,11 @@ const TechStartApp = (() => {
         cacheRoomLocally(room);
         return room;
       } catch (error) {
+<<<<<<< HEAD
         console.warn("Nao foi possivel iniciar o treino offline no Firebase. Usando fallback local.", error);
+=======
+        console.warn("Nao foi possivel iniciar o treino no Firebase. Usando fallback local.", error);
+>>>>>>> main
       }
     }
     const localRoom = startOfflineTraining(roomCode, userId);
@@ -1587,7 +1674,11 @@ const TechStartApp = (() => {
       nick: "guest",
       email: "",
       github: "",
+<<<<<<< HEAD
       bio: "Perfil temporario para treino offline.",
+=======
+      bio: "Perfil temporario para treino.",
+>>>>>>> main
       language: "Java",
       guest: true,
     });
@@ -1716,6 +1807,43 @@ const TechStartApp = (() => {
     return localRoom;
   }
 
+<<<<<<< HEAD
+=======
+  async function giveUpRoundAsync(roomCode, userId) {
+    if (firebaseEnabled()) {
+      try {
+        const room = await getRoomByCodeAsync(roomCode);
+        if (!room || room.status !== "playing") {
+          return { ok: false, message: "Este round não está disponível." };
+        }
+        const player = room.players.find((item) => item.userId === userId);
+        if (!player || player.solutionStatus !== "pending") {
+          return { ok: false, message: "Você já enviou uma resposta neste round." };
+        }
+        player.submittedAt = now();
+        player.solutionStatus = "wrong";
+        player.scoredThisRound = false;
+        player.evaluationMessage = "Você desistiu deste round.";
+        player.aiFeedback = "Use o feedback e a solução de referência para tentar novamente no próximo desafio.";
+        completeRoundIfNeeded(room, false);
+        if (room.matchFinishedAfterFeedback) {
+          await finalizeFirebaseRoomStats(room);
+        }
+        await window.TechStartFirebaseClient.updateRoom(room);
+        cacheRoomLocally(room);
+        return { ok: true, room };
+      } catch (error) {
+        console.warn("Não foi possível desistir do round no Firebase.", error);
+      }
+    }
+    const localResult = giveUpRound(roomCode, userId);
+    if (localResult.room) {
+      cacheRoomLocally(localResult.room);
+    }
+    return localResult;
+  }
+
+>>>>>>> main
   async function markRoundFeedbackSeenAsync(roomCode, userId) {
     if (firebaseEnabled()) {
       try {
@@ -1754,8 +1882,16 @@ const TechStartApp = (() => {
           return null;
         }
         const opponent = room.players.find((player) => player.userId !== userId);
+        if (!opponent) {
+          room.status = "abandoned";
+          room.winnerUserId = null;
+          room.finishedReason = "abandoned";
+          await window.TechStartFirebaseClient.updateRoom(room);
+          cacheRoomLocally(room);
+          return room;
+        }
         room.status = "finished";
-        room.winnerUserId = opponent ? opponent.userId : userId;
+        room.winnerUserId = opponent.userId;
         await finalizeFirebaseRoomStats(room);
         await window.TechStartFirebaseClient.updateRoom(room);
         cacheRoomLocally(room);
@@ -1893,6 +2029,11 @@ const TechStartApp = (() => {
     previewSolutionAsync,
     submitSolutionAsync,
     submitSolution,
+<<<<<<< HEAD
+=======
+    giveUpRoundAsync,
+    giveUpRound,
+>>>>>>> main
     finishExpiredRoundAsync,
     finishExpiredRound,
     markRoundFeedbackSeenAsync,
@@ -1900,6 +2041,8 @@ const TechStartApp = (() => {
     ensureOfflineOpponentAsync,
     giveUpAsync,
     giveUp,
+    leaveRoomAsync,
+    leaveRoom,
     requestRematchAsync,
     requestRematch,
     requestRandomMatchAsync,

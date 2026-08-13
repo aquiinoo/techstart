@@ -451,6 +451,9 @@ async function renderRoom() {
   document.getElementById("round-indicator").textContent = isOfflineTraining()
     ? "Treino"
     : `Round ${room.currentRound}/${room.totalRounds}`;
+  document.getElementById("connection-status").textContent = isOfflineTraining()
+    ? "Treino em andamento"
+    : "Conexão estável";
   document.getElementById("timer-indicator").textContent = formatClock(remaining);
   document.getElementById("player-one-name").textContent = userOne ? userOne.name : "Jogador 1";
   document.getElementById("player-one-score").textContent = `${playerOne ? playerOne.score : 0} pts`;

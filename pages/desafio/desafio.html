@@ -3,101 +3,302 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>TechStart | Desafio</title>
-  <link rel="stylesheet" href="style.css?v=20260813-2">
+
+  <link rel="stylesheet" href="style.css?v=20260815-1">
   <link rel="icon" href="../../assets/piscando.png" type="image/png">
 </head>
+
 <body>
+
   <main class="challenge-layout">
+
     <header class="match-topbar">
+
       <div>
-          <p class="section-label" id="room-chip">Sala</p>
-          <h1 id="round-indicator">Round</h1>
-          <p class="connection-status" id="connection-status" aria-live="polite">Conectando...</p>
+        <p class="section-label" id="room-chip">Sala</p>
+
+        <h1 id="round-indicator">Round</h1>
+
+        <p
+          class="connection-status"
+          id="connection-status"
+          aria-live="polite"
+        >
+          Conectando...
+        </p>
       </div>
 
+
       <div class="score-strip">
+
         <div class="player-side blue-side">
           <strong id="player-one-name">Jogador 1</strong>
           <span id="player-one-score">0 pts</span>
         </div>
+
+
         <div class="timer-box">
           <span id="timer-indicator">05:00</span>
         </div>
+
+
         <div class="player-side red-side">
           <strong id="player-two-name">Jogador 2</strong>
           <span id="player-two-score">0 pts</span>
         </div>
+
       </div>
-      <button id="leave-training-button" class="secondary-button hidden" type="button">Voltar ao painel</button>
+
+
+      <button
+        id="leave-training-button"
+        class="secondary-button hidden"
+        type="button"
+      >
+        Voltar ao painel
+      </button>
+
     </header>
 
+
     <section class="panel challenge-panel">
+
       <div class="challenge-meta">
+
         <div>
+
           <p class="section-label">Desafio</p>
-          <h2 id="challenge-name">Preparando round</h2>
-          <p id="challenge-description" class="muted"></p>
-          <div id="challenge-details" class="challenge-details"></div>
+
+          <h2 id="challenge-name">
+            Preparando round
+          </h2>
+
+          <p
+            id="challenge-description"
+            class="muted"
+          ></p>
+
+          <div
+            id="challenge-details"
+            class="challenge-details"
+          ></div>
+
         </div>
-        <div class="language-chip" id="language-chip"></div>
+
+
+        <div
+          class="language-chip"
+          id="language-chip"
+        ></div>
+
       </div>
 
-      <textarea id="solution-input" placeholder="Digite sua solucao aqui."></textarea>
+
+      <textarea
+        id="solution-input"
+        placeholder="Digite sua solucao aqui."
+      ></textarea>
+
 
       <div class="editor-actions">
-        <button id="test-button" class="secondary-button">Compilar e testar Java</button>
-        <button id="submit-button" class="primary-button">Enviar solucao</button>
-        <button id="give-up-round-button" class="secondary-button">Desistir do round</button>
+
+        <!-- BOTÃO NEUTRO -->
+        <button
+          id="test-button"
+          class="secondary-button"
+          type="button"
+        >
+          Compilar e testar Java
+        </button>
+
+
+        <!-- BOTÃO VERDE -->
+        <button
+          id="submit-button"
+          class="primary-button"
+          type="button"
+        >
+          Enviar solucao
+        </button>
+
+
+        <!-- BOTÃO VERMELHO -->
+        <button
+          id="give-up-round-button"
+          class="danger-button"
+          type="button"
+        >
+          Desistir do round
+        </button>
+
       </div>
+
 
       <div class="feedback-grid">
+
         <article class="feedback-card">
+
           <h3>Resultado</h3>
-          <p id="result-output" class="muted">Os testes e o feedback aparecerao aqui.</p>
+
+          <p
+            id="result-output"
+            class="muted"
+          >
+            Os testes e o feedback aparecerao aqui.
+          </p>
+
         </article>
+
+
         <article class="feedback-card">
+
           <h3>Analise da IA</h3>
-          <p id="ai-output" class="muted">A IA vai analisar sua resposta apos o inicio do exercicio.</p>
+
+          <p
+            id="ai-output"
+            class="muted"
+          >
+            A IA vai analisar sua resposta apos o inicio do exercicio.
+          </p>
+
         </article>
+
       </div>
+
     </section>
+
   </main>
 
-  <aside class="floating-chat is-minimized" id="floating-chat" aria-label="Chat da sala">
-    <button class="chat-toggle" id="chat-toggle" type="button" aria-expanded="false">💬 Chat da sala <span id="chat-count"></span></button>
+
+  <!-- CHAT -->
+
+  <aside
+    class="floating-chat is-minimized"
+    id="floating-chat"
+    aria-label="Chat da sala"
+  >
+
+    <button
+      class="chat-toggle"
+      id="chat-toggle"
+      type="button"
+      aria-expanded="false"
+    >
+      💬 Chat da sala
+      <span id="chat-count"></span>
+    </button>
+
+
     <div class="floating-chat-body">
-      <div id="chat-messages" class="chat-messages"></div>
-      <form id="chat-form" class="chat-form">
-        <input id="chat-input" maxlength="500" placeholder="Mensagem para seu oponente" autocomplete="off">
-        <button class="primary-button" type="submit">Enviar</button>
+
+      <div
+        id="chat-messages"
+        class="chat-messages"
+      ></div>
+
+
+      <form
+        id="chat-form"
+        class="chat-form"
+      >
+
+        <input
+          id="chat-input"
+          maxlength="500"
+          placeholder="Mensagem para seu oponente"
+          autocomplete="off"
+        >
+
+
+        <button
+          class="primary-button"
+          type="submit"
+        >
+          Enviar
+        </button>
+
       </form>
+
     </div>
+
   </aside>
 
-  <div class="loading-overlay" id="loading-overlay" aria-live="polite">
-    <img src="../../assets/carregando.png" alt="Panda preparando o desafio">
-    <p>O panda está preparando seu feedback...</p>
+
+  <!-- LOADING -->
+
+  <div
+    class="loading-overlay"
+    id="loading-overlay"
+    aria-live="polite"
+  >
+
+    <img
+      src="../../assets/carregando.png"
+      alt="Panda preparando o desafio"
+    >
+
+    <p>
+      O panda está preparando seu feedback...
+    </p>
+
   </div>
 
-  <div id="popup" class="popup hidden" role="dialog" aria-modal="true">
+
+  <!-- POPUP -->
+
+  <div
+    id="popup"
+    class="popup hidden"
+    role="dialog"
+    aria-modal="true"
+  >
+
     <div class="popup-card">
-      <p class="section-label">TechStart</p>
+
+      <p class="section-label">
+        TechStart
+      </p>
+
       <h3 id="popup-title"></h3>
+
       <p id="popup-text"></p>
-      <button type="button" class="primary-button" id="popup-button">Continuar</button>
+
+      <button
+        type="button"
+        class="primary-button"
+        id="popup-button"
+      >
+        Continuar
+      </button>
+
     </div>
+
   </div>
+
+
+  <!-- FIREBASE -->
 
   <script src="../../shared/firebase-config.js"></script>
+
   <script src="https://www.gstatic.com/firebasejs/12.7.0/firebase-app-compat.js"></script>
+
   <script src="https://www.gstatic.com/firebasejs/12.7.0/firebase-auth-compat.js"></script>
+
   <script src="https://www.gstatic.com/firebasejs/12.7.0/firebase-firestore-compat.js"></script>
+
   <script src="../../shared/firebase.js"></script>
+
   <script src="../../shared/firebase-client.js"></script>
+
   <script src="../../shared/compiler-config.js"></script>
+
   <script src="../../shared/challenges.js"></script>
+
   <script src="../../shared/app.js"></script>
-  <script src="script.js?v=20260813-2"></script>
+
+  <script src="script.js?v=20260815-1"></script>
+
 </body>
 </html>

@@ -245,7 +245,7 @@ textarea {
 
 /* =========================================
    BOTÃO POSITIVO
-   Ex.: Enviar solução / Pronto
+   Enviar solução
    ========================================= */
 
 .primary-button {
@@ -264,7 +264,7 @@ textarea {
 
 /* =========================================
    BOTÃO NEUTRO
-   Ex.: Copiar link / Voltar
+   Compilar e testar Java
    ========================================= */
 
 .secondary-button {
@@ -280,7 +280,7 @@ textarea {
 
 /* =========================================
    BOTÃO NEGATIVO
-   Ex.: Desistir
+   Desistir do round
    ========================================= */
 
 .danger-button {

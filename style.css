@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Bree+Serif&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
 :root {
   --bg: black;
@@ -34,16 +35,84 @@ body {
 
 h1{
 
-  font-family: 'Bree Serif', serif;
-
+  font-family: "Press Start 2P", system-ui;
+  color: rgb(87, 158, 252);
+  text-shadow: 1px 1px 10px rgb(87, 158, 252);
+  animation: piscarazul 2s ease-in-out infinite;
 }
 
 .tech{
 
-  font-family: 'Bree Serif', serif;
-  color: blue;
-
+  font-family: "Press Start 2P", system-ui;
+  color: red;
+  text-shadow: 1px 1px 10px red;
+  animation: piscarvermelho 2s ease-in-out infinite;
 }
+
+@keyframes piscarvermelho {
+  0%, 12% {
+    opacity: 1;
+    text-shadow: 1px 1px 10px red;
+    color: red;
+  }
+
+  15%, 22% {
+    opacity: 0;
+    text-shadow: 1px 1px 10px rgba(255, 0, 0, 0);
+    color: rgba(255, 0, 0, 0);
+  }
+
+  25%, 32% {
+    opacity: 1;
+    text-shadow: 1px 1px 10px red;
+    color: red;
+  }
+
+  35%, 42% {
+    opacity: 0;
+    text-shadow: 1px 1px 10px rgba(255, 0, 0, 0);
+    color: rgba(255, 0, 0, 0);
+  }
+
+  45%, 100% {
+    opacity: 1;
+    text-shadow: 1px 1px 10px red;
+    color: red;
+  }
+}
+
+@keyframes piscarazul {
+  0%, 12% {
+    opacity: 1;
+    text-shadow: 1px 1px 10px rgb(87, 158, 252);
+    color: rgb(87, 158, 252);
+  }
+
+  15%, 22% {
+    opacity: 0;
+    text-shadow: 1px 1px 10px rgba(255, 0, 0, 0);
+    color: rgba(255, 0, 0, 0);
+  }
+
+  25%, 32% {
+    opacity: 1;
+    text-shadow: 1px 1px 10px rgb(87, 158, 252);
+    color: rgb(87, 158, 252);
+  }
+
+  35%, 42% {
+    opacity: 0;
+    text-shadow: 1px 1px 10px rgba(255, 0, 0, 0);
+    color: rgba(255, 0, 0, 0);
+  }
+
+  45%, 100% {
+    opacity: 1;
+    text-shadow: 1px 1px 10px rgb(87, 158, 252);
+    color: rgb(87, 158, 252);
+  }
+}
+
 
 a {
   color: var(--accent-soft);
@@ -59,9 +128,7 @@ input {
   min-height: 100vh;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 1fr 1fr; 
-  align-items: center;
-  gap: 25px;
+  place-items: center;
   padding: 32px 0;
 }
 
@@ -107,20 +174,19 @@ input {
   opacity: 0.36;
 }
 
-.brand-mark {
-  width: 96px;
-  height: 96px;
-  display: grid;
-  place-items: center;
-  border-radius: 24px;
-  background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.76), rgba(0, 0, 0, 0));
-  border: 1px solid rgba(110, 168, 255, 0.473);
-  margin-bottom: 20px;
+.logomarca{
+
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 12px;
+  width: 100%;
+
 }
 
-.brand-mark img {
-  width: 72px;
-  height: 72px;
+.logomarca img {
+  width: 40px;
+  height: 40px;
   object-fit: contain;
 }
 
@@ -144,24 +210,11 @@ input {
   font-size: 1.06rem;
 }
 
-.brand-badges {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: 28px;
-}
-
-.brand-badges span {
-  padding: 10px 14px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-}
-
 .auth-card {
   background: var(--panel);
   padding: 36px;
-  width: 100%;
+  width: min(480px, 100%);
+  justify-self: center;
 }
 
 .auth-header h2 {
@@ -373,3 +426,4 @@ input {
     font-size: 0.98rem;
   }
 }
+

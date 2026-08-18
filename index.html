@@ -5,38 +5,51 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TechStart | Login</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="icon" href="./assets/piscando.png" type="image/png">
+  <link rel="icon" href="./assets/pandarodando.gif" type="gif">
 </head>
+
 <body>
+
+  <div class="estrelas" id="estrelas-container"></div>
+  <div class="codigos" id="codigos-container"></div>
+
   <main class="auth-layout">
 
-    <section class="auth-card">
+    <section class="autenticacao_card">
 
-      <div class="logomarca">
+      <div class="div_logomarca">
+
         <h1><span class="tech">Tech</span>Start</h1>
         <div class="brand-badges">
-        <img src="./assets/piscando.png" alt="Logo TechStart">
+        <img src="./assets/acenando.gif" alt="Panda Logo TechStart" id="panda_logo">
+
       </div>
       
       </div>
 
       <form id="login-form" class="auth-form">
-        <label for="usuario">Usuário</label>
+        <label for="usuario">Email</label>
         <input type="email" id="usuario" placeholder="Digite seu e-mail" required>
 
         <label for="senha">Senha</label>
         <input type="password" id="senha" placeholder="Digite sua senha" required>
 
-        <button type="submit" class="primary-button">Entrar</button>
+        <div class="div_botao_entrar">
+
+           <button type="submit" id="entrar" class="botao_primario">Entrar</button>
+
+        </div>
+
+       
       </form>
 
       <p id="login-feedback" class="feedback" aria-live="polite"></p>
 
-      <div class="auth-links">
+      <div class="autenticacao_links">
         
-        <p>Esqueceu sua senha? <a href="./pages/recuperar/recuperar.html">Esqueci minha senha</a></p>
-        <p>Novo por aqui? <a href="./pages/cadastro/cadastro.html">Faça seu cadastro</a></p>
-        <p>Ou então: <a href="#" id="guest-login">Entrar como convidado</a></p>
+        <p>Esqueceu sua senha? <a href="./pages/recuperar/recuperar.html">Recuperar</a></p>
+        <p>Novo por aqui? <a href="./pages/cadastro/cadastro.html">Cadastre-se aqui</a></p>
+        <p>Ou então <a href="#" id="guest-login">entrar como convidado</a></p>
 
       </div>
     </section>
@@ -44,10 +57,16 @@
 
   <div id="success-popup" class="popup hidden" role="dialog" aria-modal="true" aria-labelledby="popup-title">
     <div class="popup-card">
-      <p class="section-label">Sucesso</p>
+
       <h3 id="popup-title">Login efetuado com sucesso</h3>
-      <p>Você será redirecionado para a tela inicial do usuário.</p>
-      <button type="button" class="primary-button" id="popup-confirm">Continuar</button>
+      <p id="msg_bemvindo">Bem-vindo ao TechStart!</p>
+
+      <div class="div_botao_continuar">
+
+        <button type="button" class="botao_primario" id="popup-confirm">Continuar</button>
+
+      </div>
+      
     </div>
   </div>
 
@@ -62,3 +81,4 @@
   <script src="script.js"></script>
 </body>
 </html>
+

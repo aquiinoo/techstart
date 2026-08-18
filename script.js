@@ -10,6 +10,15 @@ const userInput = document.getElementById("usuario");
 const passwordInput = document.getElementById("senha");
 const popupTitle = document.getElementById("popup-title");
 
+// Limpar mensagens de erro quando o usuário digita
+userInput.addEventListener("input", () => {
+  userInput.setCustomValidity("");
+});
+
+passwordInput.addEventListener("input", () => {
+  passwordInput.setCustomValidity("");
+});
+
 function hidePopupAndRedirect() {
   popup.classList.add("hidden");
 
@@ -60,8 +69,25 @@ function showPopup(customTitle = "Login efetuado com sucesso") {
 if (loginForm) {
   loginForm.addEventListener("submit", async (event) => {
     event.preventDefault();
-
     resetFeedback();
+
+    // Validação manual
+    let isValid = true;
+    
+    if (!userInput.value.trim()) {
+      showFeedback("Por favor, preencha o e-mail.", "error");
+      isValid = false;
+    } else if (!userInput.value.includes("@")) {
+      showFeedback("Por favor, digite um e-mail válido.", "error");
+      isValid = false;
+    }
+
+    if (!passwordInput.value) {
+      showFeedback("Por favor, preencha a senha.", "error");
+      isValid = false;
+    }
+
+    if (!isValid) return;
 
     try {
       const result = await TechStartApp.loginAsync(
@@ -74,7 +100,6 @@ if (loginForm) {
           result.message || "Falha ao realizar login.",
           "error"
         );
-
         return;
       }
 
@@ -86,7 +111,6 @@ if (loginForm) {
       showPopup("Login efetuado com sucesso");
     } catch (error) {
       console.error("Erro no login:", error);
-
       showFeedback(
         "Erro interno ao realizar login.",
         "error"
@@ -108,7 +132,7 @@ if (guestLoginButton) {
       );
 
       showPopup(
-        "Acesso como convidado liberado"
+        "Acesso como convidado liberado!"
       );
     } catch (error) {
       console.error(
@@ -136,3 +160,39 @@ if (popupConfirm) {
     hidePopupAndRedirect
   );
 }
+
+// Criar estrelas
+function criarEstrelas() {
+  const container = document.getElementById("estrelas-container");
+  for (let i = 0; i < 50; i++) {
+    const estrela = document.createElement("div");
+    estrela.className = "estrela";
+    estrela.style.left = Math.random() * 100 + "%";
+    estrela.style.top = Math.random() * 100 + "%";
+    estrela.style.animationDelay = Math.random() * 3 + "s";
+    container.appendChild(estrela);
+  }
+}
+criarEstrelas();
+
+// Criar blocos de código
+function criarCodigos() {
+  const container = document.getElementById("codigos-container");
+  const snippets = [
+    "public class Main {\n  public static void main() {\n    System.out.println(\"Hello\");\n  }\n}",
+    "int[] arr = {1, 2, 3};\nfor (int i : arr) {\n  System.out.println(i);\n}",
+    "class User {\n  String name;\n  User(String n) {\n    name = n;\n  }\n}",
+    "public void loop() {\n  while (true) {\n    System.out.println(\"loop\");\n  }\n}"
+  ];
+
+  for (let i = 0; i < 8; i++) {
+    const bloco = document.createElement("div");
+    bloco.className = "codigo-bloco";
+    bloco.textContent = snippets[i % snippets.length];
+    bloco.style.left = Math.random() * 80 + "%";
+    bloco.style.top = Math.random() * 80 + "%";
+    bloco.style.animationDelay = Math.random() * 6 + "s";
+    container.appendChild(bloco);
+  }
+}
+criarCodigos();

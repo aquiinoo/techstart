@@ -1,7 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
 :root {
-  --bg: #09111e;
+  --bg: black;
   --panel: rgba(255, 255, 255, 0.06);
   --card: rgba(255, 255, 255, 0.05);
   --border: rgba(110, 168, 255, 0.18);
@@ -21,15 +21,12 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Press Start 2P', system-ui;
 }
 
 body {
   min-height: 100vh;
-  background:
-    radial-gradient(circle at top left, rgba(110, 168, 255, 0.22), transparent 24%),
-    radial-gradient(circle at bottom right, rgba(255, 95, 109, 0.18), transparent 26%),
-    linear-gradient(135deg, #07111f, #10151f 45%, #190e14);
+  background: var(--bg);
   color: var(--text);
 }
 
@@ -47,7 +44,7 @@ textarea {
   padding: 24px 24px 24px 328px;
 }
 
-.sidebar,
+.barra_lateral,
 .card,
 .panel,
 .popup-card {
@@ -58,7 +55,7 @@ textarea {
   backdrop-filter: blur(16px);
 }
 
-.sidebar {
+.barra_lateral {
   height: calc(100vh - 48px);
   width: 280px;
   padding: 24px;
@@ -77,10 +74,24 @@ textarea {
   color: var(--accent-soft);
 }
 
-.sidebar h1,
-.panel-header h2,
-.hero h2 {
-  margin-top: 10px;
+.barra_lateral h1{
+  font-size: 24px;
+  color: red;
+  text-shadow: 1px 1px 10px red;
+}
+
+.barra_lateral span{
+
+  color: blue;
+  text-shadow: 1px 1px 10px blue;
+
+}
+
+.techstart{
+
+  display: flex;
+  justify-content: center;
+
 }
 
 .sidebar-copy,
@@ -96,7 +107,7 @@ textarea {
 }
 
 .menu-item,
-.logout-button,
+.botao_sair,
 .primary-button,
 .secondary-button,
 .accept-button,
@@ -115,7 +126,7 @@ textarea {
 
 .menu-item,
 .secondary-button,
-.logout-button,
+.botao_sair,
 .connect-button,
 .accept-button {
   background: rgba(255, 255, 255, 0.06);
@@ -125,7 +136,7 @@ textarea {
 
 .menu-item.active,
 .menu-item:hover,
-.logout-button:hover,
+.botao_sair:hover,
 .secondary-button:hover,
 .connect-button:hover,
 .accept-button:hover,
@@ -138,9 +149,15 @@ textarea {
   color: var(--accent-soft);
 }
 
-.logout-button,
+.botao_sair,
 .primary-button {
   width: 100%;
+}
+
+.botao_sair{
+
+  color: red;
+
 }
 
 /* =========================================
@@ -495,4 +512,56 @@ textarea {
   .language-chip {
     width: auto;
   }
+}
+
+.estrelas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.estrela {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: white;
+  border-radius: 50%;
+  opacity: 0;
+  animation: twinkle 3s infinite;
+}
+
+.codigos {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+  font-family: 'Press Start 2P', system-ui;
+  font-size: 12px;
+  color: white;
+}
+
+.codigo-bloco {
+  position: absolute;
+  white-space: pre;
+  opacity: 0;
+  animation: piscarCodigo 6s infinite;
+  line-height: 1.4;
+  font-family: 'Press Start 2P', system-ui;
+}
+
+@keyframes piscarCodigo {
+  0%, 100% { opacity: 0; }
+  30%, 70% { opacity: 0.3; }
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
 }

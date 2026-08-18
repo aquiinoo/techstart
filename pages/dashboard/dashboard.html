@@ -8,13 +8,19 @@
   <link rel="icon" href="../../assets/piscando.png" type="image/png">
 </head>
 <body>
+
+  <div class="estrelas" id="estrelas-container"></div>
+  <div class="codigos" id="codigos-container"></div>
+  
   <main class="dashboard">
-    <aside class="sidebar">
-      <div>
-        <p class="section-label">TechStart</p>
-        <h1>Painel do jogador</h1>
-        <p class="sidebar-copy">Acesse duelistas, ranking, histórico, perfil e suporte em um único lugar.</p>
+    <aside class="barra_lateral">
+      <div class="techstart">
+  
+        <h1>Tech<span>Start</span></h1>
+
       </div>
+
+      <img src="../../assets/pandarodando.gif" alt="Panda Rodando">
 
       <nav class="menu">
         <button type="button" class="menu-item active" data-target="home">Início</button>
@@ -25,32 +31,34 @@
         <button type="button" class="menu-item" data-target="community">Jogadores</button>
       </nav>
 
-      <button type="button" id="logout-button" class="logout-button">Sair</button>
+      <button type="button" id="botao_sair" class="botao_sair">Sair</button>
     </aside>
 
     <section class="content">
       <section class="hero panel active-panel" id="panel-home">
         <div class="hero-top">
           <div>
-            <p class="section-label">Bem-vindo</p>
+
             <h2 id="greeting">Olá, jogador</h2>
-            <p id="firebase-status" class="muted"></p>
+
           </div>
+
           <div class="hero-chip" id="preferred-language"></div>
+          
         </div>
 
         <div class="hero-grid">
           <article class="card action-card">
             <h3>Treinar</h3>
             <p>Pratique sozinho e receba um desafio com feedback automático.</p>
-            <button type="button" id="offline-training" class="primary-button">Treinar</button>
+            <button type="button" id="botao_treinar" class="primary-button">Treinar</button>
           </article>
 
           <article class="card action-card">
             <h3>Criar sala</h3>
             <p>Gere um link copiável e convide outro jogador para um duelo em Java.</p>
             <div class="inline-form">
-              <button type="button" id="create-room" class="primary-button">Criar</button>
+              <button type="button" id="botao_criar" class="primary-button">Criar</button>
             </div>
             <p id="room-link" class="muted small"></p>
           </article>
@@ -59,15 +67,16 @@
             <h3>Entrar em duelo</h3>
             <p>Use o link ou código de uma sala existente.</p>
             <div class="inline-form">
-              <input type="text" id="join-room-code" placeholder="Código da sala">
-              <button type="button" id="join-room" class="primary-button">Entrar</button>
+              <input type="text" id="input_codigo" placeholder="Código da sala">
+              
             </div>
+            <button type="button" id="botao_entrar" class="primary-button">Entrar</button>
           </article>
 
           <article class="card action-card">
-            <h3>Jogar com aleatório</h3>
-            <p>Entre em uma fila pública para duelos em Java.</p>
-            <button type="button" id="random-match" class="secondary-button">Buscar jogador</button>
+            <h3>Partida rápida</h3>
+            <p>Entre na fila pública para duelos em Java.</p>
+            <button type="button" id="botao_buscar" class="primary-button">Buscar partida</button>
           </article>
         </div>
       </section>

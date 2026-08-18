@@ -6,6 +6,91 @@ const popup = document.getElementById("popup");
 const popupTitle = document.getElementById("popup-title");
 const popupText = document.getElementById("popup-text");
 const popupButton = document.getElementById("popup-button");
+const botaoSair = document.getElementById("botao_sair")
+const botaoCriar = document.getElementById("botao_criar")
+const botaoEntrar = document.getElementById("botao_entrar")
+const botaoBuscar = document.getElementById("botao_buscar")
+const pandaImg = document.querySelector("img[alt='Panda Rodando']")
+
+botaoSair.addEventListener("mouseenter", () => {
+
+  if(pandaImg) {
+
+    pandaImg.src = "../../assets/triste.gif";
+
+  }
+
+});
+
+botaoSair.addEventListener("mouseleave", () => {
+
+  if(pandaImg) {
+
+    pandaImg.src = "../../assets/pandarodando.gif";
+
+  }
+
+});
+
+botaoCriar.addEventListener("mouseenter", () => {
+
+  if(pandaImg) {
+
+    pandaImg.src = "../../assets/prontopralutarv2.gif";
+
+  }
+
+})
+
+botaoCriar.addEventListener("mouseleave", () =>{
+
+  if(pandaImg) {
+
+    pandaImg.src = "../../assets/pandarodando.gif";
+
+  }
+
+})
+
+botaoEntrar.addEventListener("mouseenter", () => {
+
+  if(pandaImg) {
+
+    pandaImg.src = "../../assets/prontopralutarv2.gif";
+
+  }
+
+})
+
+botaoEntrar.addEventListener("mouseleave", () =>{
+
+  if(pandaImg) {
+
+    pandaImg.src = "../../assets/pandarodando.gif";
+
+  }
+
+})
+
+botaoBuscar.addEventListener("mouseenter", () => {
+
+  if(pandaImg) {
+
+    pandaImg.src = "../../assets/prontopralutarv2.gif";
+
+  }
+
+})
+
+botaoBuscar.addEventListener("mouseleave", () =>{
+
+  if(pandaImg) {
+
+    pandaImg.src = "../../assets/pandarodando.gif";
+
+  }
+
+})
 
 function openPanel(target) {
   menuItems.forEach((button) => button.classList.toggle("active", button.dataset.target === target));
@@ -196,7 +281,7 @@ menuItems.forEach((button) => {
   button.addEventListener("click", () => openPanel(button.dataset.target));
 });
 
-document.getElementById("logout-button").addEventListener("click", async () => {
+document.getElementById("botao_sair").addEventListener("click", async () => {
   await TechStartApp.logoutAsync();
   window.location.href = "../../index.html";
 });
@@ -268,3 +353,39 @@ document.getElementById("random-match").addEventListener("click", async () => {
   await refresh();
   openPanel("home");
 })();
+
+// Criar estrelas
+function criarEstrelas() {
+  const container = document.getElementById("estrelas-container");
+  for (let i = 0; i < 50; i++) {
+    const estrela = document.createElement("div");
+    estrela.className = "estrela";
+    estrela.style.left = Math.random() * 100 + "%";
+    estrela.style.top = Math.random() * 100 + "%";
+    estrela.style.animationDelay = Math.random() * 3 + "s";
+    container.appendChild(estrela);
+  }
+}
+criarEstrelas();
+
+// Criar blocos de código
+function criarCodigos() {
+  const container = document.getElementById("codigos-container");
+  const snippets = [
+    "public class Main {\n  public static void main() {\n    System.out.println(\"Hello\");\n  }\n}",
+    "int[] arr = {1, 2, 3};\nfor (int i : arr) {\n  System.out.println(i);\n}",
+    "class User {\n  String name;\n  User(String n) {\n    name = n;\n  }\n}",
+    "public void loop() {\n  while (true) {\n    System.out.println(\"loop\");\n  }\n}"
+  ];
+
+  for (let i = 0; i < 8; i++) {
+    const bloco = document.createElement("div");
+    bloco.className = "codigo-bloco";
+    bloco.textContent = snippets[i % snippets.length];
+    bloco.style.left = Math.random() * 80 + "%";
+    bloco.style.top = Math.random() * 80 + "%";
+    bloco.style.animationDelay = Math.random() * 6 + "s";
+    container.appendChild(bloco);
+  }
+}
+criarCodigos();

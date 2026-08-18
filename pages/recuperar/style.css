@@ -1,8 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
 :root {
   --bg: #08111c;
-  --card: rgba(255, 255, 255, 0.06);
+  --painel: rgb(56, 56, 56);
   --border: rgba(110, 168, 255, 0.18);
   --text: #eef5f0;
   --muted: #aac6df;
@@ -15,7 +16,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Press Start 2P', system-ui;
 }
 
 body {
@@ -23,10 +24,7 @@ body {
   display: grid;
   place-items: center;
   padding: 24px;
-  background:
-    radial-gradient(circle at top left, rgba(110, 168, 255, 0.18), transparent 24%),
-    radial-gradient(circle at bottom right, rgba(255, 255, 255, 0.08), transparent 24%),
-    linear-gradient(135deg, #06110e, #081313 55%, #0b1715);
+  background: black;
   color: var(--text);
 }
 
@@ -34,16 +32,16 @@ body {
   width: min(620px, 100%);
 }
 
+.recuperar,
 .recovery-card,
 .popup-card {
   border-radius: 28px;
-  border: 1px solid var(--border);
-  background: var(--card);
+  background: var(--painel);
   box-shadow: 0 22px 50px rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(16px);
 }
 
-.recovery-card {
+.recuperar {
   padding: 32px;
 }
 
@@ -53,10 +51,13 @@ body {
   margin-bottom: 24px;
 }
 
-.back-link,
-.login-link {
+.voltar {
   color: var(--muted);
   text-decoration: none;
+}
+
+.voltar:hover{
+  transform: translateY(-1px);
 }
 
 .section-label {
@@ -92,11 +93,11 @@ label {
 
 input {
   border-radius: 14px;
-  border: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.05);
+  background: black;
   color: var(--text);
   padding: 14px 16px;
   font: inherit;
+  
 }
 
 input:focus,
@@ -120,7 +121,7 @@ textarea:focus {
 }
 
 .primary-button:hover {
-  background: linear-gradient(135deg, var(--accent), #5f8edc);
+  transform: translateY(-1px);
 }
 
 .feedback {

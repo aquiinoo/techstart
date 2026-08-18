@@ -8,16 +8,15 @@
   <link rel="icon" href="../../assets/piscando.png" type="image/png">
 </head>
 <body>
+
   <main class="register-layout">
     <section class="register-card">
       <div class="header-row">
-        <a class="back-link" href="../../index.html">Voltar</a>
-        <a class="login-link" href="../../index.html">Login</a>
+        <a class="voltar" href="../../index.html">Voltar</a>
       </div>
 
-      <p class="section-label">Cadastro</p>
       <h1>Crie sua conta</h1>
-      <p class="intro">Campos marcados com * sao obrigatorios para entrar na plataforma.</p>
+      <p class="intro">Campos marcados com * sao obrigatórios.</p>
 
       <form id="register-form" class="register-form">
         <div class="grid">
@@ -72,16 +71,14 @@
       </form>
 
       <p id="register-feedback" class="feedback" aria-live="polite"></p>
-      <p class="switch-auth">Já possui conta? <a href="../../index.html">Login</a></p>
     </section>
   </main>
 
   <div id="success-popup" class="popup hidden" role="dialog" aria-modal="true">
     <div class="popup-card">
-      <p class="section-label">Conta criada</p>
-      <h2>Cadastro efetuado com sucesso</h2>
+      <h2>Cadastro efetuado com sucesso!</h2>
       <p>Você será redirecionado para a tela do usuário.</p>
-      <button type="button" class="primary-button" id="popup-confirm">Ir para o dashboard</button>
+      <button type="button" class="primary-button" id="popup-confirm">Continuar</button>
     </div>
   </div>
 

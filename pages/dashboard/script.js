@@ -312,13 +312,13 @@ document.getElementById("support-form").addEventListener("submit", async (event)
   event.target.reset();
 });
 
-document.getElementById("offline-training").addEventListener("click", async () => {
+document.getElementById("botao_treinar").addEventListener("click", async () => {
   const room = await TechStartApp.createRoomAsync(currentUser.id, "Java");
   await TechStartApp.startOfflineTrainingAsync(room.code, currentUser.id);
   window.location.assign(buildChallengeUrl(room.code, { mode: "offline" }));
 });
 
-document.getElementById("create-room").addEventListener("click", async () => {
+document.getElementById("botao_criar").addEventListener("click", async () => {
   const room = await TechStartApp.createRoomAsync(currentUser.id, "Java");
   const duelUrl = buildDuelUrl(room.code);
   document.getElementById("room-link").innerHTML = `Link copiavel: <strong>${duelUrl}</strong>`;
@@ -326,7 +326,7 @@ document.getElementById("create-room").addEventListener("click", async () => {
   window.location.assign(duelUrl);
 });
 
-document.getElementById("join-room").addEventListener("click", async () => {
+document.getElementById("botao_entrar").addEventListener("click", async () => {
   const code = document.getElementById("join-room-code").value;
   const result = await TechStartApp.joinRoomByCodeAsync(code, currentUser.id);
   if (!result.ok) {
@@ -336,7 +336,7 @@ document.getElementById("join-room").addEventListener("click", async () => {
   window.location.assign(buildDuelUrl(code.toUpperCase()));
 });
 
-document.getElementById("random-match").addEventListener("click", async () => {
+document.getElementById("botao_buscar").addEventListener("click", async () => {
   const result = await TechStartApp.requestRandomMatchAsync(currentUser.id, "Java");
   if (!result.ok) {
     showPopup("Fila indisponivel", result.message);

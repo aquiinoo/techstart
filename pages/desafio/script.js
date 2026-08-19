@@ -139,6 +139,106 @@ function renderChat() {
   container.scrollTop = container.scrollHeight;
 }
 
+async function evaluateCodeWithAI(source, challenge, testResult) {
+  try {
+    if (window.TechStartAiConfigReady) {
+      await window.TechStartAiConfigReady;
+    }
+
+    const apiKey = window.TechStartGeminiApiKey;
+
+    if (!apiKey) {
+      throw new Error("Chave da API Gemini não configurada.");
+    }
+
+    const prompt = `
+Você é a IA avaliadora do TechStart.
+
+Analise o código do aluno e o resultado dos testes.
+
+Desafio:
+${challenge.title}
+
+Descrição:
+${challenge.description}
+
+Código:
+${source}
+
+Testes:
+${testResult}
+
+Responda em português do Brasil.
+
+Se estiver correto:
+"Seu código está correto! [explique brevemente o motivo]."
+
+Se estiver errado:
+"Seu código precisa de um ajuste. [explique apenas o principal erro]. Dica: [dê uma dica curta]."
+
+REGRAS:
+- Máximo de 3 frases.
+- Máximo de 60 palavras.
+- Não mostre código corrigido.
+- Não forneça a solução completa.
+- Seja simples e direto.
+`;
+
+    const response = await fetch(
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-goog-api-key": apiKey,
+        },
+        body: JSON.stringify({
+          contents: [
+            {
+              parts: [
+                {
+                  text: prompt,
+                },
+              ],
+            },
+          ],
+          generationConfig: {
+            maxOutputTokens: 1024,
+            temperature: 0.2,
+          },
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      console.error("Erro Gemini:", data);
+      throw new Error(
+        data?.error?.message || "Erro ao obter feedback da IA."
+      );
+    }
+
+    const feedback =
+      data?.candidates?.[0]?.content?.parts
+        ?.map((part) => part.text || "")
+        .join("")
+        .trim();
+
+    if (!feedback) {
+      console.error("Resposta Gemini sem texto. finishReason:", data?.candidates?.[0]?.finishReason, data);
+      throw new Error("A IA não retornou feedback.");
+    }
+
+    return feedback;
+
+  } catch (error) {
+    console.error("Erro ao avaliar código com IA:", error);
+
+    return "A IA não conseguiu avaliar o código agora.";
+  }
+}
+
 async function compileJava(source, challenge) {
   const endpoint = window.TechStartJudge0Endpoint;
   if (!endpoint) {
@@ -183,10 +283,10 @@ async function compileJava(source, challenge) {
     throw new Error(payload.error || "O serviço de compilação não respondeu.");
   }
 
-  const output = payload.stdout || "";
+  const rawOutput = payload.stdout || "";
   const testResults = (challenge.tests || []).map((test, index) => {
     const prefix = `__TECHSTART_TEST_${index}__`;
-    const actual = output.split(/\r?\n/).find((line) => line.startsWith(prefix))?.slice(prefix.length).trim() || "";
+    const actual = rawOutput.split(/\r?\n/).find((line) => line.startsWith(prefix))?.slice(prefix.length).trim() || "";
     const rawExpected = String(test.expected ?? "").trim();
     const expected = /^(['"]).*\1$/.test(rawExpected) ? rawExpected.slice(1, -1) : rawExpected;
     return { call: test.call, expected, actual, passed: actual === expected };
@@ -194,13 +294,27 @@ async function compileJava(source, challenge) {
   const compiled = !payload.compile_output && !payload.stderr;
   const passed = compiled && testResults.length > 0 && testResults.every((test) => test.passed);
   const details = testResults.map((test) => `${test.passed ? "✓" : "✕"} ${test.call}: esperado ${test.expected}, recebido ${test.actual || "(sem retorno)"}`).join("\n");
-  return {
-    configured: true,
-    compiled,
-    passed,
-    tests: testResults,
-    output: payload.compile_output || payload.stderr || (passed ? `Compilação concluída.\n${details}` : details),
-  };
+  const output =
+  payload.compile_output ||
+  payload.stderr ||
+  (passed
+    ? `Compilação concluída.\n${details}`
+    : details);
+
+const aiFeedback = await evaluateCodeWithAI(
+  source,
+  challenge,
+  output
+);
+
+return {
+  configured: true,
+  compiled,
+  passed,
+  tests: testResults,
+  output,
+  aiFeedback,
+};
 }
 
 function wait(ms) {

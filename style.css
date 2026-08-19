@@ -233,9 +233,9 @@ input {
 }
 
 .autenticacao_links {
-  margin-top: 16px;
+  margin-top: 32px;
   display: grid;
-  gap: 10px;
+  gap: 16px;
   color: white;
   font-size: 12px;
 }
@@ -414,7 +414,7 @@ input {
 .div_botao_continuar
 {
 
-  margin-top: 8px;
+  margin-top: 16px;
   display: flex;
   justify-content: center;
 

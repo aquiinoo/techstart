@@ -735,7 +735,7 @@ const TechStartApp = (() => {
     }
   }
 
-  function generateAiFeedback(source, evaluation) {
+  function generateAiFeedback(source, evaluation, challenge) {
     const lines = source.split("\n").filter(Boolean).length;
     const feedback = [];
     feedback.push(evaluation.correct ? "A IA identificou que sua solucao atende aos testes deste round." : "A IA identificou pontos para ajuste antes da submissao final.");
@@ -746,42 +746,96 @@ const TechStartApp = (() => {
 
   async function generateAiFeedbackAsync(source, evaluation, challenge) {
     const fallback = generateAiFeedback(source, evaluation);
-    const endpoint = window.TechStartAiFeedbackEndpoint;
+    const apiKey = window.TechStartGeminiApiKey;
 
-    if (!endpoint) {
-      return fallback;
+    if (!apiKey) {
+        console.warn("Chave da IA não foi carregada. Usando feedback local.");
+        return fallback;
     }
 
     try {
-      const response = await fetch(endpoint, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          source,
-          evaluation,
-          challenge: {
-            id: challenge?.id,
-            title: challenge?.title,
-            description: challenge?.description,
-            language: challenge?.language,
-            tests: challenge?.tests || [],
-          },
-        }),
-      });
+        const prompt = `
+Você é um professor de programação ajudando um estudante.
 
-      if (!response.ok) {
-        throw new Error("Endpoint de IA indisponivel.");
-      }
+Analise a solução enviada pelo aluno para o desafio abaixo.
 
-      const data = await response.json();
-      return data.feedback || data.message || fallback;
+DESAFIO:
+Título: ${challenge?.title || ""}
+Descrição: ${challenge?.description || ""}
+Linguagem: ${challenge?.language || "Java"}
+
+CÓDIGO DO ALUNO:
+${source}
+
+RESULTADO DA AVALIAÇÃO:
+${JSON.stringify(evaluation)}
+
+Forneça um feedback curto e útil em português.
+
+Explique:
+1. Se a solução está correta ou não.
+2. O principal erro, caso exista.
+3. Como o aluno poderia melhorar o código.
+4. Uma sugestão de melhoria de lógica ou organização.
+
+Não forneça uma solução completa pronta.
+Não invente erros que não estejam no código.
+
+Responda diretamente ao aluno.
+`;
+
+        const response = await fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${encodeURIComponent(apiKey)}`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    contents: [
+                        {
+                            parts: [
+                                {
+                                    text: prompt
+                                }
+                            ]
+                        }
+                    ],
+                    generationConfig: {
+                        temperature: 0.4,
+                        maxOutputTokens: 1024
+                    }
+                })
+            }
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            console.error("Erro retornado pelo Gemini:", data);
+            throw new Error("Gemini não respondeu corretamente.");
+        }
+
+        const feedback =
+            data?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+        if (!feedback) {
+            throw new Error("O Gemini não retornou texto.");
+        }
+
+        console.log("Resposta do Gemini:", feedback);
+
+        return feedback;
+
     } catch (error) {
-      console.warn("Nao foi possivel obter feedback da IA. Usando feedback local.", error);
-      return fallback;
+        console.warn(
+            "Não foi possível obter feedback do Gemini. Usando feedback local.",
+            error
+        );
+
+        return fallback;
     }
-  }
+}
 
   function previewSolution(source, challengeId) {
     const evaluation = evaluateChallenge(source, challengeId);

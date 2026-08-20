@@ -770,16 +770,16 @@ ${source}
 RESULTADO DA AVALIAÇÃO:
 ${JSON.stringify(evaluation)}
 
-Forneça um feedback curto e útil em português.
+Escreva um feedback curto (no máximo 4 frases, poucas linhas) em português, em texto corrido, sem títulos, sem markdown (nada de **, *, #, listas numeradas ou com marcadores).
 
-Explique:
-1. Se a solução está correta ou não.
-2. O principal erro, caso exista.
-3. Como o aluno poderia melhorar o código.
-4. Uma sugestão de melhoria de lógica ou organização.
+Cubra rapidamente, em prosa:
+- Se a solução está correta.
+- O principal ponto de atenção, se houver.
+- Uma sugestão objetiva de melhoria.
 
 Não forneça uma solução completa pronta.
 Não invente erros que não estejam no código.
+Seja direto e objetivo, como um comentário rápido de code review.
 
 Responda diretamente ao aluno.
 `;
@@ -803,7 +803,7 @@ Responda diretamente ao aluno.
                     ],
                     generationConfig: {
                         temperature: 0.4,
-                        maxOutputTokens: 1024
+                        maxOutputTokens: 220
                     }
                 })
             }
@@ -1252,6 +1252,65 @@ Responda diretamente ao aluno.
       dateStyle: "short",
       timeStyle: "short",
     }).format(new Date(date));
+  }
+
+  function escapeHtmlForFeedback(value) {
+    return String(value || "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+  function renderFeedbackHtml(rawText) {
+    const text = String(rawText || "").trim();
+    if (!text) {
+      return "";
+    }
+
+    const lines = text.split(/\r?\n/);
+    const htmlParts = [];
+    let listItems = [];
+
+    function flushList() {
+      if (listItems.length) {
+        htmlParts.push(`<ul class="feedback-list">${listItems.join("")}</ul>`);
+        listItems = [];
+      }
+    }
+
+    function inline(str) {
+      let escaped = escapeHtmlForFeedback(str);
+      escaped = escaped.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+      escaped = escaped.replace(/(?<!\*)\*([^*\n]+)\*(?!\*)/g, "<em>$1</em>");
+      escaped = escaped.replace(/`([^`]+)`/g, "<code>$1</code>");
+      return escaped;
+    }
+
+    lines.forEach((line) => {
+      const trimmed = line.trim();
+      if (!trimmed) {
+        flushList();
+        return;
+      }
+      const bulletMatch = trimmed.match(/^[-*]\s+(.*)$/);
+      const numberedMatch = trimmed.match(/^\d+[.)]\s+(.*)$/);
+      if (bulletMatch || numberedMatch) {
+        listItems.push(`<li>${inline(bulletMatch ? bulletMatch[1] : numberedMatch[1])}</li>`);
+        return;
+      }
+      flushList();
+      const headingMatch = trimmed.match(/^#{1,6}\s+(.*)$/);
+      if (headingMatch) {
+        htmlParts.push(`<p class="feedback-heading">${inline(headingMatch[1])}</p>`);
+        return;
+      }
+      htmlParts.push(`<p>${inline(trimmed)}</p>`);
+    });
+    flushList();
+
+    return htmlParts.join("");
   }
 
   function firebaseEnabled() {
@@ -2091,6 +2150,7 @@ Responda diretamente ao aluno.
     registerOfflineTrainingAsync,
     registerOfflineTraining,
     formatDate,
+    renderFeedbackHtml,
     getCountdownRemainingSeconds,
     getRoundRemainingSeconds,
     getActiveRoom,

@@ -502,11 +502,12 @@ textarea {
     padding: 16px 12px 12px;
   }
 
-  .barra_lateral {
+  .dashboard > .barra_lateral {
     position: static !important;
     top: auto !important;
     left: auto !important;
     width: 100% !important;
+    min-width: 100% !important;
     margin: 0 0 18px !important;
     box-sizing: border-box;
     max-width: none;
@@ -521,7 +522,7 @@ textarea {
     margin: 0 auto;
   }
 
-  .barra_lateral {
+  .dashboard > .barra_lateral {
     gap: 18px;
     justify-content: initial;
   }

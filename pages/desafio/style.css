@@ -1,29 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
 :root {
-  --md-sys-color-primary: #a9c7ff;
-  --md-sys-color-primary-container: #004a77;
-  --md-sys-color-error: #ffb4ab;
-
-  --bg: #08111c;
-  --panel: rgba(255, 255, 255, 0.06);
-  --card: rgba(255, 255, 255, 0.05);
-  --border: rgba(110, 168, 255, 0.18);
-
-  --text: #f5fbff;
-  --muted: #aac6df;
-
-  /* Azul principal da interface */
-  --accent: #6ea8ff;
-
-  /* Verde escuro para ações positivas */
-  --success: #3f8f62;
-
-  /* Vermelho escuro para ações negativas */
-  --danger: #a65353;
-
-  /* Mantido apenas para compatibilidade */
-  --red: #a65353;
+  --painel: rgb(56, 56, 56);
 }
 
 * {
@@ -35,16 +13,28 @@
 
 body {
   min-height: 100vh;
-  background:
-    linear-gradient(115deg, rgba(33, 98, 180, 0.28), transparent 34%),
-    linear-gradient(245deg, rgba(195, 45, 60, 0.28), transparent 34%),
-    linear-gradient(135deg, var(--bg), #10151f 50%, #190e14);
-  color: var(--text);
+  background: black;
+  color: white;
 }
 
-button,
-textarea {
-  font: inherit;
+#botao_voltar{
+
+  width: fit-content;
+  padding: 10px;
+  background: white;
+  border-radius: 8px;
+  color: black;
+  cursor: pointer;
+  position: absolute;
+  top: 20px;
+  left: 20px;
+
+}
+
+#botao_voltar:hover{
+
+  transform: translateY(-1px);
+
 }
 
 .challenge-layout {
@@ -58,32 +48,46 @@ textarea {
 .match-topbar,
 .panel,
 .popup-card {
-  background: var(--panel);
-  border-radius: 28px;
-  border: 1px solid var(--border);
-  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.26);
-  backdrop-filter: blur(16px);
+  background: var(--painel);
+  border-radius: 8px;
   padding: 20px;
 }
 
-.match-topbar {
-  display: grid;
-  grid-template-columns: minmax(180px, 0.5fr) minmax(0, 1fr);
+.card-scoreboard {
+  display: block;
   align-items: center;
   gap: 18px;
+  border: 1px solid black;
+  border-radius: 8px;
+  padding: 16px;
+  background: var(--painel);
+}
+
+#status-line{
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+}
+
+#round-indicator{
+
+  margin-top: 10px;
+
 }
 
 .section-label {
   text-transform: uppercase;
   letter-spacing: 0.18em;
   font-size: 0.72rem;
-  color: #9fc6ff;
+  color: greenyellow;
+;
 }
 
 .connection-status {
-  margin-top: 6px;
-  color: #8fc5a5;
-  font-size: 0.84rem;
+  color: yellow;
+  font-size: 12px;
 }
 
 .muted {
@@ -92,8 +96,8 @@ textarea {
 }
 
 .score-strip {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 128px minmax(0, 1fr);
+  margin-top: 10px;
+  display: flex;
   gap: 12px;
   align-items: stretch;
 }
@@ -101,30 +105,27 @@ textarea {
 .score-strip > div,
 .language-chip,
 .feedback-card {
-  border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: var(--card);
+  border-radius: 8px;
+  background: black;
   padding: 14px;
 }
 
+#player-one-score, #player-two-score{
+
+  color: white;
+
+}
+
 .score-strip .blue-side {
-  border-color: rgba(110, 168, 255, 0.34);
-  background:
-    linear-gradient(
-      145deg,
-      rgba(110, 168, 255, 0.2),
-      rgba(255, 255, 255, 0.04)
-    );
+  background: blue;
+  border: 4px solid black;
+  flex: 1;
 }
 
 .score-strip .red-side {
-  border-color: rgba(166, 83, 83, 0.34);
-  background:
-    linear-gradient(
-      145deg,
-      rgba(166, 83, 83, 0.16),
-      rgba(255, 255, 255, 0.04)
-    );
+  background:red;
+  border: 4px solid black;
+  flex: 1;
 }
 
 .score-strip strong,
@@ -137,17 +138,34 @@ textarea {
   margin-top: 4px;
 }
 
-.timer-box {
+.score-strip .timer-box {
   display: grid;
   place-items: center;
   text-align: center;
+  background-color: yellow;
+  border: 4px solid black;
+  width: fit-content;
 }
 
 .timer-box #timer-indicator {
-  color: #d9e8ff;
-  font-size: 2rem;
+  color: black;
+  font-size: 24px;
   font-weight: 700;
   margin: 0;
+}
+
+.title-line{
+
+  display: flex;
+  gap: 4px;
+  letter-spacing: -1px;
+
+}
+
+.title-line span{
+
+  color: orange;
+
 }
 
 .challenge-meta {
@@ -156,41 +174,56 @@ textarea {
   align-items: start;
   gap: 16px;
   margin-bottom: 14px;
+  color: or;
 }
 
 .challenge-details {
   display: grid;
   gap: 8px;
-  margin-top: 14px;
   padding: 14px;
-  border-radius: 16px;
-  border-left: 3px solid var(--accent);
-  background: rgba(110, 168, 255, 0.08);
-  color: var(--muted);
+  color: white;
   line-height: 1.45;
-  font-size: 0.92rem;
 }
 
 .challenge-details strong {
-  color: var(--text);
+  color: yellow;
 }
 
 .challenge-details code {
-  color: #b9d5ff;
+  color: white;
+}
+
+.challenge-details p {
+
+  white-space: pre-line;
+
+}
+
+.challenge-details .obs-line {
+  color: white; 
+}
+
+.challenge-details .solution-word {
+  color: orange;
+  font-weight: 700;
 }
 
 .language-chip {
   white-space: nowrap;
 }
 
+#ai-output span {
+  display: block;
+  margin-top: 8px;
+  color: orange;
+}
+
 textarea {
   width: 100%;
-  min-height: 340px;
+  min-height: 240px;
   padding: 18px;
-  border-radius: 18px;
+  border-radius: 8px;
   border: 1px solid var(--border);
-  background: rgba(3, 10, 20, 0.48);
-  color: var(--text);
   resize: vertical;
 }
 
@@ -210,7 +243,6 @@ textarea {
 }
 
 .feedback-card p {
-  margin-top: 8px;
   white-space: pre-line;
 }
 
@@ -223,14 +255,9 @@ textarea {
 .danger-button {
   min-height: 48px;
   padding: 0 20px;
-  border-radius: 999px;
+  border-radius: 8px;
   border: 1px solid transparent;
   cursor: pointer;
-  transition:
-    transform 0.2s ease,
-    background 0.2s ease,
-    border-color 0.2s ease,
-    box-shadow 0.2s ease;
 }
 
 .primary-button:hover,
@@ -243,68 +270,28 @@ textarea {
   display: none !important;
 }
 
-/* =========================================
-   BOTÃO POSITIVO
-   Enviar solução
-   ========================================= */
-
 .primary-button {
-  background: #3f8f62;
+  background: green;
   color: #f5fbff;
   font-weight: 700;
-  border-color: rgba(63, 143, 98, 0.55);
-  box-shadow: 0 8px 20px rgba(63, 143, 98, 0.12);
 }
 
-.primary-button:hover {
-  background: #4b9d6d;
-  border-color: rgba(75, 157, 109, 0.7);
-  box-shadow: 0 10px 24px rgba(63, 143, 98, 0.18);
-}
-
-/* =========================================
-   BOTÃO NEUTRO
-   Compilar e testar Java
-   ========================================= */
 
 .secondary-button {
-  background: rgba(255, 255, 255, 0.06);
-  color: var(--text);
-  border-color: rgba(255, 255, 255, 0.08);
+  background: white;
+  color: black;
 }
-
-.secondary-button:hover {
-  background: rgba(255, 255, 255, 0.09);
-  border-color: rgba(110, 168, 255, 0.25);
-}
-
-/* =========================================
-   BOTÃO NEGATIVO
-   Desistir do round
-   ========================================= */
 
 .danger-button {
-  background: #a65353;
+  background: red;
   color: #fff;
   font-weight: 700;
-  border-color: rgba(166, 83, 83, 0.55);
-  box-shadow: 0 8px 20px rgba(166, 83, 83, 0.10);
-}
-
-.danger-button:hover {
-  background: #b35d5d;
-  border-color: rgba(179, 93, 93, 0.7);
-  box-shadow: 0 10px 24px rgba(166, 83, 83, 0.16);
 }
 
 button:disabled {
   cursor: not-allowed;
   opacity: 0.55;
 }
-
-/* =========================================
-   CHAT FLUTUANTE
-   ========================================= */
 
 .floating-chat {
   position: fixed;
@@ -313,11 +300,14 @@ button:disabled {
   z-index: 5;
   width: min(370px, calc(100vw - 32px));
   overflow: hidden;
-  border: 1px solid var(--border);
-  border-radius: 24px;
+  border-radius: 8px;
   background: rgba(9, 20, 33, 0.96);
-  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.38);
-  backdrop-filter: blur(20px);
+}
+
+.floating-chat:hover{
+
+  transform: translateY(-1px);
+
 }
 
 .chat-toggle {
@@ -325,7 +315,7 @@ button:disabled {
   min-height: 52px;
   border: 0;
   padding: 0 18px;
-  background: rgba(79, 156, 255, 0.20);
+  background: cornflowerblue;
   color: var(--text);
   cursor: pointer;
   font: inherit;
@@ -334,7 +324,7 @@ button:disabled {
 }
 
 .chat-toggle:hover {
-  background: rgba(79, 156, 255, 0.28);
+  transform: translateY(-1px);
 }
 
 .floating-chat-body {
@@ -355,8 +345,8 @@ button:disabled {
 
 .chat-message {
   padding: 10px;
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  background: black;
 }
 
 .chat-message p {
@@ -373,10 +363,10 @@ button:disabled {
 
 .chat-form input {
   min-width: 0;
-  border-radius: 999px;
+  border-radius: 8px;
   border: 1px solid var(--border);
-  background: rgba(0, 0, 0, 0.16);
-  color: var(--text);
+  background: black;
+  color: white;
   padding: 0 14px;
 }
 
@@ -384,10 +374,6 @@ button:disabled {
   min-height: 42px;
   padding: 0 15px;
 }
-
-/* =========================================
-   LOADING
-   ========================================= */
 
 body.is-busy::after {
   content: "";
@@ -461,6 +447,14 @@ body.is-busy .loading-overlay {
   white-space: pre-line;
 }
 
+.challenge-panel  textarea{
+
+  background: black;
+  color: white;
+  line-height: 20px;
+
+}
+
 /* =========================================
    RESPONSIVIDADE
    ========================================= */
@@ -490,4 +484,56 @@ body.is-busy .loading-overlay {
     right: 16px;
     bottom: 16px;
   }
+}
+
+.estrelas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.estrela {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: white;
+  border-radius: 50%;
+  opacity: 0;
+  animation: twinkle 3s infinite;
+}
+
+.codigos {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+  font-family: 'Press Start 2P', system-ui;
+  font-size: 12px;
+  color: white;
+}
+
+.codigo-bloco {
+  position: absolute;
+  white-space: pre;
+  opacity: 0;
+  animation: piscarCodigo 6s infinite;
+  line-height: 1.4;
+  font-family: 'Press Start 2P', system-ui;
+}
+
+@keyframes piscarCodigo {
+  0%, 100% { opacity: 0; }
+  30%, 70% { opacity: 0.3; }
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
 }

@@ -6,7 +6,7 @@ let redirected = false;
 const params = new URLSearchParams(window.location.search);
 const fallbackActiveRoom =
   window.TechStartApp &&
-  typeof window.TechStartApp.getActiveRoom === "function"
+    typeof window.TechStartApp.getActiveRoom === "function"
     ? window.TechStartApp.getActiveRoom()
     : null;
 const roomCode = (params.get("room") || fallbackActiveRoom?.code || "").toUpperCase();
@@ -96,20 +96,42 @@ function renderChallengeDetails(challenge) {
     details.textContent = "";
     return;
   }
-  const tests = (challenge.tests || []).map((test) => `${test.call} → ${test.expected}`).join(" • ");
-  const hints = (challenge.hints || []).join(" • ");
+  const tests = (challenge.tests || []).map((test) => `${test.call} = ${test.expected}`).join("\n");
+  const hints = (challenge.hints || []).join("\n");
   const lines = [
-    ["Objetivo: ", "entregue apenas o método pedido, dentro da classe Solution."],
-    ["Casos públicos: ", tests || "serão exibidos após compilar."],
+    ["Objetivo: ", challenge.description],
+    ["Exemplos de entrada/saída: ", tests || "serão exibidos após compilar."],
     ["Dicas: ", hints || "leia com atenção o método e o tipo de retorno."],
   ];
-  details.replaceChildren(...lines.map(([label, text]) => {
+
+  const paragraphs = lines.map(([label, text]) => {
     const paragraph = document.createElement("p");
     const title = document.createElement("strong");
     title.textContent = label;
     paragraph.append(title, document.createTextNode(text));
     return paragraph;
-  }));
+  });
+
+  // Parágrafo do "Obs" tratado separado, pra poder colorir a palavra Solution
+  const obsParagraph = document.createElement("p");
+  obsParagraph.className = "obs-line";
+
+  const obsLabel = document.createElement("strong");
+  obsLabel.textContent = "Obs: ";
+
+  const solutionWord = document.createElement("span");
+  solutionWord.className = "solution-word";
+  solutionWord.textContent = "Solution";
+
+  obsParagraph.append(
+    obsLabel,
+    document.createTextNode("o método pedido deve estar dentro da classe "),
+    solutionWord,
+    document.createTextNode(".")
+  );
+
+  paragraphs.push(obsParagraph);
+  details.replaceChildren(...paragraphs);
 }
 
 function renderChat() {
@@ -263,10 +285,10 @@ async function compileJava(source, challenge) {
     if (!/^[a-zA-Z_$][\w$]*\s*\([^;{}]*\)$/.test(call)) {
       throw new Error("Um caso de teste está inválido.");
     }
-    return `System.out.println("__TECHSTART_TEST_${index}__" + String.valueOf(Solution.${call}));`;
+    return `System.out.println("__TECHSTART_TEST_${index}__" + String.valueOf(__solution.${call}));`;
   });
-  const program = `${normalizedSource}\n\npublic class Main {\n  public static void main(String[] args) {\n    try {\n      ${testLines.join("\n      ")}\n    } catch (Throwable error) {\n      error.printStackTrace();\n      System.exit(1);\n    }\n  }\n}`;
 
+  const program = `${normalizedSource}\n\npublic class Main {\n  public static void main(String[] args) {\n    try {\n      Solution __solution = new Solution();\n      ${testLines.join("\n      ")}\n    } catch (Throwable error) {\n      error.printStackTrace();\n      System.exit(1);\n    }\n  }\n}`;
   const response = await fetch(`${endpoint}/submissions?base64_encoded=false&wait=true`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -295,26 +317,26 @@ async function compileJava(source, challenge) {
   const passed = compiled && testResults.length > 0 && testResults.every((test) => test.passed);
   const details = testResults.map((test) => `${test.passed ? "✓" : "✕"} ${test.call}: esperado ${test.expected}, recebido ${test.actual || "(sem retorno)"}`).join("\n");
   const output =
-  payload.compile_output ||
-  payload.stderr ||
-  (passed
-    ? `Compilação concluída.\n${details}`
-    : details);
+    payload.compile_output ||
+    payload.stderr ||
+    (passed
+      ? `Compilação concluída.\n${details}`
+      : details);
 
-const aiFeedback = await evaluateCodeWithAI(
-  source,
-  challenge,
-  output
-);
+  const aiFeedback = await evaluateCodeWithAI(
+    source,
+    challenge,
+    output
+  );
 
-return {
-  configured: true,
-  compiled,
-  passed,
-  tests: testResults,
-  output,
-  aiFeedback,
-};
+  return {
+    configured: true,
+    compiled,
+    passed,
+    tests: testResults,
+    output,
+    aiFeedback,
+  };
 }
 
 function wait(ms) {
@@ -371,6 +393,7 @@ async function syncPresence() {
     showPopup("Jogador desconectado", "O duelo foi encerrado automaticamente porque um jogador saiu ou fechou a aba.", redirectToScoreboard);
   }
 }
+
 
 function handleEditorTab(event) {
   const textarea = event.target;
@@ -574,19 +597,17 @@ async function renderRoom() {
   document.getElementById("player-two-name").textContent = isOfflineTraining()
     ? "Treino solo"
     : userTwo
-    ? userTwo.name
-    : "Jogador 2";
+      ? userTwo.name
+      : "Jogador 2";
   document.getElementById("player-two-score").textContent = isOfflineTraining()
     ? "sem adversario"
     : `${playerTwo ? playerTwo.score : 0} pts`;
   document.getElementById("challenge-name").textContent = challenge.title;
-  document.getElementById("challenge-description").textContent = challenge.description;
   renderChallengeDetails(challenge);
-  document.getElementById("language-chip").textContent = room.language;
   document.getElementById("solution-input").placeholder = challenge.starter;
 
   setRoundControlsDisabled(!currentPlayer || currentPlayer.solutionStatus !== "pending");
-  document.getElementById("leave-training-button").classList.toggle("hidden", !isOfflineTraining());
+  document.getElementById("botao_voltar").classList.toggle("hidden", !isOfflineTraining());
   renderChat();
 }
 
@@ -629,7 +650,7 @@ document.getElementById("chat-form").addEventListener("submit", async (event) =>
   await renderRoom();
 });
 
-document.getElementById("leave-training-button").addEventListener("click", async () => {
+document.getElementById("botao_voltar").addEventListener("click", async () => {
   if (!isOfflineTraining()) return;
   setBusy(true, "Encerrando treino...");
   await TechStartApp.leaveRoomAsync(room.code, duelUser.id);
@@ -717,8 +738,52 @@ document.getElementById("give-up-round-button").addEventListener("click", async 
     return;
   }
 
-  await renderRoom();
-  await syncPresence();
+  try {
+    await renderRoom();
+  } catch (error) {
+    console.error("Erro ao renderizar a sala:", error);
+  }
+  try {
+    await syncPresence();
+  } catch (error) {
+    console.error("Erro ao sincronizar presenca:", error);
+  }
   window.setInterval(renderRoom, 1000);
   window.setInterval(syncPresence, 5000);
 })();
+
+// Criar estrelas
+function criarEstrelas() {
+  const container = document.getElementById("estrelas-container");
+  for (let i = 0; i < 50; i++) {
+    const estrela = document.createElement("div");
+    estrela.className = "estrela";
+    estrela.style.left = Math.random() * 100 + "%";
+    estrela.style.top = Math.random() * 100 + "%";
+    estrela.style.animationDelay = Math.random() * 3 + "s";
+    container.appendChild(estrela);
+  }
+}
+criarEstrelas();
+
+// Criar blocos de código
+function criarCodigos() {
+  const container = document.getElementById("codigos-container");
+  const snippets = [
+    "public class Main {\n  public static void main() {\n    System.out.println(\"Hello\");\n  }\n}",
+    "int[] arr = {1, 2, 3};\nfor (int i : arr) {\n  System.out.println(i);\n}",
+    "class User {\n  String name;\n  User(String n) {\n    name = n;\n  }\n}",
+    "public void loop() {\n  while (true) {\n    System.out.println(\"loop\");\n  }\n}"
+  ];
+
+  for (let i = 0; i < 8; i++) {
+    const bloco = document.createElement("div");
+    bloco.className = "codigo-bloco";
+    bloco.textContent = snippets[i % snippets.length];
+    bloco.style.left = Math.random() * 80 + "%";
+    bloco.style.top = Math.random() * 80 + "%";
+    bloco.style.animationDelay = Math.random() * 6 + "s";
+    container.appendChild(bloco);
+  }
+}
+criarCodigos();

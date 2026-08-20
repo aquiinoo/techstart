@@ -23,6 +23,8 @@
 
 body {
   min-height: 100vh;
+  max-width: 100%;
+  overflow-x: hidden;
   background:
     black;
   color: var(--text);
@@ -138,6 +140,7 @@ input {
   background: var(--painel);
   padding: 36px;
   width: min(480px, 100%);
+  min-width: 0;
   justify-self: center;
 }
 
@@ -204,6 +207,8 @@ input {
 }
 
 .auth-form input {
+  width: 100%;
+  min-width: 0;
   min-height: 50px;
   padding: 0 16px;
   border-radius: 14px;
@@ -403,6 +408,17 @@ input {
 
   .auth-card {
     padding: 24px;
+  }
+
+  .autenticacao_card {
+    width: 100%;
+    padding: 24px;
+  }
+
+  .auth-form,
+  .autenticacao_links {
+    min-width: 0;
+    max-width: 100%;
   }
 
   .auth-header p {

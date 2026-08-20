@@ -502,11 +502,17 @@ textarea {
   }
 
   .barra_lateral {
+    width: 100% !important;
+    max-width: none;
+    align-self: stretch;
     padding: 20px;
   }
 
   .barra_lateral img {
-    display: none;
+    display: block;
+    width: min(110px, 100%);
+    height: auto;
+    margin: 0 auto;
   }
 
   .barra_lateral {

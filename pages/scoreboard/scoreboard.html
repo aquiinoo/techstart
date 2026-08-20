@@ -8,17 +8,17 @@
   <link rel="shortcut icon" href="../../assets/piscando.png" type="image/x-icon">
 </head>
 <body>
+  <a id="botao_voltar" class="back-link" href="../dashboard/dashboard.html">Voltar</a>
+
   <main class="scoreboard-layout">
     <section class="scoreboard-main">
       <div class="topbar">
-        <a class="back-link" href="../dashboard/dashboard.html">Voltar</a>
         <div class="room-chip" id="room-chip">Sala</div>
       </div>
 
       <section class="panel ready-panel">
         <div class="ready-header">
           <div>
-            <p class="section-label">Painel de pronto</p>
             <h1 id="room-title">Aguardando duelo</h1>
             <p class="muted" id="room-description"></p>
           </div>
@@ -27,21 +27,18 @@
 
         <div class="players-grid">
           <article class="player-card">
-            <p class="section-label">Jogador 1</p>
             <h2 id="player-one-name">Aguardando</h2>
             <strong id="player-one-score">0 pts</strong>
             <span id="player-one-status">Aguardando</span>
           </article>
 
           <article class="countdown-card">
-            <p class="section-label">Status</p>
             <strong id="match-status">Aguardando jogadores</strong>
             <span id="countdown-indicator">--</span>
             <p class="muted" id="last-round-summary"></p>
           </article>
 
           <article class="player-card">
-            <p class="section-label">Jogador 2</p>
             <h2 id="player-two-name">Aguardando</h2>
             <strong id="player-two-score">0 pts</strong>
             <span id="player-two-status">Aguardando</span>
@@ -49,7 +46,7 @@
         </div>
 
         <div class="ready-actions">
-          <button id="copy-link" class="secondary-button">Copiar link</button>
+          <button id="copy-link" class="secondary-button">COPIAR CODIGO</button>
           <button id="ready-button" class="primary-button">PRONTO</button>
           <button id="give-up-button" class="danger-button">DESISTIR</button>
         </div>

@@ -94,8 +94,8 @@ function renderPlayer(slot, player) {
   document.getElementById(`player-${slot}-score`).textContent = `${player ? player.score : 0} pts`;
   document.getElementById(`player-${slot}-status`).textContent = player
     ? player.ready
-      ? "PRONTO"
-      : "Aguardando pronto"
+      ? "PRONTO!"
+      : "QUASE LÁ..."
     : "Sem jogador";
 }
 
@@ -152,7 +152,7 @@ async function renderRoom() {
 
   const readyButton = document.getElementById("ready-button");
   readyButton.disabled = room.status === "finished" || !currentPlayer || room.players.length < 2;
-  readyButton.textContent = currentPlayer?.ready ? "CANCELAR PRONTO" : "PRONTO";
+  readyButton.textContent = currentPlayer?.ready ? "CANCELAR" : "PRONTO";
 
   document.getElementById("finish-panel").classList.toggle("hidden", room.status !== "finished");
 
@@ -161,7 +161,7 @@ async function renderRoom() {
     return;
   } else if (room.status === "countdown") {
     document.getElementById("room-title").textContent = "Todos prontos";
-    document.getElementById("match-status").textContent = "O round vai comecar";
+    document.getElementById("match-status").textContent = "O round vai começar";
     document.getElementById("countdown-indicator").textContent = countdown;
     if (countdown <= 0) {
       await TechStartApp.startRoundAsync(room.code);
@@ -176,7 +176,7 @@ async function renderRoom() {
     return;
   } else {
     document.getElementById("room-title").textContent = room.players.length < 2 ? "Aguardando adversario" : "Prepare-se para o round";
-    document.getElementById("match-status").textContent = room.players.length < 2 ? "Convide outro jogador" : "Aguardando pronto";
+    document.getElementById("match-status").textContent = room.players.length < 2 ? "Convide outro jogador" : "Aguardando jogadores";
     document.getElementById("countdown-indicator").textContent = "--";
   }
 
@@ -187,7 +187,7 @@ async function renderRoom() {
 
   document.getElementById("last-round-summary").textContent = lastRoundWinner
     ? `Ultimo round: ${lastRoundWinner.name} pontuou.`
-    : "Quando ambos estiverem prontos, a contagem comeca.";
+    : "Quando ambos estiverem prontos, a contagem começa.";
 
   renderChat();
 }
@@ -207,10 +207,10 @@ document.getElementById("ready-button").addEventListener("click", async () => {
   await TechStartApp.setPlayerReadyAsync(room.code, currentUser.id, nextReady);
   await renderRoom();
   showPopup(
-    nextReady ? "Pronto confirmado" : "Pronto cancelado",
+    nextReady ? "Isso aí!" : "Vish...",
     nextReady
-      ? "Quando o outro jogador tambem estiver pronto, a contagem vai comecar."
-      : "Voce pode apertar pronto novamente quando quiser iniciar o round."
+      ? "Quando o outro jogador também estiver pronto, a contagem vai começar."
+      : "Não vai arregar agora né?"
   );
 });
 

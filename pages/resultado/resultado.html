@@ -8,25 +8,30 @@
   <link rel="shortcut icon" href="../../assets/piscando.png" type="image/x-icon">
 </head>
 <body>
+  <a id="botao_voltar" class="back-link" href="../dashboard/dashboard.html">Voltar</a>
+
   <main class="result-layout">
     <section class="result-hero" id="result-hero">
-      <a class="back-link" href="../dashboard/dashboard.html">Voltar ao painel</a>
-      <p class="section-label" id="room-chip">Sala</p>
+      <div class="result-topbar">
+        <div class="room-chip" id="room-chip">Sala</div>
+        <div class="outcome-pill" id="outcome-pill">Resultado</div>
+      </div>
+
       <h1 id="result-title">Resultado do duelo</h1>
       <p class="muted" id="result-summary"></p>
+
       <div class="score-board">
         <article class="player-score blue-side">
-          <p class="section-label">Azul</p>
           <h2 id="player-one-name">Jogador 1</h2>
           <strong id="player-one-score">0</strong>
         </article>
         <span class="versus">vs</span>
         <article class="player-score red-side">
-          <p class="section-label">Vermelho</p>
           <h2 id="player-two-name">Jogador 2</h2>
           <strong id="player-two-score">0</strong>
         </article>
       </div>
+
       <div class="result-actions">
         <button type="button" id="rematch-button" class="primary-button">Pedir/Aceitar revanche</button>
         <button type="button" id="new-opponent-button" class="secondary-button">Jogar com outro aleatorio</button>

@@ -5,7 +5,7 @@ let cachedUsers = [];
 const params = new URLSearchParams(window.location.search);
 const fallbackActiveRoom =
   window.TechStartApp &&
-  typeof window.TechStartApp.getActiveRoom === "function"
+    typeof window.TechStartApp.getActiveRoom === "function"
     ? window.TechStartApp.getActiveRoom()
     : null;
 const roomCode = (params.get("room") || fallbackActiveRoom?.code || "").toUpperCase();
@@ -94,13 +94,13 @@ function renderTrainingFeedback() {
   document.getElementById("room-chip").textContent = "Treino";
   document.getElementById("feedback-title").textContent = timedOut ? "Tempo esgotado" : gaveUp ? "Treino interrompido" : correct ? "Treino concluído" : "Treino revisado";
   document.getElementById("challenge-summary").textContent = `${challenge?.title || "Desafio"} — ${challenge?.description || ""}`;
-  document.getElementById("score-pill").textContent = timedOut ? "00:00" : correct ? "✓" : "↻";
+  document.getElementById("score-pill").classList.add("hidden");
   document.getElementById("result-title").textContent = timedOut ? "O tempo acabou" : gaveUp ? "Você encerrou o treino" : correct ? "Boa solução!" : "Você está no caminho";
   document.getElementById("evaluation-output").textContent = timedOut
     ? "O treino foi encerrado pelo tempo. Compare uma solução de referência com a sua ideia e tente novamente."
     : gaveUp
-    ? "O treino foi encerrado por você. Use a solução de referência como ponto de partida e tente outro desafio."
-    : payload.evaluation?.message || "Revise o método solicitado.";
+      ? "O treino foi encerrado por você. Use a solução de referência como ponto de partida e tente outro desafio."
+      : payload.evaluation?.message || "Revise o método solicitado.";
   document.getElementById("ai-output").textContent = payload.aiFeedback || "Use as dicas e os casos de teste para ajustar sua solução.";
   document.querySelector(".result-panel").classList.toggle("round-success", correct && !timedOut);
   document.querySelector(".result-panel").classList.toggle("round-warning", !correct || timedOut);
@@ -122,8 +122,8 @@ function renderPlayers() {
       const status = feedback?.scoredThisRound
         ? "Pontuou primeiro"
         : feedback?.solutionStatus === "correct"
-        ? "Acertou depois"
-        : "Nao pontuou";
+          ? "Acertou depois"
+          : "Nao pontuou";
       const css = feedback?.solutionStatus === "correct" ? "correct" : "wrong";
       return `
         <article class="player-summary ${css}">
@@ -160,12 +160,13 @@ async function renderRoom() {
   document.getElementById("room-chip").textContent = `Sala ${room.code}`;
   document.getElementById("feedback-title").textContent = `Feedback do round ${room.lastRoundNumber || room.currentRound}`;
   document.getElementById("challenge-summary").textContent = `${challenge.title} - ${challenge.description}`;
+  document.getElementById("score-pill").classList.remove("hidden");
   document.getElementById("score-pill").textContent = `${playerOne?.score || 0} x ${playerTwo?.score || 0}`;
   document.getElementById("result-title").textContent = userFeedback?.scoredThisRound
     ? "Voce pontuou"
     : userFeedback?.solutionStatus === "correct"
-    ? "Voce acertou, mas chegou depois"
-    : "Ainda nao foi dessa vez";
+      ? "Voce acertou, mas chegou depois"
+      : "Ainda nao foi dessa vez";
   document.querySelector(".result-panel").classList.toggle("round-success", Boolean(userFeedback?.scoredThisRound));
   document.querySelector(".result-panel").classList.toggle("round-warning", !userFeedback?.scoredThisRound);
   document.getElementById("evaluation-output").textContent =

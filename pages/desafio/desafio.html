@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,22 +13,33 @@
 
 <body>
 
+  <div class="estrelas" id="estrelas-container"></div>
+  <div class="codigos" id="codigos-container"></div>
+
   <main class="challenge-layout">
 
-    <header class="match-topbar">
+    <button id="botao_voltar" type="button">
+      Voltar
+    </button>
+
+    <header class="card-scoreboard">
 
       <div>
-        <p class="section-label" id="room-chip">Sala</p>
+
+        <div id="status-line">
+
+          <p class="section-label" id="room-chip">Sala</p>
+
+          <p>-</p>
+
+          <p class="connection-status" id="connection-status" aria-live="polite">
+            Conectando...
+          </p>
+
+        </div>
 
         <h1 id="round-indicator">Round</h1>
 
-        <p
-          class="connection-status"
-          id="connection-status"
-          aria-live="polite"
-        >
-          Conectando...
-        </p>
       </div>
 
 
@@ -51,15 +63,6 @@
 
       </div>
 
-
-      <button
-        id="leave-training-button"
-        class="secondary-button hidden"
-        type="button"
-      >
-        Voltar ao painel
-      </button>
-
     </header>
 
 
@@ -69,67 +72,43 @@
 
         <div>
 
-          <p class="section-label">Desafio</p>
+          <div class="title-line">
 
-          <h2 id="challenge-name">
-            Preparando round
-          </h2>
+            <h2>Desafio em <span>Java:</span></h2>
 
-          <p
-            id="challenge-description"
-            class="muted"
-          ></p>
+            <h2 id="challenge-name">
+              Preparando round
+            </h2>
 
-          <div
-            id="challenge-details"
-            class="challenge-details"
-          ></div>
+
+          </div>
+
+          <div id="challenge-details" class="challenge-details"></div>
 
         </div>
-
-
-        <div
-          class="language-chip"
-          id="language-chip"
-        ></div>
 
       </div>
 
 
-      <textarea
-        id="solution-input"
-        placeholder="Digite sua solucao aqui."
-      ></textarea>
+      <textarea id="solution-input" placeholder="Digite sua solucao aqui." spellcheck="false"></textarea>
 
 
       <div class="editor-actions">
 
         <!-- BOTÃO NEUTRO -->
-        <button
-          id="test-button"
-          class="secondary-button"
-          type="button"
-        >
-          Compilar e testar Java
+        <button id="test-button" class="secondary-button" type="button">
+          Testar e compilar
         </button>
 
 
         <!-- BOTÃO VERDE -->
-        <button
-          id="submit-button"
-          class="primary-button"
-          type="button"
-        >
-          Enviar solucao
+        <button id="submit-button" class="primary-button" type="button">
+          Enviar resposta
         </button>
 
 
         <!-- BOTÃO VERMELHO -->
-        <button
-          id="give-up-round-button"
-          class="danger-button"
-          type="button"
-        >
+        <button id="give-up-round-button" class="danger-button" type="button">
           Desistir do round
         </button>
 
@@ -140,13 +119,10 @@
 
         <article class="feedback-card">
 
-          <h3>Resultado</h3>
+          <h3>Resultado / Console</h3>
 
-          <p
-            id="result-output"
-            class="muted"
-          >
-            Os testes e o feedback aparecerao aqui.
+          <p id="result-output" class="muted">
+            Os testes e o retorno do console aparecerao aqui
           </p>
 
         </article>
@@ -154,13 +130,13 @@
 
         <article class="feedback-card">
 
-          <h3>Analise da IA</h3>
+          <h3>Análise da IA</h3>
 
-          <p
-            id="ai-output"
-            class="muted"
-          >
-            A IA vai analisar sua resposta apos o inicio do exercicio.
+          <p id="ai-output" class="muted">
+            A IA vai analisar seus testes e te ajudar com dicas
+            <span>Obs: a IA pode ficar indisponível em alguns momentos devido a quantidade limitada de tokens, mas isso
+              não indica erro no seu código.
+            </span>
           </p>
 
         </article>
@@ -174,48 +150,25 @@
 
   <!-- CHAT -->
 
-  <aside
-    class="floating-chat is-minimized"
-    id="floating-chat"
-    aria-label="Chat da sala"
-  >
+  <aside class="floating-chat is-minimized" id="floating-chat" aria-label="Chat da sala">
 
-    <button
-      class="chat-toggle"
-      id="chat-toggle"
-      type="button"
-      aria-expanded="false"
-    >
-      💬 Chat da sala
+    <button class="chat-toggle" id="chat-toggle" type="button" aria-expanded="false">
+      Chat
       <span id="chat-count"></span>
     </button>
 
 
     <div class="floating-chat-body">
 
-      <div
-        id="chat-messages"
-        class="chat-messages"
-      ></div>
+      <div id="chat-messages" class="chat-messages"></div>
 
 
-      <form
-        id="chat-form"
-        class="chat-form"
-      >
+      <form id="chat-form" class="chat-form">
 
-        <input
-          id="chat-input"
-          maxlength="500"
-          placeholder="Mensagem para seu oponente"
-          autocomplete="off"
-        >
+        <input id="chat-input" maxlength="500" placeholder="Mensagem para seu oponente" autocomplete="off">
 
 
-        <button
-          class="primary-button"
-          type="submit"
-        >
+        <button class="primary-button" type="submit">
           Enviar
         </button>
 
@@ -228,16 +181,9 @@
 
   <!-- LOADING -->
 
-  <div
-    class="loading-overlay"
-    id="loading-overlay"
-    aria-live="polite"
-  >
+  <div class="loading-overlay" id="loading-overlay" aria-live="polite">
 
-    <img
-      src="../../assets/carregando.png"
-      alt="Panda preparando o desafio"
-    >
+    <img src="../../assets/carregando.png" alt="Panda preparando o desafio">
 
     <p>
       O panda está preparando seu feedback...
@@ -248,12 +194,7 @@
 
   <!-- POPUP -->
 
-  <div
-    id="popup"
-    class="popup hidden"
-    role="dialog"
-    aria-modal="true"
-  >
+  <div id="popup" class="popup hidden" role="dialog" aria-modal="true">
 
     <div class="popup-card">
 
@@ -265,11 +206,7 @@
 
       <p id="popup-text"></p>
 
-      <button
-        type="button"
-        class="primary-button"
-        id="popup-button"
-      >
+      <button type="button" class="primary-button" id="popup-button">
         Continuar
       </button>
 
@@ -303,4 +240,5 @@
   <script src="script.js?v=20260815-1"></script>
 
 </body>
+
 </html>

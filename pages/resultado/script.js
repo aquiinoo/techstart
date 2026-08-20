@@ -67,10 +67,12 @@ function renderResult() {
   const isDraw = !room.winnerUserId;
   const currentWon = room.winnerUserId === currentUser.id;
   const resultHero = document.getElementById("result-hero");
+  const outcomePill = document.getElementById("outcome-pill");
 
   resultHero.classList.toggle("win", currentWon);
   resultHero.classList.toggle("loss", !isDraw && !currentWon);
   resultHero.classList.toggle("draw", isDraw);
+  outcomePill.textContent = isDraw ? "EMPATE" : currentWon ? "VITORIA" : "DERROTA";
 
   document.getElementById("room-chip").textContent = `Sala ${room.code}`;
   document.getElementById("player-one-name").textContent = userOne ? userOne.name : "Jogador 1";
@@ -85,11 +87,11 @@ function renderResult() {
   }
 
   const winner = getUser(room.winnerUserId);
-  document.getElementById("result-title").textContent = currentWon ? "Voce venceu" : "Voce perdeu";
+  document.getElementById("result-title").textContent = currentWon ? "Amassou ele!" : "Você perdeu ;(";
   document.getElementById("result-summary").textContent =
     room.finishedReason === "disconnect"
       ? `${winner ? winner.name : "O vencedor"} venceu por desconexao.`
-      : `${winner ? winner.name : "O vencedor"} fechou a partida melhor de 3.`;
+      : `${winner ? winner.name : "O vencedor"} fechou a partida melhor de 3!`;
 }
 
 async function renderRoom() {
@@ -130,7 +132,40 @@ document.getElementById("new-opponent-button").addEventListener("click", async (
   window.location.assign(scoreboardUrl(result.room.code));
 });
 
+function buildMockRoom() {
+  return {
+    code: "MOCK1",
+    status: "finished",
+    finishedReason: params.get("reason") === "disconnect" ? "disconnect" : "normal",
+    winnerUserId:
+      params.get("draw") === "1"
+        ? null
+        : params.get("lose") === "1"
+        ? "mock-user-2"
+        : "mock-user-1",
+    players: [
+      { userId: "mock-user-1", score: 2 },
+      { userId: "mock-user-2", score: 1 },
+    ],
+  };
+}
+
+function buildMockUsers() {
+  return [
+    { id: "mock-user-1", name: "Jogador Um", nick: "j1" },
+    { id: "mock-user-2", name: "Jogador Dois", nick: "j2" },
+  ];
+}
+
 (async () => {
+  if (params.get("mock") === "1") {
+    currentUser = buildMockUsers()[0];
+    room = buildMockRoom();
+    cachedUsers = buildMockUsers();
+    renderResult();
+    return;
+  }
+
   if (!roomCode) {
     redirectToDashboard("codigo da sala ausente");
     return;

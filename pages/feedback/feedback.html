@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +8,12 @@
   <link rel="stylesheet" href="style.css">
   <link rel="shortcut icon" href="../../assets/piscando.png" type="image/x-icon">
 </head>
+
 <body>
+
+  <div class="estrelas" id="estrelas-container"></div>
+  <div class="codigos" id="codigos-container"></div>
+
   <main class="feedback-layout">
     <section class="panel feedback-hero">
       <div>
@@ -20,20 +26,17 @@
 
     <section class="feedback-grid">
       <article class="panel result-panel">
-        <p class="section-label">Seu resultado</p>
         <h2 id="result-title">Analisando</h2>
         <p id="evaluation-output" class="muted"></p>
       </article>
 
       <article class="panel result-panel">
-        <p class="section-label">Feedback da IA</p>
         <h2 id="feedback-subtitle">Pontos de melhoria</h2>
         <p id="ai-output" class="muted"></p>
       </article>
     </section>
 
     <section class="panel training-panel hidden" id="training-panel">
-      <p class="section-label">Próximo passo</p>
       <h2 id="training-note">Continue praticando</h2>
       <p class="muted" id="training-detail"></p>
       <div class="reference-solution">
@@ -42,7 +45,7 @@
       </div>
       <div class="training-actions">
         <button type="button" id="train-again-button" class="primary-button">Treinar novamente</button>
-        <a class="secondary-button" href="../dashboard/dashboard.html">Voltar ao painel</a>
+        <a class="secondary-button" href="../dashboard/dashboard.html">Voltar ao menu</a>
       </div>
     </section>
 
@@ -67,4 +70,5 @@
   <script src="../../shared/app.js"></script>
   <script src="script.js"></script>
 </body>
+
 </html>

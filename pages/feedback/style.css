@@ -1,37 +1,30 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
 :root {
-  --panel: rgba(12, 23, 33, 0.9);
-  --border: rgba(255, 255, 255, 0.12);
-  --text: #edf4fb;
-  --muted: #acb8c4;
-  --accent: #4f9cff;
-  --red: #ff5f6d;
-  --success: #3ddc97;
-  --danger: #ff7070;
+  --painel: rgb(56, 56, 56);
+  --muted: #cccccc;
 }
 
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  font-family: 'Outfit', sans-serif;
+  font-family: 'Press Start 2P', sans-serif;
 }
 
 body {
   min-height: 100vh;
-  background:
-    linear-gradient(115deg, rgba(33, 98, 180, 0.28), transparent 34%),
-    linear-gradient(245deg, rgba(195, 45, 60, 0.28), transparent 34%),
-    linear-gradient(135deg, #071019, #10151f 50%, #190e14);
-  color: var(--text);
+  background: black;
+  color: white;
 }
 
 button {
   font: inherit;
 }
 
-.hidden { display: none !important; }
+.hidden {
+  display: none !important;
+}
 
 .feedback-layout {
   width: min(1120px, calc(100% - 32px));
@@ -42,12 +35,9 @@ button {
 }
 
 .panel {
-  background: var(--panel);
-  border-radius: 28px;
-  border: 1px solid var(--border);
-  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.26);
-  backdrop-filter: blur(16px);
-  padding: 24px;
+  background: var(--painel);
+  border-radius: 8px;
+  padding: 20px;
 }
 
 .feedback-hero {
@@ -55,13 +45,21 @@ button {
   justify-content: space-between;
   align-items: center;
   gap: 18px;
+  border: 1px solid black;
+}
+
+.feedback-hero h1 {
+
+  margin-bottom: 8px;
+
 }
 
 .section-label {
   text-transform: uppercase;
   letter-spacing: 0.18em;
   font-size: 0.72rem;
-  color: #c9dcff;
+  color: greenyellow;
+  margin-bottom: 12px;
 }
 
 .muted {
@@ -75,11 +73,11 @@ button {
   min-height: 72px;
   display: grid;
   place-items: center;
-  border-radius: 18px;
-  border: 1px solid rgba(79, 156, 255, 0.36);
-  background: linear-gradient(90deg, rgba(79, 156, 255, 0.28), rgba(255, 95, 109, 0.28));
-  color: #d7e8ff;
-  font-size: 2rem;
+  border-radius: 8px;
+  border: 4px solid black;
+  background-color: yellow;
+  color: black;
+  font-size: 1.6rem;
   font-weight: 700;
 }
 
@@ -95,14 +93,17 @@ button {
 
 .result-panel {
   min-height: 230px;
+  border: 3px solid black;
 }
 
-.result-panel.round-success { border-color: rgba(61, 220, 151, .55); background: linear-gradient(145deg, rgba(61,220,151,.13), var(--panel)); }
-.result-panel.round-warning { border-color: rgba(255, 180, 171, .3); }
+.result-panel.round-success {
+  border-color: limegreen;
+}
 
 .result-panel h2,
 .players-panel h2 {
-  margin: 8px 0 10px;
+  margin: 12px 0 10px;
+  color: yellow;
 }
 
 .players-panel {
@@ -115,9 +116,9 @@ button {
 }
 
 .player-summary {
-  border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  background: black;
+  border: 1px solid var(--painel);
   padding: 16px;
 }
 
@@ -128,24 +129,29 @@ button {
 
 .player-summary span {
   color: var(--muted);
-  margin-top: 6px;
+  margin-top: 8px;
 }
 
 .player-summary.correct span {
-  color: var(--success);
+  color: limegreen;
 }
 
 .player-summary.wrong span {
-  color: #ffd2d2;
+  color: tomato;
 }
 
 .primary-button {
   min-height: 48px;
-  border-radius: 999px;
+  border-radius: 8px;
   border: 1px solid transparent;
   cursor: pointer;
-  background: linear-gradient(135deg, var(--accent), var(--red));
-  color: white;
+  background: green;
+  color: #f5fbff;
+  font-weight: 700;
+}
+
+.primary-button:hover {
+  transform: translateY(-1px);
 }
 
 .secondary-button {
@@ -153,19 +159,49 @@ button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 999px;
+  border-radius: 8px;
   padding: 0 20px;
-  border: 1px solid var(--border);
-  background: rgba(255,255,255,.06);
-  color: var(--text);
+  border: 1px solid transparent;
+  background: white;
+  color: black;
   text-decoration: none;
 }
 
-.training-panel { display: grid; gap: 14px; }
-.training-panel h2 { font-size: clamp(1.5rem, 3vw, 2.2rem); }
-.reference-solution { padding: 16px; border-radius: 18px; background: rgba(79,156,255,.1); border: 1px solid rgba(79,156,255,.28); }
-.reference-solution pre { margin-top: 10px; overflow: auto; color: #dceaff; font: 0.9rem/1.55 ui-monospace, SFMono-Regular, Consolas, monospace; white-space: pre-wrap; }
-.training-actions { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 12px; }
+.secondary-button:hover {
+  transform: translateY(-1px);
+}
+
+.training-panel {
+  display: grid;
+  gap: 14px;
+  border: 1px solid black;
+}
+
+.training-panel h2 {
+  color: yellow;
+}
+
+.reference-solution {
+  padding: 16px;
+  border-radius: 8px;
+  background: black;
+  border: 1px solid var(--painel);
+}
+
+.reference-solution pre {
+  margin-top: 10px;
+  overflow: auto;
+  color: white;
+  font-size: 0.8rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.training-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
 
 .primary-button:disabled {
   cursor: not-allowed;
@@ -183,4 +219,56 @@ button {
   .training-actions {
     grid-template-columns: 1fr;
   }
+}
+
+.estrelas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.estrela {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: white;
+  border-radius: 50%;
+  opacity: 0;
+  animation: twinkle 3s infinite;
+}
+
+.codigos {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: -1;
+  font-family: 'Press Start 2P', system-ui;
+  font-size: 12px;
+  color: white;
+}
+
+.codigo-bloco {
+  position: absolute;
+  white-space: pre;
+  opacity: 0;
+  animation: piscarCodigo 6s infinite;
+  line-height: 1.4;
+  font-family: 'Press Start 2P', system-ui;
+}
+
+@keyframes piscarCodigo {
+  0%, 100% { opacity: 0; }
+  30%, 70% { opacity: 0.3; }
+}
+
+@keyframes twinkle {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 1; }
 }

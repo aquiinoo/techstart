@@ -51,32 +51,39 @@
           <article class="card action-card">
             <h3>Treinar</h3>
             <p>Pratique sozinho e receba um desafio com feedback automático.</p>
-            <button type="button" id="botao_treinar" class="primary-button">Treinar</button>
+            <div class="card-footer">
+              <button type="button" id="botao_treinar" class="primary-button">Treinar</button>
+            </div>
           </article>
 
           <article class="card action-card">
             <h3>Criar sala</h3>
             <p>Gere um link copiável e convide outro jogador para um duelo em Java.</p>
-            <div class="inline-form">
-              <button type="button" id="botao_criar" class="primary-button">Criar</button>
+            <div class="card-footer">
+              <div class="inline-form">
+                <button type="button" id="botao_criar" class="primary-button">Criar</button>
+              </div>
+              <p id="room-link" class="muted small"></p>
             </div>
-            <p id="room-link" class="muted small"></p>
           </article>
 
           <article class="card action-card">
             <h3>Entrar em duelo</h3>
             <p>Use o link ou código de uma sala existente.</p>
-            <div class="inline-form">
-              <input type="text" id="input_codigo" placeholder="Código da sala">
-              
+            <div class="card-footer">
+              <div class="inline-form">
+                <input type="text" id="input_codigo" placeholder="Código da sala">
+              </div>
+              <button type="button" id="botao_entrar" class="primary-button">Entrar</button>
             </div>
-            <button type="button" id="botao_entrar" class="primary-button">Entrar</button>
           </article>
 
           <article class="card action-card">
             <h3>Partida rápida</h3>
             <p>Entre na fila pública para duelos em Java.</p>
-            <button type="button" id="botao_buscar" class="primary-button">Buscar partida</button>
+            <div class="card-footer">
+              <button type="button" id="botao_buscar" class="primary-button">Buscar partida</button>
+            </div>
           </article>
         </div>
       </section>

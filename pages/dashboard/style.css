@@ -259,6 +259,20 @@ textarea {
   margin-top: 18px;
 }
 
+.action-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.action-card .card-footer {
+  margin-top: auto;
+  padding-top: 18px;
+}
+
+.action-card .card-footer > * + * {
+  margin-top: 14px;
+}
+
 .action-card h3,
 .card h3 {
   margin-bottom: 10px;

@@ -27,11 +27,18 @@ textarea {
   width: min(1120px, calc(100% - 32px));
   margin: 0 auto;
   display: grid;
+<<<<<<< HEAD
   grid-template-columns: minmax(0, 1fr) 380px;
   gap: 20px;
   padding: 24px 0;
   padding-top: 76px;
   align-items: stretch;
+=======
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 20px;
+  padding: 24px 0;
+  align-items: start;
+>>>>>>> 05078b89a7a1142b114ead3fc9c4f44a64a75b46
 }
 
 .scoreboard-main {
@@ -42,24 +49,35 @@ textarea {
 .topbar {
   display: flex;
   align-items: center;
+<<<<<<< HEAD
   justify-content: flex-end;
+=======
+  justify-content: space-between;
+>>>>>>> 05078b89a7a1142b114ead3fc9c4f44a64a75b46
   gap: 12px;
 }
 
 .back-link {
   display: inline-flex;
   align-items: center;
+<<<<<<< HEAD
   width: fit-content;
   padding: 10px;
+=======
+  padding: 10px 16px;
+>>>>>>> 05078b89a7a1142b114ead3fc9c4f44a64a75b46
   background: white;
   color: black;
   border-radius: 8px;
   text-decoration: none;
+<<<<<<< HEAD
   cursor: pointer;
   position: absolute;
   top: 20px;
   left: 20px;
   z-index: 10;
+=======
+>>>>>>> 05078b89a7a1142b114ead3fc9c4f44a64a75b46
 }
 
 .back-link:hover {
@@ -165,7 +183,11 @@ textarea {
 }
 
 #countdown-indicator {
+<<<<<<< HEAD
   color: yellow;
+=======
+  color: orange;
+>>>>>>> 05078b89a7a1142b114ead3fc9c4f44a64a75b46
   font-size: 1.6rem;
   font-weight: 700;
 }
@@ -239,6 +261,7 @@ button:disabled {
    SIDEBAR / CHAT
    ========================================= */
 
+<<<<<<< HEAD
 .scoreboard-sidebar {
   display: flex;
   flex-direction: column;
@@ -256,6 +279,15 @@ button:disabled {
 .chat-messages {
   flex: 1;
   min-height: 0;
+=======
+.scoreboard-sidebar .panel {
+  display: grid;
+  gap: 12px;
+}
+
+.chat-messages {
+  max-height: 360px;
+>>>>>>> 05078b89a7a1142b114ead3fc9c4f44a64a75b46
   overflow: auto;
   display: grid;
   align-content: start;
@@ -334,6 +366,7 @@ button:disabled {
 
 @media (max-width: 900px) {
   .scoreboard-layout {
+<<<<<<< HEAD
     grid-template-columns: 1fr;
   }
 
@@ -349,6 +382,19 @@ button:disabled {
     grid-template-columns: 1fr;
   }
 
+=======
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 780px) {
+  .players-grid,
+  .ready-actions,
+  .finish-actions {
+    grid-template-columns: 1fr;
+  }
+
+>>>>>>> 05078b89a7a1142b114ead3fc9c4f44a64a75b46
   .ready-header {
     flex-direction: column;
   }

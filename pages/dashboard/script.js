@@ -134,7 +134,10 @@ function buildChallengeUrl(roomCode, extras = {}) {
 function renderGreeting(user) {
   document.getElementById("greeting").textContent = `Olá, ${user.name}`;
   document.getElementById("preferred-language").textContent = `Linguagem favorita: ${user.language}`;
-  document.getElementById("firebase-status").textContent = TechStartFirebase.status;
+  const firebaseStatusEl = document.getElementById("firebase-status");
+  if (firebaseStatusEl) {
+    firebaseStatusEl.textContent = TechStartFirebase.status;
+  }
 }
 
 function renderProfile(user) {
@@ -327,7 +330,7 @@ document.getElementById("botao_criar").addEventListener("click", async () => {
 });
 
 document.getElementById("botao_entrar").addEventListener("click", async () => {
-  const code = document.getElementById("join-room-code").value;
+  const code = document.getElementById("input_codigo").value;
   const result = await TechStartApp.joinRoomByCodeAsync(code, currentUser.id);
   if (!result.ok) {
     showPopup("Nao foi possivel entrar", result.message);

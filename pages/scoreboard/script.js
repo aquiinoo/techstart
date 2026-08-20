@@ -193,8 +193,8 @@ async function renderRoom() {
 }
 
 document.getElementById("copy-link").addEventListener("click", async () => {
-  await navigator.clipboard?.writeText(scoreboardUrl()).catch(() => {});
-  showPopup("Link copiado", "Envie este link para o outro jogador entrar no painel da sala.");
+  await navigator.clipboard?.writeText(roomCode).catch(() => {});
+  showPopup("Código copiado", "Envie este código para o outro jogador entrar na sala.");
 });
 
 document.getElementById("ready-button").addEventListener("click", async () => {

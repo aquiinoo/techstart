@@ -373,6 +373,7 @@ input {
 
 @media (max-width: 720px) {
   .auth-layout {
+    width: 100%;
     padding: 18px 12px;
   }
 
@@ -413,6 +414,23 @@ input {
   .autenticacao_card {
     width: 100%;
     padding: 24px;
+    overflow: hidden;
+  }
+
+  .div_logomarca {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .div_logomarca h1 {
+    font-size: 1.5rem;
+    text-align: center;
+    overflow-wrap: anywhere;
+  }
+
+  .div_logomarca img {
+    width: 64px;
+    height: 64px;
   }
 
   .auth-form,

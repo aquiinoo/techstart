@@ -498,11 +498,17 @@ textarea {
   }
 
   .dashboard {
+    width: 100%;
     padding: 16px 12px 12px;
   }
 
   .barra_lateral {
+    position: static !important;
+    top: auto !important;
+    left: auto !important;
     width: 100% !important;
+    margin: 0 0 18px !important;
+    box-sizing: border-box;
     max-width: none;
     align-self: stretch;
     padding: 20px;

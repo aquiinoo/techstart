@@ -101,7 +101,9 @@ function renderTrainingFeedback() {
     : gaveUp
       ? "O treino foi encerrado por você. Use a solução de referência como ponto de partida e tente outro desafio."
       : payload.evaluation?.message || "Revise o método solicitado.";
-  document.getElementById("ai-output").textContent = payload.aiFeedback || "Use as dicas e os casos de teste para ajustar sua solução.";
+  document.getElementById("ai-output").innerHTML = TechStartApp.renderFeedbackHtml(
+    payload.aiFeedback || "Use as dicas e os casos de teste para ajustar sua solução."
+  );
   document.querySelector(".result-panel").classList.toggle("round-success", correct && !timedOut);
   document.querySelector(".result-panel").classList.toggle("round-warning", !correct || timedOut);
   document.querySelector(".players-panel").classList.add("hidden");
@@ -171,8 +173,9 @@ async function renderRoom() {
   document.querySelector(".result-panel").classList.toggle("round-warning", !userFeedback?.scoredThisRound);
   document.getElementById("evaluation-output").textContent =
     userFeedback?.evaluationMessage || "Nao encontramos uma submissao sua neste round.";
-  document.getElementById("ai-output").textContent =
-    userFeedback?.aiFeedback || "Revise o enunciado e compare sua solucao com os pontos esperados.";
+  document.getElementById("ai-output").innerHTML = TechStartApp.renderFeedbackHtml(
+    userFeedback?.aiFeedback || "Revise o enunciado e compare sua solucao com os pontos esperados."
+  );
   document.getElementById("round-winner").textContent = winner
     ? `${winner.name} pontuou neste round`
     : "Nenhum jogador pontuou neste round";

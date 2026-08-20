@@ -738,7 +738,10 @@ const TechStartApp = (() => {
   function generateAiFeedback(source, evaluation, challenge) {
     const lines = source.split("\n").filter(Boolean).length;
     const feedback = [];
-    feedback.push(evaluation.correct ? "A IA identificou que sua solucao atende aos testes deste round." : "A IA identificou pontos para ajuste antes da submissao final.");
+    feedback.push(evaluation.correct ? "Sua solucao atende aos criterios deste desafio." : "Sua solucao ainda precisa de um ajuste para atender aos criterios deste desafio.");
+    if (!evaluation.correct && evaluation.message) {
+      feedback.push(evaluation.message);
+    }
     feedback.push(lines <= 3 ? "Sua resposta esta objetiva." : "Sua resposta pode ser simplificada para ficar mais clara.");
     feedback.push(source.includes("return") ? "Bom uso de retorno explicito na funcao." : "Inclua um return para entregar o resultado esperado.");
     return feedback.join(" ");
@@ -746,14 +749,17 @@ const TechStartApp = (() => {
 
   async function generateAiFeedbackAsync(source, evaluation, challenge) {
     const fallback = generateAiFeedback(source, evaluation);
-    const apiKey = window.TechStartGeminiApiKey;
-
-    if (!apiKey) {
-        console.warn("Chave da IA não foi carregada. Usando feedback local.");
-        return fallback;
-    }
 
     try {
+        if (window.TechStartAiConfigReady) {
+            await window.TechStartAiConfigReady;
+        }
+
+        const apiKey = window.TechStartGeminiApiKey;
+        if (!apiKey) {
+            throw new Error("Chave da IA não configurada.");
+        }
+
         const prompt = `
 Você é um professor de programação ajudando um estudante.
 
@@ -770,12 +776,11 @@ ${source}
 RESULTADO DA AVALIAÇÃO:
 ${JSON.stringify(evaluation)}
 
-Escreva um feedback curto (no máximo 4 frases, poucas linhas) em português, em texto corrido, sem títulos, sem markdown (nada de **, *, #, listas numeradas ou com marcadores).
+Escreva um feedback curto em português, em 2 parágrafos breves e naturais.
+Não use título, cabeçalho, listas, marcadores ou numeração: a tela já possui um título para o feedback.
+Se ajudar na leitura, use **negrito** somente em uma expressão importante e \`código\` somente para nomes de métodos, variáveis ou trechos curtos. Sempre feche os marcadores que abrir.
 
-Cubra rapidamente, em prosa:
-- Se a solução está correta.
-- O principal ponto de atenção, se houver.
-- Uma sugestão objetiva de melhoria.
+Cubra rapidamente se a solução está correta, o principal ponto de atenção (se houver) e uma sugestão objetiva de melhoria.
 
 Não forneça uma solução completa pronta.
 Não invente erros que não estejam no código.
@@ -803,7 +808,7 @@ Responda diretamente ao aluno.
                     ],
                     generationConfig: {
                         temperature: 0.4,
-                        maxOutputTokens: 220
+                        maxOutputTokens: 512
                     }
                 })
             }
@@ -816,10 +821,15 @@ Responda diretamente ao aluno.
             throw new Error("Gemini não respondeu corretamente.");
         }
 
-        const feedback =
-            data?.candidates?.[0]?.content?.parts?.[0]?.text;
+        const candidate = data?.candidates?.[0];
+        const feedback = candidate?.content?.parts
+            ?.map((part) => part.text || "")
+            .join("")
+            .trim();
 
-        if (!feedback) {
+        const completeFeedback = /[.!?]["')\]*_`]*\s*$/.test(feedback || "");
+        if (!feedback || !completeFeedback || candidate?.finishReason === "MAX_TOKENS") {
+            console.warn("Resposta da IA incompleta. Usando feedback local.", candidate?.finishReason);
             throw new Error("O Gemini não retornou texto.");
         }
 
@@ -1271,17 +1281,16 @@ Responda diretamente ao aluno.
 
     const lines = text.split(/\r?\n/);
     const htmlParts = [];
-    let listItems = [];
-
-    function flushList() {
-      if (listItems.length) {
-        htmlParts.push(`<ul class="feedback-list">${listItems.join("")}</ul>`);
-        listItems = [];
-      }
-    }
 
     function inline(str) {
-      let escaped = escapeHtmlForFeedback(str);
+      let normalized = String(str || "");
+      if ((normalized.match(/\*\*/g) || []).length % 2) {
+        normalized = normalized.replaceAll("**", "");
+      }
+      if ((normalized.match(/`/g) || []).length % 2) {
+        normalized = normalized.replaceAll("`", "");
+      }
+      let escaped = escapeHtmlForFeedback(normalized);
       escaped = escaped.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
       escaped = escaped.replace(/(?<!\*)\*([^*\n]+)\*(?!\*)/g, "<em>$1</em>");
       escaped = escaped.replace(/`([^`]+)`/g, "<code>$1</code>");
@@ -1291,24 +1300,17 @@ Responda diretamente ao aluno.
     lines.forEach((line) => {
       const trimmed = line.trim();
       if (!trimmed) {
-        flushList();
         return;
       }
-      const bulletMatch = trimmed.match(/^[-*]\s+(.*)$/);
-      const numberedMatch = trimmed.match(/^\d+[.)]\s+(.*)$/);
-      if (bulletMatch || numberedMatch) {
-        listItems.push(`<li>${inline(bulletMatch ? bulletMatch[1] : numberedMatch[1])}</li>`);
+      const content = trimmed
+        .replace(/^#{1,6}\s+/, "")
+        .replace(/^[-*]\s+/, "")
+        .replace(/^\d+[.)]\s+/, "");
+      if (/^feedback da (sua )?solu[çc][ãa]o$/i.test(content)) {
         return;
       }
-      flushList();
-      const headingMatch = trimmed.match(/^#{1,6}\s+(.*)$/);
-      if (headingMatch) {
-        htmlParts.push(`<p class="feedback-heading">${inline(headingMatch[1])}</p>`);
-        return;
-      }
-      htmlParts.push(`<p>${inline(trimmed)}</p>`);
+      htmlParts.push(`<p>${inline(content)}</p>`);
     });
-    flushList();
 
     return htmlParts.join("");
   }

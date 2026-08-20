@@ -489,6 +489,12 @@ body.is-busy .loading-overlay {
    ========================================= */
 
 @media (max-width: 780px) {
+  #botao_voltar {
+    position: static;
+    margin: 0;
+    align-self: start;
+  }
+
   .match-topbar,
   .score-strip,
   .editor-actions,

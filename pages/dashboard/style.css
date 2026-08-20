@@ -448,9 +448,12 @@ textarea {
     grid-template-columns: 1fr;
   }
 
-  .sidebar {
+  .barra_lateral {
     min-height: auto;
     position: static;
+    width: 100%;
+    height: auto;
+    margin-bottom: 24px;
   }
 }
 
@@ -459,7 +462,7 @@ textarea {
     padding: 24px 16px 16px;
   }
 
-  .sidebar {
+  .barra_lateral {
     position: static;
     width: 100%;
     height: auto;
@@ -498,8 +501,30 @@ textarea {
     padding: 16px 12px 12px;
   }
 
-  .sidebar {
+  .barra_lateral {
     padding: 20px;
+  }
+
+  .barra_lateral img {
+    display: none;
+  }
+
+  .barra_lateral {
+    gap: 18px;
+    justify-content: initial;
+  }
+
+  .menu {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+    margin: 0;
+  }
+
+  .menu-item,
+  .botao_sair {
+    min-height: 44px;
+    padding: 0 10px;
+    font-size: 0.68rem;
   }
 
   .panel,

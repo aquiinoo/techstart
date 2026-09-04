@@ -476,6 +476,12 @@ body.is-busy .loading-overlay {
   white-space: pre-line;
 }
 
+.popup-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
 .challenge-panel  textarea{
 
   background: black;

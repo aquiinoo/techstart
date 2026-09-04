@@ -16,6 +16,7 @@ const popup = document.getElementById("popup");
 const popupTitle = document.getElementById("popup-title");
 const popupText = document.getElementById("popup-text");
 const popupButton = document.getElementById("popup-button");
+const popupCancelButton = document.getElementById("popup-cancel-button");
 
 function scoreboardUrl() {
   const url = new URL("../scoreboard/scoreboard.html", window.location.href);
@@ -79,6 +80,33 @@ function showPopup(title, text, callback) {
     if (callback) {
       callback();
     }
+  };
+}
+
+function showConfirmPopup(title, text, onConfirm) {
+  popupTitle.textContent = title;
+  popupText.textContent = text;
+
+  popupCancelButton.classList.remove("hidden");
+
+  popupButton.textContent = "Sair da partida";
+
+  popup.classList.remove("hidden");
+
+  popupButton.onclick = () => {
+    popup.classList.add("hidden");
+    popupCancelButton.classList.add("hidden");
+    popupButton.textContent = "Continuar";
+
+    if (onConfirm) {
+      onConfirm();
+    }
+  };
+
+  popupCancelButton.onclick = () => {
+    popup.classList.add("hidden");
+    popupCancelButton.classList.add("hidden");
+    popupButton.textContent = "Continuar";
   };
 }
 
@@ -650,11 +678,20 @@ document.getElementById("chat-form").addEventListener("submit", async (event) =>
   await renderRoom();
 });
 
-document.getElementById("botao_voltar").addEventListener("click", async () => {
+document.getElementById("botao_voltar").addEventListener("click", () => {
   if (!isOfflineTraining()) return;
-  setBusy(true, "Encerrando treino...");
-  await TechStartApp.leaveRoomAsync(room.code, duelUser.id);
-  redirectToDashboard("treino encerrado pelo jogador");
+
+  showConfirmPopup(
+    "Sair da partida?",
+    "Tem certeza que deseja sair da partida? Seu progresso será perdido.",
+    async () => {
+      setBusy(true, "Encerrando treino...");
+
+      await TechStartApp.leaveRoomAsync(room.code, duelUser.id);
+
+      redirectToDashboard("treino encerrado pelo jogador");
+    }
+  );
 });
 
 document.getElementById("solution-input").addEventListener("keydown", handleEditorKeydown);

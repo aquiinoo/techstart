@@ -194,25 +194,27 @@
 
   <!-- POPUP -->
 
-  <div id="popup" class="popup hidden" role="dialog" aria-modal="true">
+<div id="popup" class="popup hidden" role="dialog" aria-modal="true">
+  <div class="popup-card">
+    <p class="section-label">
+      TechStart
+    </p>
 
-    <div class="popup-card">
+    <h3 id="popup-title"></h3>
 
-      <p class="section-label">
-        TechStart
-      </p>
+    <p id="popup-text"></p>
 
-      <h3 id="popup-title"></h3>
-
-      <p id="popup-text"></p>
+    <div class="popup-actions">
+      <button type="button" class="secondary-button hidden" id="popup-cancel-button">
+        Cancelar
+      </button>
 
       <button type="button" class="primary-button" id="popup-button">
         Continuar
       </button>
-
     </div>
-
   </div>
+</div>
 
 
   <!-- FIREBASE -->

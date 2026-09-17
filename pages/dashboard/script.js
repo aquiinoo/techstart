@@ -133,7 +133,6 @@ function buildChallengeUrl(roomCode, extras = {}) {
 
 function renderGreeting(user) {
   document.getElementById("greeting").textContent = `Olá, ${user.name}`;
-  document.getElementById("preferred-language").textContent = `Linguagem favorita: ${user.language}`;
   const firebaseStatusEl = document.getElementById("firebase-status");
   if (firebaseStatusEl) {
     firebaseStatusEl.textContent = TechStartFirebase.status;

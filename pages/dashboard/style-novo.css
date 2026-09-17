@@ -128,12 +128,17 @@ textarea {
   display: none;
 }
 
+.section-title {
+  height: 100px;
+  display: flex;
+  gap: 10px;
+}
+
 .section-label {
   text-transform: uppercase;
   letter-spacing: 0.12em;
   font-size: 0.75rem;
   color: var(--accent-soft);
-  margin-bottom: 4px;
 }
 
 .panel-header h2,

@@ -93,8 +93,21 @@ botaoBuscar.addEventListener("mouseleave", () =>{
 })
 
 function openPanel(target) {
-  menuItems.forEach((button) => button.classList.toggle("active", button.dataset.target === target));
-  panels.forEach((panel) => panel.classList.toggle("active-panel", panel.id === `panel-${target}`));
+  menuItems.forEach((button) => {
+    const selected = button.dataset.target === target;
+    button.classList.toggle("active", selected);
+
+    const icon = button.querySelector(".menu-icon");
+    if (icon) {
+      icon.src = selected
+        ? icon.dataset.selectedIcon
+        : icon.dataset.defaultIcon;
+    }
+  });
+
+  panels.forEach((panel) =>
+    panel.classList.toggle("active-panel", panel.id === `panel-${target}`)
+  );
 }
 
 function showPopup(title, text, callback) {
@@ -391,3 +404,39 @@ function criarCodigos() {
   }
 }
 criarCodigos();
+
+// Menu icons
+function criarMenuIcons() {
+  const container = document.getElementById("menu-icons");
+  const icons = [
+    { name: "home", src: "../../assets/homewhite.png", selected: "../../assets/homeselected.png" },
+    { name: "profile", src: "../../assets/profilewhite.png", selected: "../../assets/profilesselected.png" },
+    { name: "history", src: "../../assets/historywhite.png", selected: "../../assets/historysselected.png" },
+    { name: "ranking", src: "../../assets/rankingwhite.png", selected: "../../assets/rankingsselected.png" },
+    { name: "profiles", src: "../../assets/profileswhite.png", selected: "../../assets/profilesselected.png" },
+    { name: "help", src: "../../assets/helpwhite.png", selected: "../../assets/helpsselected.png" },
+    { name: "support", src: "../../assets/supportwhite.png", selected: "../../assets/supportsselected.png" },
+    { name: "training", src: "../../assets/trainingwhite.png", selected: "../../assets/trainingssselected.png" }
+  ];
+
+  for (let i = 0; i < icons.length; i++) {
+    const icon = document.createElement("img");
+    icon.src = icons[i].src;
+    icon.alt = icons[i].name;
+    icon.className = "menu-icon menu-icon-default";
+    container.appendChild(icon);
+  }
+}
+criarMenuIcons();
+
+.menu-icon-selected {
+  display: none;
+}
+
+.menu-item.active .menu-icon-default {
+  display: none;
+}
+
+.menu-item.active .menu-icon-selected {
+  display: block;
+}

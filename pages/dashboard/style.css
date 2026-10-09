@@ -163,6 +163,20 @@ textarea {
   color: var(--accent-soft);
 }
 
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  width: 100%;
+}
+
+.menu-icon {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
 .botao_sair,
 .primary-button {
   width: 100%;

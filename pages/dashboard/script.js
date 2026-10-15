@@ -12,85 +12,49 @@ const botaoEntrar = document.getElementById("botao_entrar")
 const botaoBuscar = document.getElementById("botao_buscar")
 const pandaImg = document.querySelector("img[alt='Panda Rodando']")
 
-botaoSair.addEventListener("mouseenter", () => {
+// Verificação de segurança para o botão Sair
+if (botaoSair) {
+  botaoSair.addEventListener("mouseenter", () => {
+    if (pandaImg) pandaImg.src = "../../assets/triste.gif";
+  });
 
-  if(pandaImg) {
+  botaoSair.addEventListener("mouseleave", () => {
+    if (pandaImg) pandaImg.src = "../../assets/pandarodando.gif";
+  });
+}
 
-    pandaImg.src = "../../assets/triste.gif";
+// Verificação de segurança para o botão Criar
+if (botaoCriar) {
+  botaoCriar.addEventListener("mouseenter", () => {
+    if (pandaImg) pandaImg.src = "../../assets/prontopralutarv2.gif";
+  });
 
-  }
+  botaoCriar.addEventListener("mouseleave", () => {
+    if (pandaImg) pandaImg.src = "../../assets/pandarodando.gif";
+  });
+}
 
-});
+// Verificação de segurança para o botão Entrar
+if (botaoEntrar) {
+  botaoEntrar.addEventListener("mouseenter", () => {
+    if (pandaImg) pandaImg.src = "../../assets/prontopralutarv2.gif";
+  });
 
-botaoSair.addEventListener("mouseleave", () => {
+  botaoEntrar.addEventListener("mouseleave", () => {
+    if (pandaImg) pandaImg.src = "../../assets/pandarodando.gif";
+  });
+}
 
-  if(pandaImg) {
+// Verificação de segurança para o botão Buscar
+if (botaoBuscar) {
+  botaoBuscar.addEventListener("mouseenter", () => {
+    if (pandaImg) pandaImg.src = "../../assets/prontopralutarv2.gif";
+  });
 
-    pandaImg.src = "../../assets/pandarodando.gif";
-
-  }
-
-});
-
-botaoCriar.addEventListener("mouseenter", () => {
-
-  if(pandaImg) {
-
-    pandaImg.src = "../../assets/prontopralutarv2.gif";
-
-  }
-
-})
-
-botaoCriar.addEventListener("mouseleave", () =>{
-
-  if(pandaImg) {
-
-    pandaImg.src = "../../assets/pandarodando.gif";
-
-  }
-
-})
-
-botaoEntrar.addEventListener("mouseenter", () => {
-
-  if(pandaImg) {
-
-    pandaImg.src = "../../assets/prontopralutarv2.gif";
-
-  }
-
-})
-
-botaoEntrar.addEventListener("mouseleave", () =>{
-
-  if(pandaImg) {
-
-    pandaImg.src = "../../assets/pandarodando.gif";
-
-  }
-
-})
-
-botaoBuscar.addEventListener("mouseenter", () => {
-
-  if(pandaImg) {
-
-    pandaImg.src = "../../assets/prontopralutarv2.gif";
-
-  }
-
-})
-
-botaoBuscar.addEventListener("mouseleave", () =>{
-
-  if(pandaImg) {
-
-    pandaImg.src = "../../assets/pandarodando.gif";
-
-  }
-
-})
+  botaoBuscar.addEventListener("mouseleave", () => {
+    if (pandaImg) pandaImg.src = "../../assets/pandarodando.gif";
+  });
+}
 
 function openPanel(target) {
   menuItems.forEach((button) => {
@@ -406,25 +370,26 @@ function criarCodigos() {
 criarCodigos();
 
 // Menu icons
-function criarMenuIcons() {
-  const container = document.getElementById("menu-icons");
-  const icons = [
-    { name: "home", src: "../../assets/homewhite.png", selected: "../../assets/homeselected.png" },
-    { name: "profile", src: "../../assets/profilewhite.png", selected: "../../assets/profilesselected.png" },
-    { name: "history", src: "../../assets/historywhite.png", selected: "../../assets/historysselected.png" },
-    { name: "ranking", src: "../../assets/rankingwhite.png", selected: "../../assets/rankingsselected.png" },
-    { name: "profiles", src: "../../assets/profileswhite.png", selected: "../../assets/profilesselected.png" },
-    { name: "help", src: "../../assets/helpwhite.png", selected: "../../assets/helpsselected.png" },
-    { name: "support", src: "../../assets/supportwhite.png", selected: "../../assets/supportsselected.png" },
-    { name: "training", src: "../../assets/trainingwhite.png", selected: "../../assets/trainingssselected.png" }
-  ];
+// function criarMenuIcons() {
+//   const container = document.getElementById("menu-icon");
+//   const icons = [
+//     { name: "home", src: "../../assets/homewhite.png", selected: "../../assets/homeselected.png" },
+//     { name: "profile", src: "../../assets/profilewhite.png", selected: "../../assets/profilesselected.png" },
+//     { name: "history", src: "../../assets/historywhite.png", selected: "../../assets/historysselected.png" },
+//     { name: "ranking", src: "../../assets/rankingwhite.png", selected: "../../assets/rankingsselected.png" },
+//     { name: "profiles", src: "../../assets/profileswhite.png", selected: "../../assets/profilesselected.png" },
+//     { name: "help", src: "../../assets/helpwhite.png", selected: "../../assets/helpsselected.png" },
+//     { name: "support", src: "../../assets/supportwhite.png", selected: "../../assets/supportsselected.png" },
+//     { name: "training", src: "../../assets/trainingwhite.png", selected: "../../assets/trainingssselected.png" }
+//   ];
 
-  for (let i = 0; i < icons.length; i++) {
-    const icon = document.createElement("img");
-    icon.src = icons[i].src;
-    icon.alt = icons[i].name;
-    icon.className = "menu-icon menu-icon-default";
-    container.appendChild(icon);
-  }
-}
-criarMenuIcons();
+//   for (let i = 0; i < icons.length; i++) {
+//     const icon = document.createElement("img");
+//     icon.src = icons[i].src;
+//     icon.alt = icons[i].name;
+//     icon.className = "menu-icon menu-icon-default";
+//     container.appendChild(icon);
+//   }
+// }
+
+// criarMenuIcons();

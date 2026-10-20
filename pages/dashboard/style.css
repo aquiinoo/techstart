@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import url('');
 
 :root {
   --bg: black;
@@ -44,7 +45,6 @@ textarea {
   padding: 24px 24px 24px 328px;
 }
 
-.barra_lateral,
 .card,
 .panel,
 .popup-card {
@@ -56,15 +56,19 @@ textarea {
 }
 
 .barra_lateral {
-  height: calc(100vh - 48px);
-  width: 280px;
-  padding: 24px;
+
+  background-color: var(--panel);
+  height: 100vh;
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  width: 256px;
+  overflow-y: auto;
+  padding: 0px 24px;
   position: fixed;
-  top: 24px;
-  left: 24px;
+  left: 0px;
+  border-right: white 2px solid;
+  
 }
 
 .section-label {
@@ -120,8 +124,6 @@ textarea {
   margin: 24px 0;
 }
 
-.menu-item,
-.botao_sair,
 .primary-button,
 .secondary-button,
 .accept-button,
@@ -140,7 +142,6 @@ textarea {
 
 .menu-item,
 .secondary-button,
-.botao_sair,
 .connect-button,
 .accept-button {
   background: rgba(255, 255, 255, 0.06);
@@ -149,18 +150,11 @@ textarea {
 }
 
 .menu-item.active,
-.menu-item:hover,
-.botao_sair:hover,
 .secondary-button:hover,
 .connect-button:hover,
 .accept-button:hover,
 .primary-button:hover {
   transform: translateY(-1px);
-}
-
-.menu-item.active {
-  border-color: rgba(110, 168, 255, 0.45);
-  color: var(--accent-soft);
 }
 
 .menu-item {
@@ -169,6 +163,20 @@ textarea {
   gap: 12px;
   text-align: left;
   width: 100%;
+  border: none;
+  background-color: #07111f00;
+  height: 40px;
+}
+
+.menu-item.active {
+  border-color: rgba(110, 168, 255, 0.45);
+  color: var(--accent-soft);
+}
+
+.menu-item:hover{
+
+  background-color: rgba(255, 255, 255, 0.123);
+
 }
 
 .menu-icon {
@@ -177,7 +185,6 @@ textarea {
   object-fit: contain;
 }
 
-.botao_sair,
 .primary-button {
   width: 100%;
 }
@@ -185,13 +192,23 @@ textarea {
 .botao_sair{
 
   color: red;
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  width: 100%;
+  border: none;
+  background-color: rgba(255, 255, 255, 0);
+  height: 40px;
 
 }
 
-/* =========================================
-   BOTÕES PRINCIPAIS
-   Mesmo padrão azul da tela de login
-   ========================================= */
+.botao_sair:hover{
+
+  background-color: #1f0707cb;
+
+}
 
 .primary-button {
   background: linear-gradient(
@@ -584,8 +601,7 @@ textarea {
     margin: 0;
   }
 
-  .menu-item,
-  .botao_sair {
+  .menu-item{
     min-height: 44px;
     padding: 0 10px;
     font-size: 0.68rem;

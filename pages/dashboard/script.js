@@ -428,15 +428,3 @@ function criarMenuIcons() {
   }
 }
 criarMenuIcons();
-
-.menu-icon-selected {
-  display: none;
-}
-
-.menu-item.active .menu-icon-default {
-  display: none;
-}
-
-.menu-item.active .menu-icon-selected {
-  display: block;
-}

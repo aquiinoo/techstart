@@ -162,33 +162,6 @@ function renderChallengeDetails(challenge) {
   details.replaceChildren(...paragraphs);
 }
 
-function renderChat() {
-  const messages = room?.chat || [];
-  const container = document.getElementById("chat-messages");
-  const count = document.getElementById("chat-count");
-  count.textContent = messages.length ? String(messages.length) : "";
-  container.replaceChildren();
-  if (!messages.length) {
-    const empty = document.createElement("p");
-    empty.className = "muted";
-    empty.textContent = "Sem mensagens ainda.";
-    container.append(empty);
-    return;
-  }
-  messages.slice(-40).forEach((message) => {
-    const item = document.createElement("article");
-    item.className = "chat-message";
-    const author = document.createElement("strong");
-    const user = getUser(message.userId);
-    author.textContent = user ? `@${user.nick}` : "Jogador";
-    const text = document.createElement("p");
-    text.textContent = message.message;
-    item.append(author, text);
-    container.append(item);
-  });
-  container.scrollTop = container.scrollHeight;
-}
-
 async function evaluateCodeWithAI(source, challenge, testResult) {
   try {
     if (window.TechStartAiConfigReady) {
@@ -636,7 +609,6 @@ async function renderRoom() {
 
   setRoundControlsDisabled(!currentPlayer || currentPlayer.solutionStatus !== "pending");
   document.getElementById("botao_voltar").classList.toggle("hidden", !isOfflineTraining());
-  renderChat();
 }
 
 const testButton = document.getElementById("test-button");

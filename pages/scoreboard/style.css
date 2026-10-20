@@ -5,6 +5,10 @@
   --muted: #cccccc;
 }
 
+html {
+  font-size: 12px;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -14,8 +18,8 @@
 
 body {
   min-height: 100vh;
-  background: black;
-  color: white;
+  background: var(--bg);
+  color: var(--text);
 }
 
 button,
@@ -24,41 +28,41 @@ textarea {
 }
 
 .scoreboard-layout {
-  width: min(1120px, calc(100% - 32px));
+  width: min(840px, calc(100% - 24px));
   margin: 0 auto;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 380px;
-  gap: 20px;
-  padding: 24px 0;
-  padding-top: 76px;
+  grid-template-columns: minmax(0, 1fr) 285px;
+  gap: 15px;
+  padding: 18px 0;
+  padding-top: 57px;
   align-items: stretch;
 }
 
 .scoreboard-main {
   display: grid;
-  gap: 20px;
+  gap: 15px;
 }
 
 .topbar {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 12px;
+  gap: 9px;
 }
 
 .back-link {
   display: inline-flex;
   align-items: center;
   width: fit-content;
-  padding: 10px;
-  background: white;
-  color: black;
-  border-radius: 8px;
+  padding: 8px;
+  background: var(--btn-bg);
+  color: var(--btn-text);
+  border-radius: 6px;
   text-decoration: none;
   cursor: pointer;
   position: absolute;
-  top: 20px;
-  left: 20px;
+  top: 15px;
+  left: 15px;
   z-index: 10;
 }
 
@@ -67,8 +71,8 @@ textarea {
 }
 
 .room-chip {
-  padding: 10px 16px;
-  border-radius: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
   border: 1px solid black;
   background: var(--painel);
   color: greenyellow;
@@ -77,16 +81,16 @@ textarea {
 
 .panel {
   background: var(--painel);
-  border-radius: 8px;
-  padding: 20px;
+  border-radius: 6px;
+  padding: 15px;
 }
 
 .ready-header {
   display: flex;
   justify-content: space-between;
   align-items: start;
-  gap: 16px;
-  margin-bottom: 18px;
+  gap: 12px;
+  margin-bottom: 14px;
 }
 
 .section-label {
@@ -99,12 +103,12 @@ textarea {
 .muted {
   color: var(--muted);
   line-height: 1.6;
-  margin-top: 8px;
+  margin-top: 6px;
 }
 
 .round-pill {
-  padding: 10px 16px;
-  border-radius: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
   background-color: yellow;
   color: black;
   border: 4px solid black;
@@ -114,19 +118,19 @@ textarea {
 
 .players-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 200px minmax(0, 1fr);
-  gap: 12px;
+  grid-template-columns: minmax(0, 1fr) 150px minmax(0, 1fr);
+  gap: 9px;
   align-items: stretch;
 }
 
 .player-card,
 .countdown-card {
-  border-radius: 8px;
-  background: black;
+  border-radius: 6px;
+  background: var(--inset);
   border: 4px solid black;
-  padding: 16px;
+  padding: 12px;
   display: grid;
-  gap: 6px;
+  gap: 4px;
   text-align: center;
 }
 
@@ -147,7 +151,7 @@ textarea {
 }
 
 .player-card strong {
-  color: white;
+  color: var(--text);
 }
 
 .player-card span {
@@ -161,7 +165,7 @@ textarea {
 }
 
 .countdown-card strong {
-  color: white;
+  color: var(--text);
 }
 
 #countdown-indicator {
@@ -173,8 +177,8 @@ textarea {
 .ready-actions {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
-  margin-top: 18px;
+  gap: 10px;
+  margin-top: 14px;
 }
 
 /* =========================================
@@ -184,9 +188,9 @@ textarea {
 .primary-button,
 .secondary-button,
 .danger-button {
-  min-height: 48px;
-  padding: 0 20px;
-  border-radius: 8px;
+  min-height: 36px;
+  padding: 0 15px;
+  border-radius: 6px;
   border: 1px solid transparent;
   cursor: pointer;
 }
@@ -208,8 +212,8 @@ textarea {
 }
 
 .secondary-button {
-  background: white;
-  color: black;
+  background: var(--btn-bg);
+  color: var(--btn-text);
 }
 
 .danger-button {
@@ -225,14 +229,14 @@ button:disabled {
 
 .finish-panel {
   display: grid;
-  gap: 14px;
+  gap: 10px;
   border: 3px solid limegreen;
 }
 
 .finish-actions {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+  gap: 9px;
 }
 
 /* =========================================
@@ -248,9 +252,9 @@ button:disabled {
 .scoreboard-sidebar .panel {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 9px;
   height: 100%;
-  min-height: 480px;
+  min-height: 360px;
 }
 
 .chat-messages {
@@ -259,13 +263,13 @@ button:disabled {
   overflow: auto;
   display: grid;
   align-content: start;
-  gap: 8px;
+  gap: 6px;
 }
 
 .chat-message {
-  padding: 10px;
-  border-radius: 8px;
-  background: black;
+  padding: 8px;
+  border-radius: 6px;
+  background: var(--inset);
 }
 
 .chat-message p {
@@ -277,21 +281,21 @@ button:disabled {
 .chat-form {
   display: grid;
   grid-template-columns: 1fr auto;
-  gap: 8px;
+  gap: 6px;
 }
 
 .chat-form input {
   min-width: 0;
-  border-radius: 8px;
+  border-radius: 6px;
   border: 1px solid var(--painel);
-  background: black;
-  color: white;
-  padding: 0 14px;
+  background: var(--inset);
+  color: var(--text);
+  padding: 0 10px;
 }
 
 .chat-form .primary-button {
-  min-height: 42px;
-  padding: 0 15px;
+  min-height: 32px;
+  padding: 0 11px;
 }
 
 /* =========================================
@@ -305,7 +309,7 @@ button:disabled {
   display: grid;
   place-items: center;
   background: rgba(0, 0, 0, 0.72);
-  padding: 20px;
+  padding: 15px;
 }
 
 .popup.hidden {
@@ -313,19 +317,19 @@ button:disabled {
 }
 
 .popup-card {
-  width: min(420px, 100%);
+  width: min(315px, 100%);
   background: var(--painel);
-  border-radius: 8px;
-  padding: 20px;
+  border-radius: 6px;
+  padding: 15px;
 }
 
 .popup-card h3 {
-  margin: 12px 0;
+  margin: 9px 0;
   color: orange;
 }
 
 .popup-card p:last-of-type {
-  margin-bottom: 16px;
+  margin-bottom: 12px;
   white-space: pre-line;
 }
 
@@ -339,7 +343,7 @@ button:disabled {
   }
 
   .scoreboard-sidebar .panel {
-    min-height: 320px;
+    min-height: 240px;
   }
 }
 

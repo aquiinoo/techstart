@@ -7,8 +7,11 @@
 
   <title>TechStart | Desafio</title>
 
-  <link rel="stylesheet" href="style.css?v=20260820-2">
+  <link rel="stylesheet" href="style.css?v=20261016-1">
   <link rel="icon" href="../../assets/sentado64x64.png" type="image/png">
+  <link rel="stylesheet" href="../../shared/icons.css">
+  <link rel="stylesheet" href="../../shared/theme.css">
+  <script src="../../shared/theme.js"></script>
 </head>
 
 <body>
@@ -74,7 +77,7 @@
 
           <div class="title-line">
 
-            <h2>Desafio em <span>Java:</span></h2>
+            <h2>Desafio em <span id="challenge-language">Java:</span></h2>
 
             <h2 id="challenge-name">
               Preparando round
@@ -146,6 +149,29 @@
     </section>
 
   </main>
+
+
+  <!-- CHAT -->
+
+  <aside class="floating-chat is-minimized" id="floating-chat" aria-label="Chat da sala">
+
+    <div class="floating-chat-body">
+
+      <div id="chat-messages" class="chat-messages"></div>
+
+      <form id="chat-form" class="chat-form">
+
+        <input id="chat-input" maxlength="500" placeholder="Mensagem para seu oponente" autocomplete="off">
+
+        <button class="primary-button" type="submit">
+          Enviar
+        </button>
+
+      </form>
+
+    </div>
+
+  </aside>
 
   <!-- LOADING -->
 

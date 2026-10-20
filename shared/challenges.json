@@ -7,11 +7,24 @@
     "description": "Crie um metodo chamado soma que receba dois inteiros e retorne a soma deles.",
     "starter": "public class Solution {\n  public int soma(int a, int b) {\n    \n  }\n}",
     "methodName": "soma",
-    "requiredPatterns": ["public int soma", "return", "+"],
+    "requiredPatterns": [
+      "public int soma",
+      "return",
+      "+"
+    ],
     "tests": [
-      { "call": "soma(2, 3)", "expected": "5" },
-      { "call": "soma(-1, 1)", "expected": "0" },
-      { "call": "soma(10, 15)", "expected": "25" }
+      {
+        "call": "soma(2, 3)",
+        "expected": "5"
+      },
+      {
+        "call": "soma(-1, 1)",
+        "expected": "0"
+      },
+      {
+        "call": "soma(10, 15)",
+        "expected": "25"
+      }
     ],
     "hints": [
       "O metodo precisa se chamar soma.",
@@ -27,11 +40,25 @@
     "description": "Crie um metodo chamado ehPar que receba um inteiro e retorne true se ele for par.",
     "starter": "public class Solution {\n  public boolean ehPar(int numero) {\n    \n  }\n}",
     "methodName": "ehPar",
-    "requiredPatterns": ["public boolean ehPar", "return", "%", "=="],
+    "requiredPatterns": [
+      "public boolean ehPar",
+      "return",
+      "%",
+      "=="
+    ],
     "tests": [
-      { "call": "ehPar(2)", "expected": "true" },
-      { "call": "ehPar(7)", "expected": "false" },
-      { "call": "ehPar(0)", "expected": "true" }
+      {
+        "call": "ehPar(2)",
+        "expected": "true"
+      },
+      {
+        "call": "ehPar(7)",
+        "expected": "false"
+      },
+      {
+        "call": "ehPar(0)",
+        "expected": "true"
+      }
     ],
     "hints": [
       "Use o operador % para descobrir o resto da divisao.",
@@ -47,12 +74,29 @@
     "description": "Crie um metodo chamado maior que receba dois inteiros e retorne o maior deles.",
     "starter": "public class Solution {\n  public int maior(int a, int b) {\n    \n  }\n}",
     "methodName": "maior",
-    "requiredPatterns": ["public int maior", "return"],
-    "acceptedPatterns": [[">", "Math.max"]],
+    "requiredPatterns": [
+      "public int maior",
+      "return"
+    ],
+    "acceptedPatterns": [
+      [
+        ">",
+        "Math.max"
+      ]
+    ],
     "tests": [
-      { "call": "maior(4, 9)", "expected": "9" },
-      { "call": "maior(12, 3)", "expected": "12" },
-      { "call": "maior(5, 5)", "expected": "5" }
+      {
+        "call": "maior(4, 9)",
+        "expected": "9"
+      },
+      {
+        "call": "maior(12, 3)",
+        "expected": "12"
+      },
+      {
+        "call": "maior(5, 5)",
+        "expected": "5"
+      }
     ],
     "hints": [
       "Compare a e b com if ou use Math.max.",
@@ -68,11 +112,25 @@
     "description": "Crie um metodo chamado media que receba tres notas double e retorne a media aritmetica.",
     "starter": "public class Solution {\n  public double media(double n1, double n2, double n3) {\n    \n  }\n}",
     "methodName": "media",
-    "requiredPatterns": ["public double media", "return", "+", "/"],
+    "requiredPatterns": [
+      "public double media",
+      "return",
+      "+",
+      "/"
+    ],
     "tests": [
-      { "call": "media(7.0, 8.0, 9.0)", "expected": "8.0" },
-      { "call": "media(5.0, 5.0, 8.0)", "expected": "6.0" },
-      { "call": "media(10.0, 9.0, 8.0)", "expected": "9.0" }
+      {
+        "call": "media(7.0, 8.0, 9.0)",
+        "expected": "8.0"
+      },
+      {
+        "call": "media(5.0, 5.0, 8.0)",
+        "expected": "6.0"
+      },
+      {
+        "call": "media(10.0, 9.0, 8.0)",
+        "expected": "9.0"
+      }
     ],
     "hints": [
       "Some as tres notas.",
@@ -88,11 +146,24 @@
     "description": "Crie um metodo chamado ehPositivo que retorne true quando o numero for maior que zero.",
     "starter": "public class Solution {\n  public boolean ehPositivo(int numero) {\n    \n  }\n}",
     "methodName": "ehPositivo",
-    "requiredPatterns": ["public boolean ehPositivo", "return", ">"],
+    "requiredPatterns": [
+      "public boolean ehPositivo",
+      "return",
+      ">"
+    ],
     "tests": [
-      { "call": "ehPositivo(10)", "expected": "true" },
-      { "call": "ehPositivo(-3)", "expected": "false" },
-      { "call": "ehPositivo(0)", "expected": "false" }
+      {
+        "call": "ehPositivo(10)",
+        "expected": "true"
+      },
+      {
+        "call": "ehPositivo(-3)",
+        "expected": "false"
+      },
+      {
+        "call": "ehPositivo(0)",
+        "expected": "false"
+      }
     ],
     "hints": [
       "Compare numero com zero.",
@@ -108,11 +179,26 @@
     "description": "Crie um metodo chamado converter que receba uma temperatura em Celsius e retorne Fahrenheit.",
     "starter": "public class Solution {\n  public double converter(double celsius) {\n    \n  }\n}",
     "methodName": "converter",
-    "requiredPatterns": ["public double converter", "return", "*", "+", "32"],
+    "requiredPatterns": [
+      "public double converter",
+      "return",
+      "*",
+      "+",
+      "32"
+    ],
     "tests": [
-      { "call": "converter(0.0)", "expected": "32.0" },
-      { "call": "converter(100.0)", "expected": "212.0" },
-      { "call": "converter(10.0)", "expected": "50.0" }
+      {
+        "call": "converter(0.0)",
+        "expected": "32.0"
+      },
+      {
+        "call": "converter(100.0)",
+        "expected": "212.0"
+      },
+      {
+        "call": "converter(10.0)",
+        "expected": "50.0"
+      }
     ],
     "hints": [
       "A formula e celsius * 9 / 5 + 32.",
@@ -128,11 +214,24 @@
     "description": "Crie um metodo chamado contarCaracteres que receba uma String e retorne seu tamanho.",
     "starter": "public class Solution {\n  public int contarCaracteres(String texto) {\n    \n  }\n}",
     "methodName": "contarCaracteres",
-    "requiredPatterns": ["public int contarCaracteres", "return", ".length()"],
+    "requiredPatterns": [
+      "public int contarCaracteres",
+      "return",
+      ".length()"
+    ],
     "tests": [
-      { "call": "contarCaracteres(\"Java\")", "expected": "4" },
-      { "call": "contarCaracteres(\"TechStart\")", "expected": "9" },
-      { "call": "contarCaracteres(\"\")", "expected": "0" }
+      {
+        "call": "contarCaracteres(\"Java\")",
+        "expected": "4"
+      },
+      {
+        "call": "contarCaracteres(\"TechStart\")",
+        "expected": "9"
+      },
+      {
+        "call": "contarCaracteres(\"\")",
+        "expected": "0"
+      }
     ],
     "hints": [
       "Strings em Java possuem o metodo length().",
@@ -148,11 +247,24 @@
     "description": "Crie um metodo chamado primeiraLetra que receba uma String e retorne o primeiro caractere.",
     "starter": "public class Solution {\n  public char primeiraLetra(String texto) {\n    \n  }\n}",
     "methodName": "primeiraLetra",
-    "requiredPatterns": ["public char primeiraLetra", "return", ".charAt(0)"],
+    "requiredPatterns": [
+      "public char primeiraLetra",
+      "return",
+      ".charAt(0)"
+    ],
     "tests": [
-      { "call": "primeiraLetra(\"Java\")", "expected": "'J'" },
-      { "call": "primeiraLetra(\"TechStart\")", "expected": "'T'" },
-      { "call": "primeiraLetra(\"codigo\")", "expected": "'c'" }
+      {
+        "call": "primeiraLetra(\"Java\")",
+        "expected": "'J'"
+      },
+      {
+        "call": "primeiraLetra(\"TechStart\")",
+        "expected": "'T'"
+      },
+      {
+        "call": "primeiraLetra(\"codigo\")",
+        "expected": "'c'"
+      }
     ],
     "hints": [
       "Use charAt(0) para acessar o primeiro caractere.",
@@ -168,11 +280,24 @@
     "description": "Crie um metodo chamado repetir que receba uma palavra e retorne essa palavra repetida duas vezes.",
     "starter": "public class Solution {\n  public String repetir(String palavra) {\n    \n  }\n}",
     "methodName": "repetir",
-    "requiredPatterns": ["public String repetir", "return", "+"],
+    "requiredPatterns": [
+      "public String repetir",
+      "return",
+      "+"
+    ],
     "tests": [
-      { "call": "repetir(\"oi\")", "expected": "\"oioi\"" },
-      { "call": "repetir(\"Java\")", "expected": "\"JavaJava\"" },
-      { "call": "repetir(\"a\")", "expected": "\"aa\"" }
+      {
+        "call": "repetir(\"oi\")",
+        "expected": "\"oioi\""
+      },
+      {
+        "call": "repetir(\"Java\")",
+        "expected": "\"JavaJava\""
+      },
+      {
+        "call": "repetir(\"a\")",
+        "expected": "\"aa\""
+      }
     ],
     "hints": [
       "Use concatenacao com +.",
@@ -188,12 +313,1183 @@
     "description": "Crie um metodo chamado vezesDez que receba um inteiro e retorne esse numero multiplicado por 10.",
     "starter": "public class Solution {\n  public int vezesDez(int numero) {\n    \n  }\n}",
     "methodName": "vezesDez",
-    "requiredPatterns": ["public int vezesDez", "return", "*", "10"],
-    "tests": [
-      { "call": "vezesDez(3)", "expected": "30" },
-      { "call": "vezesDez(0)", "expected": "0" },
-      { "call": "vezesDez(-2)", "expected": "-20" }
+    "requiredPatterns": [
+      "public int vezesDez",
+      "return",
+      "*",
+      "10"
     ],
+    "tests": [
+      {
+        "call": "vezesDez(3)",
+        "expected": "30"
+      },
+      {
+        "call": "vezesDez(0)",
+        "expected": "0"
+      },
+      {
+        "call": "vezesDez(-2)",
+        "expected": "-20"
+      }
+    ],
+    "hints": [
+      "Multiplique numero por 10.",
+      "Use o operador *.",
+      "Retorne o resultado da multiplicacao."
+    ]
+  },
+  {
+    "id": "python-soma",
+    "title": "Soma de dois numeros",
+    "language": "Python",
+    "difficulty": "Iniciante",
+    "description": "Crie uma funcao chamada soma que receba dois numeros e retorne a soma deles.",
+    "starter": "def soma(a, b):\n    # escreva sua solucao aqui\n    pass",
+    "methodName": "soma",
+    "requiredPatterns": [
+      "def soma",
+      "return",
+      "+"
+    ],
+    "tests": [
+      {
+        "call": "soma(2, 3)",
+        "expected": "5"
+      },
+      {
+        "call": "soma(-1, 1)",
+        "expected": "0"
+      },
+      {
+        "call": "soma(10, 15)",
+        "expected": "25"
+      }
+    ],
+    "solution": "def soma(a, b):\n    return a + b",
+    "hints": [
+      "A funcao precisa se chamar soma.",
+      "Ela recebe dois parametros: a e b.",
+      "Retorne a + b."
+    ],
+    "note": "defina a funcao pedida com def e use return para devolver o valor (nao use print)."
+  },
+  {
+    "id": "javascript-soma",
+    "title": "Soma de dois numeros",
+    "language": "JavaScript",
+    "difficulty": "Iniciante",
+    "description": "Crie uma funcao chamada soma que receba dois numeros e retorne a soma deles.",
+    "starter": "function soma(a, b) {\n  \n}",
+    "methodName": "soma",
+    "requiredPatterns": [
+      "+"
+    ],
+    "acceptedPatterns": [
+      [
+        "function soma",
+        "soma ="
+      ],
+      [
+        "return",
+        "=>"
+      ]
+    ],
+    "tests": [
+      {
+        "call": "soma(2, 3)",
+        "expected": "5"
+      },
+      {
+        "call": "soma(-1, 1)",
+        "expected": "0"
+      },
+      {
+        "call": "soma(10, 15)",
+        "expected": "25"
+      }
+    ],
+    "solution": "function soma(a, b) {\n  return a + b;\n}",
+    "hints": [
+      "A funcao precisa se chamar soma.",
+      "Ela recebe dois parametros: a e b.",
+      "Retorne a + b."
+    ],
+    "note": "declare a funcao pedida e use return para devolver o valor (nao use console.log)."
+  },
+  {
+    "id": "csharp-soma",
+    "title": "Soma de dois numeros",
+    "language": "C#",
+    "difficulty": "Iniciante",
+    "description": "Crie um metodo chamado soma que receba dois inteiros e retorne a soma deles.",
+    "starter": "public class Solution {\n  public int soma(int a, int b) {\n    \n  }\n}",
+    "methodName": "soma",
+    "requiredPatterns": [
+      "public int soma",
+      "return",
+      "+"
+    ],
+    "tests": [
+      {
+        "call": "soma(2, 3)",
+        "expected": "5"
+      },
+      {
+        "call": "soma(-1, 1)",
+        "expected": "0"
+      },
+      {
+        "call": "soma(10, 15)",
+        "expected": "25"
+      }
+    ],
+    "solution": "public class Solution {\n  public int soma(int a, int b) {\n    return a + b;\n  }\n}",
+    "hints": [
+      "O metodo precisa se chamar soma.",
+      "Use int como tipo de retorno.",
+      "Retorne a + b."
+    ]
+  },
+  {
+    "id": "python-par",
+    "title": "Numero par",
+    "language": "Python",
+    "difficulty": "Iniciante",
+    "description": "Crie uma funcao chamada ehPar que receba um numero e retorne True se ele for par.",
+    "starter": "def ehPar(numero):\n    # escreva sua solucao aqui\n    pass",
+    "methodName": "ehPar",
+    "requiredPatterns": [
+      "def ehPar",
+      "return",
+      "%",
+      "=="
+    ],
+    "tests": [
+      {
+        "call": "ehPar(2)",
+        "expected": "true"
+      },
+      {
+        "call": "ehPar(7)",
+        "expected": "false"
+      },
+      {
+        "call": "ehPar(0)",
+        "expected": "true"
+      }
+    ],
+    "solution": "def ehPar(numero):\n    return numero % 2 == 0",
+    "hints": [
+      "Use o operador % para descobrir o resto da divisao.",
+      "Um numero par tem resto 0 quando dividido por 2.",
+      "Retorne True ou False, sem usar print()."
+    ],
+    "note": "defina a funcao pedida com def e use return para devolver o valor (nao use print)."
+  },
+  {
+    "id": "javascript-par",
+    "title": "Numero par",
+    "language": "JavaScript",
+    "difficulty": "Iniciante",
+    "description": "Crie uma funcao chamada ehPar que receba um numero e retorne true se ele for par.",
+    "starter": "function ehPar(numero) {\n  \n}",
+    "methodName": "ehPar",
+    "requiredPatterns": [
+      "%",
+      "=="
+    ],
+    "acceptedPatterns": [
+      [
+        "function ehPar",
+        "ehPar ="
+      ],
+      [
+        "return",
+        "=>"
+      ]
+    ],
+    "tests": [
+      {
+        "call": "ehPar(2)",
+        "expected": "true"
+      },
+      {
+        "call": "ehPar(7)",
+        "expected": "false"
+      },
+      {
+        "call": "ehPar(0)",
+        "expected": "true"
+      }
+    ],
+    "solution": "function ehPar(numero) {\n  return numero % 2 === 0;\n}",
+    "hints": [
+      "Use o operador % para descobrir o resto da divisao.",
+      "Um numero par tem resto 0 quando dividido por 2.",
+      "Retorne true ou false, sem usar console.log."
+    ],
+    "note": "declare a funcao pedida e use return para devolver o valor (nao use console.log)."
+  },
+  {
+    "id": "csharp-par",
+    "title": "Numero par",
+    "language": "C#",
+    "difficulty": "Iniciante",
+    "description": "Crie um metodo chamado ehPar que receba um inteiro e retorne true se ele for par.",
+    "starter": "public class Solution {\n  public bool ehPar(int numero) {\n    \n  }\n}",
+    "methodName": "ehPar",
+    "requiredPatterns": [
+      "public bool ehPar",
+      "return",
+      "%",
+      "=="
+    ],
+    "tests": [
+      {
+        "call": "ehPar(2)",
+        "expected": "true"
+      },
+      {
+        "call": "ehPar(7)",
+        "expected": "false"
+      },
+      {
+        "call": "ehPar(0)",
+        "expected": "true"
+      }
+    ],
+    "solution": "public class Solution {\n  public bool ehPar(int numero) {\n    return numero % 2 == 0;\n  }\n}",
+    "hints": [
+      "Use o operador % para descobrir o resto da divisao.",
+      "Um numero par tem resto 0 quando dividido por 2.",
+      "O retorno precisa ser bool."
+    ]
+  },
+  {
+    "id": "python-maior",
+    "title": "Maior entre dois numeros",
+    "language": "Python",
+    "difficulty": "Iniciante",
+    "description": "Crie uma funcao chamada maior que receba dois numeros e retorne o maior deles.",
+    "starter": "def maior(a, b):\n    # escreva sua solucao aqui\n    pass",
+    "methodName": "maior",
+    "requiredPatterns": [
+      "def maior",
+      "return"
+    ],
+    "acceptedPatterns": [
+      [
+        ">",
+        "max("
+      ]
+    ],
+    "tests": [
+      {
+        "call": "maior(4, 9)",
+        "expected": "9"
+      },
+      {
+        "call": "maior(12, 3)",
+        "expected": "12"
+      },
+      {
+        "call": "maior(5, 5)",
+        "expected": "5"
+      }
+    ],
+    "solution": "def maior(a, b):\n    return a if a > b else b",
+    "hints": [
+      "Compare a e b com if ou use max().",
+      "Use return para devolver o maior valor.",
+      "Nao use print(); retorne o valor."
+    ],
+    "note": "defina a funcao pedida com def e use return para devolver o valor (nao use print)."
+  },
+  {
+    "id": "javascript-maior",
+    "title": "Maior entre dois numeros",
+    "language": "JavaScript",
+    "difficulty": "Iniciante",
+    "description": "Crie uma funcao chamada maior que receba dois numeros e retorne o maior deles.",
+    "starter": "function maior(a, b) {\n  \n}",
+    "methodName": "maior",
+    "requiredPatterns": [],
+    "acceptedPatterns": [
+      [
+        ">",
+        "Math.max"
+      ],
+      [
+        "function maior",
+        "maior ="
+      ],
+      [
+        "return",
+        "=>"
+      ]
+    ],
+    "tests": [
+      {
+        "call": "maior(4, 9)",
+        "expected": "9"
+      },
+      {
+        "call": "maior(12, 3)",
+        "expected": "12"
+      },
+      {
+        "call": "maior(5, 5)",
+        "expected": "5"
+      }
+    ],
+    "solution": "function maior(a, b) {\n  return a > b ? a : b;\n}",
+    "hints": [
+      "Compare a e b com if ou use Math.max.",
+      "Use return para devolver o maior valor.",
+      "Nao use console.log; retorne o valor."
+    ],
+    "note": "declare a funcao pedida e use return para devolver o valor (nao use console.log)."
+  },
+  {
+    "id": "csharp-maior",
+    "title": "Maior entre dois numeros",
+    "language": "C#",
+    "difficulty": "Iniciante",
+    "description": "Crie um metodo chamado maior que receba dois inteiros e retorne o maior deles.",
+    "starter": "public class Solution {\n  public int maior(int a, int b) {\n    \n  }\n}",
+    "methodName": "maior",
+    "requiredPatterns": [
+      "public int maior",
+      "return"
+    ],
+    "acceptedPatterns": [
+      [
+        ">",
+        "Math.Max"
+      ]
+    ],
+    "tests": [
+      {
+        "call": "maior(4, 9)",
+        "expected": "9"
+      },
+      {
+        "call": "maior(12, 3)",
+        "expected": "12"
+      },
+      {
+        "call": "maior(5, 5)",
+        "expected": "5"
+      }
+    ],
+    "solution": "public class Solution {\n  public int maior(int a, int b) {\n    return a > b ? a : b;\n  }\n}",
+    "hints": [
+      "Compare a e b com if ou use Math.Max.",
+      "O retorno precisa ser int.",
+      "Nao imprima o resultado; retorne o valor."
+    ]
+  },
+  {
+    "id": "python-media",
+    "title": "Media simples",
+    "language": "Python",
+    "difficulty": "Iniciante",
+    "description": "Crie uma funcao chamada media que receba tres notas e retorne a media aritmetica.",
+    "starter": "def media(n1, n2, n3):\n    # escreva sua solucao aqui\n    pass",
+    "methodName": "media",
+    "requiredPatterns": [
+      "def media",
+      "return",
+      "+",
+      "/"
+    ],
+    "tests": [
+      {
+        "call": "media(7.0, 8.0, 9.0)",
+        "expected": "8.0"
+      },
+      {
+        "call": "media(5.0, 5.0, 8.0)",
+        "expected": "6.0"
+      },
+      {
+        "call": "media(10.0, 9.0, 8.0)",
+        "expected": "9.0"
+      }
+    ],
+    "solution": "def media(n1, n2, n3):\n    return (n1 + n2 + n3) / 3",
+    "hints": [
+      "Some as tres notas.",
+      "Divida o total por 3.",
+      "Retorne o resultado, nao use print()."
+    ],
+    "note": "defina a funcao pedida com def e use return para devolver o valor (nao use print)."
+  },
+  {
+    "id": "javascript-media",
+    "title": "Media simples",
+    "language": "JavaScript",
+    "difficulty": "Iniciante",
+    "description": "Crie uma funcao chamada media que receba tres notas e retorne a media aritmetica.",
+    "starter": "function media(n1, n2, n3) {\n  \n}",
+    "methodName": "media",
+    "requiredPatterns": [
+      "+",
+      "/"
+    ],
+    "acceptedPatterns": [
+      [
+        "function media",
+        "media ="
+      ],
+      [
+        "return",
+        "=>"
+      ]
+    ],
+    "tests": [
+      {
+        "call": "media(7.0, 8.0, 9.0)",
+        "expected": "8.0"
+      },
+      {
+        "call": "media(5.0, 5.0, 8.0)",
+        "expected": "6.0"
+      },
+      {
+        "call": "media(10.0, 9.0, 8.0)",
+        "expected": "9.0"
+      }
+    ],
+    "solution": "function media(n1, n2, n3) {\n  return (n1 + n2 + n3) / 3;\n}",
+    "hints": [
+      "Some as tres notas.",
+      "Divida o total por 3.",
+      "Retorne o resultado, nao use console.log."
+    ],
+    "note": "declare a funcao pedida e use return para devolver o valor (nao use console.log)."
+  },
+  {
+    "id": "csharp-media",
+    "title": "Media simples",
+    "language": "C#",
+    "difficulty": "Iniciante",
+    "description": "Crie um metodo chamado media que receba tres notas double e retorne a media aritmetica.",
+    "starter": "public class Solution {\n  public double media(double n1, double n2, double n3) {\n    \n  }\n}",
+    "methodName": "media",
+    "requiredPatterns": [
+      "public double media",
+      "return",
+      "+",
+      "/"
+    ],
+    "tests": [
+      {
+        "call": "media(7.0, 8.0, 9.0)",
+        "expected": "8.0"
+      },
+      {
+        "call": "media(5.0, 5.0, 8.0)",
+        "expected": "6.0"
+      },
+      {
+        "call": "media(10.0, 9.0, 8.0)",
+        "expected": "9.0"
+      }
+    ],
+    "solution": "public class Solution {\n  public double media(double n1, double n2, double n3) {\n    return (n1 + n2 + n3) / 3.0;\n  }\n}",
+    "hints": [
+      "Some as tres notas.",
+      "Divida o total por 3.0 para manter double.",
+      "Retorne o resultado, nao use Console.WriteLine."
+    ]
+  },
+  {
+    "id": "python-positivo",
+    "title": "Numero positivo",
+    "language": "Python",
+    "difficulty": "Iniciante",
+    "description": "Crie uma funcao chamada ehPositivo que retorne True quando o numero for maior que zero.",
+    "starter": "def ehPositivo(numero):\n    # escreva sua solucao aqui\n    pass",
+    "methodName": "ehPositivo",
+    "requiredPatterns": [
+      "def ehPositivo",
+      "return",
+      ">"
+    ],
+    "tests": [
+      {
+        "call": "ehPositivo(10)",
+        "expected": "true"
+      },
+      {
+        "call": "ehPositivo(-3)",
+        "expected": "false"
+      },
+      {
+        "call": "ehPositivo(0)",
+        "expected": "false"
+      }
+    ],
+    "solution": "def ehPositivo(numero):\n    return numero > 0",
+    "hints": [
+      "Compare numero com zero.",
+      "Maior que zero significa positivo.",
+      "Retorne True ou False."
+    ],
+    "note": "defina a funcao pedida com def e use return para devolver o valor (nao use print)."
+  },
+  {
+    "id": "javascript-positivo",
+    "title": "Numero positivo",
+    "language": "JavaScript",
+    "difficulty": "Iniciante",
+    "description": "Crie uma funcao chamada ehPositivo que retorne true quando o numero for maior que zero.",
+    "starter": "function ehPositivo(numero) {\n  \n}",
+    "methodName": "ehPositivo",
+    "requiredPatterns": [
+      ">"
+    ],
+    "acceptedPatterns": [
+      [
+        "function ehPositivo",
+        "ehPositivo ="
+      ],
+      [
+        "return",
+        "=>"
+      ]
+    ],
+    "tests": [
+      {
+        "call": "ehPositivo(10)",
+        "expected": "true"
+      },
+      {
+        "call": "ehPositivo(-3)",
+        "expected": "false"
+      },
+      {
+        "call": "ehPositivo(0)",
+        "expected": "false"
+      }
+    ],
+    "solution": "function ehPositivo(numero) {\n  return numero > 0;\n}",
+    "hints": [
+      "Compare numero com zero.",
+      "Maior que zero significa positivo.",
+      "Retorne true ou false."
+    ],
+    "note": "declare a funcao pedida e use return para devolver o valor (nao use console.log)."
+  },
+  {
+    "id": "csharp-positivo",
+    "title": "Numero positivo",
+    "language": "C#",
+    "difficulty": "Iniciante",
+    "description": "Crie um metodo chamado ehPositivo que retorne true quando o numero for maior que zero.",
+    "starter": "public class Solution {\n  public bool ehPositivo(int numero) {\n    \n  }\n}",
+    "methodName": "ehPositivo",
+    "requiredPatterns": [
+      "public bool ehPositivo",
+      "return",
+      ">"
+    ],
+    "tests": [
+      {
+        "call": "ehPositivo(10)",
+        "expected": "true"
+      },
+      {
+        "call": "ehPositivo(-3)",
+        "expected": "false"
+      },
+      {
+        "call": "ehPositivo(0)",
+        "expected": "false"
+      }
+    ],
+    "solution": "public class Solution {\n  public bool ehPositivo(int numero) {\n    return numero > 0;\n  }\n}",
+    "hints": [
+      "Compare numero com zero.",
+      "Maior que zero significa positivo.",
+      "Retorne true ou false."
+    ]
+  },
+  {
+    "id": "python-celsius-fahrenheit",
+    "title": "Celsius para Fahrenheit",
+    "language": "Python",
+    "difficulty": "Iniciante",
+    "description": "Crie uma funcao chamada converter que receba uma temperatura em Celsius e retorne Fahrenheit.",
+    "starter": "def converter(celsius):\n    # escreva sua solucao aqui\n    pass",
+    "methodName": "converter",
+    "requiredPatterns": [
+      "def converter",
+      "return",
+      "*",
+      "+",
+      "32"
+    ],
+    "tests": [
+      {
+        "call": "converter(0.0)",
+        "expected": "32.0"
+      },
+      {
+        "call": "converter(100.0)",
+        "expected": "212.0"
+      },
+      {
+        "call": "converter(10.0)",
+        "expected": "50.0"
+      }
+    ],
+    "solution": "def converter(celsius):\n    return celsius * 9 / 5 + 32",
+    "hints": [
+      "A formula e celsius * 9 / 5 + 32.",
+      "Em Python, / ja devolve numero decimal.",
+      "Retorne o valor convertido."
+    ],
+    "note": "defina a funcao pedida com def e use return para devolver o valor (nao use print)."
+  },
+  {
+    "id": "javascript-celsius-fahrenheit",
+    "title": "Celsius para Fahrenheit",
+    "language": "JavaScript",
+    "difficulty": "Iniciante",
+    "description": "Crie uma funcao chamada converter que receba uma temperatura em Celsius e retorne Fahrenheit.",
+    "starter": "function converter(celsius) {\n  \n}",
+    "methodName": "converter",
+    "requiredPatterns": [
+      "*",
+      "+",
+      "32"
+    ],
+    "acceptedPatterns": [
+      [
+        "function converter",
+        "converter ="
+      ],
+      [
+        "return",
+        "=>"
+      ]
+    ],
+    "tests": [
+      {
+        "call": "converter(0.0)",
+        "expected": "32.0"
+      },
+      {
+        "call": "converter(100.0)",
+        "expected": "212.0"
+      },
+      {
+        "call": "converter(10.0)",
+        "expected": "50.0"
+      }
+    ],
+    "solution": "function converter(celsius) {\n  return celsius * 9 / 5 + 32;\n}",
+    "hints": [
+      "A formula e celsius * 9 / 5 + 32.",
+      "Retorne o valor convertido.",
+      "Nao use console.log para devolver o resultado."
+    ],
+    "note": "declare a funcao pedida e use return para devolver o valor (nao use console.log)."
+  },
+  {
+    "id": "csharp-celsius-fahrenheit",
+    "title": "Celsius para Fahrenheit",
+    "language": "C#",
+    "difficulty": "Iniciante",
+    "description": "Crie um metodo chamado converter que receba uma temperatura em Celsius e retorne Fahrenheit.",
+    "starter": "public class Solution {\n  public double converter(double celsius) {\n    \n  }\n}",
+    "methodName": "converter",
+    "requiredPatterns": [
+      "public double converter",
+      "return",
+      "*",
+      "+",
+      "32"
+    ],
+    "tests": [
+      {
+        "call": "converter(0.0)",
+        "expected": "32.0"
+      },
+      {
+        "call": "converter(100.0)",
+        "expected": "212.0"
+      },
+      {
+        "call": "converter(10.0)",
+        "expected": "50.0"
+      }
+    ],
+    "solution": "public class Solution {\n  public double converter(double celsius) {\n    return celsius * 9 / 5 + 32;\n  }\n}",
+    "hints": [
+      "A formula e celsius * 9 / 5 + 32.",
+      "Use double para evitar divisao inteira.",
+      "Retorne o valor convertido."
+    ]
+  },
+  {
+    "id": "python-contar-caracteres",
+    "title": "Contar caracteres",
+    "language": "Python",
+    "difficulty": "Iniciante",
+    "description": "Crie uma funcao chamada contarCaracteres que receba um texto e retorne seu tamanho.",
+    "starter": "def contarCaracteres(texto):\n    # escreva sua solucao aqui\n    pass",
+    "methodName": "contarCaracteres",
+    "requiredPatterns": [
+      "def contarCaracteres",
+      "return",
+      "len("
+    ],
+    "tests": [
+      {
+        "call": "contarCaracteres(\"Java\")",
+        "expected": "4"
+      },
+      {
+        "call": "contarCaracteres(\"TechStart\")",
+        "expected": "9"
+      },
+      {
+        "call": "contarCaracteres(\"\")",
+        "expected": "0"
+      }
+    ],
+    "solution": "def contarCaracteres(texto):\n    return len(texto)",
+    "hints": [
+      "Use a funcao len() para contar os caracteres.",
+      "Retorne len(texto).",
+      "Nao use print()."
+    ],
+    "note": "defina a funcao pedida com def e use return para devolver o valor (nao use print)."
+  },
+  {
+    "id": "javascript-contar-caracteres",
+    "title": "Contar caracteres",
+    "language": "JavaScript",
+    "difficulty": "Iniciante",
+    "description": "Crie uma funcao chamada contarCaracteres que receba um texto e retorne seu tamanho.",
+    "starter": "function contarCaracteres(texto) {\n  \n}",
+    "methodName": "contarCaracteres",
+    "requiredPatterns": [
+      ".length"
+    ],
+    "acceptedPatterns": [
+      [
+        "function contarCaracteres",
+        "contarCaracteres ="
+      ],
+      [
+        "return",
+        "=>"
+      ]
+    ],
+    "tests": [
+      {
+        "call": "contarCaracteres(\"Java\")",
+        "expected": "4"
+      },
+      {
+        "call": "contarCaracteres(\"TechStart\")",
+        "expected": "9"
+      },
+      {
+        "call": "contarCaracteres(\"\")",
+        "expected": "0"
+      }
+    ],
+    "solution": "function contarCaracteres(texto) {\n  return texto.length;\n}",
+    "hints": [
+      "Strings em JavaScript possuem a propriedade length.",
+      "Nao coloque parenteses depois de length.",
+      "Retorne texto.length."
+    ],
+    "note": "declare a funcao pedida e use return para devolver o valor (nao use console.log)."
+  },
+  {
+    "id": "csharp-contar-caracteres",
+    "title": "Contar caracteres",
+    "language": "C#",
+    "difficulty": "Iniciante",
+    "description": "Crie um metodo chamado contarCaracteres que receba uma String e retorne seu tamanho.",
+    "starter": "public class Solution {\n  public int contarCaracteres(string texto) {\n    \n  }\n}",
+    "methodName": "contarCaracteres",
+    "requiredPatterns": [
+      "public int contarCaracteres",
+      "return",
+      ".Length"
+    ],
+    "tests": [
+      {
+        "call": "contarCaracteres(\"Java\")",
+        "expected": "4"
+      },
+      {
+        "call": "contarCaracteres(\"TechStart\")",
+        "expected": "9"
+      },
+      {
+        "call": "contarCaracteres(\"\")",
+        "expected": "0"
+      }
+    ],
+    "solution": "public class Solution {\n  public int contarCaracteres(string texto) {\n    return texto.Length;\n  }\n}",
+    "hints": [
+      "Strings em C# possuem a propriedade Length.",
+      "Nao coloque parenteses depois de Length.",
+      "Retorne texto.Length."
+    ]
+  },
+  {
+    "id": "python-primeira-letra",
+    "title": "Primeira letra",
+    "language": "Python",
+    "difficulty": "Iniciante",
+    "description": "Crie uma funcao chamada primeiraLetra que receba um texto e retorne o primeiro caractere.",
+    "starter": "def primeiraLetra(texto):\n    # escreva sua solucao aqui\n    pass",
+    "methodName": "primeiraLetra",
+    "requiredPatterns": [
+      "def primeiraLetra",
+      "return",
+      "[0]"
+    ],
+    "tests": [
+      {
+        "call": "primeiraLetra(\"Java\")",
+        "expected": "'J'"
+      },
+      {
+        "call": "primeiraLetra(\"TechStart\")",
+        "expected": "'T'"
+      },
+      {
+        "call": "primeiraLetra(\"codigo\")",
+        "expected": "'c'"
+      }
+    ],
+    "solution": "def primeiraLetra(texto):\n    return texto[0]",
+    "hints": [
+      "Acesse o primeiro caractere com texto[0].",
+      "Retorne o caractere, nao o imprima.",
+      "Considere que os testes sempre enviarao texto nao vazio."
+    ],
+    "note": "defina a funcao pedida com def e use return para devolver o valor (nao use print)."
+  },
+  {
+    "id": "javascript-primeira-letra",
+    "title": "Primeira letra",
+    "language": "JavaScript",
+    "difficulty": "Iniciante",
+    "description": "Crie uma funcao chamada primeiraLetra que receba um texto e retorne o primeiro caractere.",
+    "starter": "function primeiraLetra(texto) {\n  \n}",
+    "methodName": "primeiraLetra",
+    "requiredPatterns": [],
+    "acceptedPatterns": [
+      [
+        "charAt(0)",
+        "[0]"
+      ],
+      [
+        "function primeiraLetra",
+        "primeiraLetra ="
+      ],
+      [
+        "return",
+        "=>"
+      ]
+    ],
+    "tests": [
+      {
+        "call": "primeiraLetra(\"Java\")",
+        "expected": "'J'"
+      },
+      {
+        "call": "primeiraLetra(\"TechStart\")",
+        "expected": "'T'"
+      },
+      {
+        "call": "primeiraLetra(\"codigo\")",
+        "expected": "'c'"
+      }
+    ],
+    "solution": "function primeiraLetra(texto) {\n  return texto.charAt(0);\n}",
+    "hints": [
+      "Use texto.charAt(0) ou texto[0].",
+      "Retorne o caractere, nao use console.log.",
+      "Considere que os testes sempre enviarao texto nao vazio."
+    ],
+    "note": "declare a funcao pedida e use return para devolver o valor (nao use console.log)."
+  },
+  {
+    "id": "csharp-primeira-letra",
+    "title": "Primeira letra",
+    "language": "C#",
+    "difficulty": "Iniciante",
+    "description": "Crie um metodo chamado primeiraLetra que receba uma String e retorne o primeiro caractere.",
+    "starter": "public class Solution {\n  public char primeiraLetra(string texto) {\n    \n  }\n}",
+    "methodName": "primeiraLetra",
+    "requiredPatterns": [
+      "public char primeiraLetra",
+      "return",
+      "[0]"
+    ],
+    "tests": [
+      {
+        "call": "primeiraLetra(\"Java\")",
+        "expected": "'J'"
+      },
+      {
+        "call": "primeiraLetra(\"TechStart\")",
+        "expected": "'T'"
+      },
+      {
+        "call": "primeiraLetra(\"codigo\")",
+        "expected": "'c'"
+      }
+    ],
+    "solution": "public class Solution {\n  public char primeiraLetra(string texto) {\n    return texto[0];\n  }\n}",
+    "hints": [
+      "Use texto[0] para acessar o primeiro caractere.",
+      "O retorno precisa ser char.",
+      "Considere que os testes sempre enviarao texto nao vazio."
+    ]
+  },
+  {
+    "id": "python-repetir-palavra",
+    "title": "Repetir palavra",
+    "language": "Python",
+    "difficulty": "Iniciante",
+    "description": "Crie uma funcao chamada repetir que receba uma palavra e retorne essa palavra repetida duas vezes.",
+    "starter": "def repetir(palavra):\n    # escreva sua solucao aqui\n    pass",
+    "methodName": "repetir",
+    "requiredPatterns": [
+      "def repetir",
+      "return"
+    ],
+    "acceptedPatterns": [
+      [
+        "+",
+        "* 2",
+        "*2"
+      ]
+    ],
+    "tests": [
+      {
+        "call": "repetir(\"oi\")",
+        "expected": "\"oioi\""
+      },
+      {
+        "call": "repetir(\"Java\")",
+        "expected": "\"JavaJava\""
+      },
+      {
+        "call": "repetir(\"a\")",
+        "expected": "\"aa\""
+      }
+    ],
+    "solution": "def repetir(palavra):\n    return palavra + palavra",
+    "hints": [
+      "Use + para concatenar ou * 2 para repetir.",
+      "Retorne palavra + palavra.",
+      "Retorne o texto, nao use print()."
+    ],
+    "note": "defina a funcao pedida com def e use return para devolver o valor (nao use print)."
+  },
+  {
+    "id": "javascript-repetir-palavra",
+    "title": "Repetir palavra",
+    "language": "JavaScript",
+    "difficulty": "Iniciante",
+    "description": "Crie uma funcao chamada repetir que receba uma palavra e retorne essa palavra repetida duas vezes.",
+    "starter": "function repetir(palavra) {\n  \n}",
+    "methodName": "repetir",
+    "requiredPatterns": [],
+    "acceptedPatterns": [
+      [
+        "+",
+        ".repeat("
+      ],
+      [
+        "function repetir",
+        "repetir ="
+      ],
+      [
+        "return",
+        "=>"
+      ]
+    ],
+    "tests": [
+      {
+        "call": "repetir(\"oi\")",
+        "expected": "\"oioi\""
+      },
+      {
+        "call": "repetir(\"Java\")",
+        "expected": "\"JavaJava\""
+      },
+      {
+        "call": "repetir(\"a\")",
+        "expected": "\"aa\""
+      }
+    ],
+    "solution": "function repetir(palavra) {\n  return palavra + palavra;\n}",
+    "hints": [
+      "Use + para concatenar ou .repeat(2).",
+      "Retorne palavra + palavra.",
+      "Retorne o texto, nao use console.log."
+    ],
+    "note": "declare a funcao pedida e use return para devolver o valor (nao use console.log)."
+  },
+  {
+    "id": "csharp-repetir-palavra",
+    "title": "Repetir palavra",
+    "language": "C#",
+    "difficulty": "Iniciante",
+    "description": "Crie um metodo chamado repetir que receba uma palavra e retorne essa palavra repetida duas vezes.",
+    "starter": "public class Solution {\n  public string repetir(string palavra) {\n    \n  }\n}",
+    "methodName": "repetir",
+    "requiredPatterns": [
+      "public string repetir",
+      "return",
+      "+"
+    ],
+    "tests": [
+      {
+        "call": "repetir(\"oi\")",
+        "expected": "\"oioi\""
+      },
+      {
+        "call": "repetir(\"Java\")",
+        "expected": "\"JavaJava\""
+      },
+      {
+        "call": "repetir(\"a\")",
+        "expected": "\"aa\""
+      }
+    ],
+    "solution": "public class Solution {\n  public string repetir(string palavra) {\n    return palavra + palavra;\n  }\n}",
+    "hints": [
+      "Use concatenacao com +.",
+      "Retorne palavra + palavra.",
+      "O retorno precisa ser string."
+    ]
+  },
+  {
+    "id": "python-tabuada",
+    "title": "Multiplicar por dez",
+    "language": "Python",
+    "difficulty": "Iniciante",
+    "description": "Crie uma funcao chamada vezesDez que receba um numero e retorne esse numero multiplicado por 10.",
+    "starter": "def vezesDez(numero):\n    # escreva sua solucao aqui\n    pass",
+    "methodName": "vezesDez",
+    "requiredPatterns": [
+      "def vezesDez",
+      "return",
+      "*",
+      "10"
+    ],
+    "tests": [
+      {
+        "call": "vezesDez(3)",
+        "expected": "30"
+      },
+      {
+        "call": "vezesDez(0)",
+        "expected": "0"
+      },
+      {
+        "call": "vezesDez(-2)",
+        "expected": "-20"
+      }
+    ],
+    "solution": "def vezesDez(numero):\n    return numero * 10",
+    "hints": [
+      "Multiplique numero por 10.",
+      "Use o operador *.",
+      "Retorne o resultado da multiplicacao."
+    ],
+    "note": "defina a funcao pedida com def e use return para devolver o valor (nao use print)."
+  },
+  {
+    "id": "javascript-tabuada",
+    "title": "Multiplicar por dez",
+    "language": "JavaScript",
+    "difficulty": "Iniciante",
+    "description": "Crie uma funcao chamada vezesDez que receba um numero e retorne esse numero multiplicado por 10.",
+    "starter": "function vezesDez(numero) {\n  \n}",
+    "methodName": "vezesDez",
+    "requiredPatterns": [
+      "*",
+      "10"
+    ],
+    "acceptedPatterns": [
+      [
+        "function vezesDez",
+        "vezesDez ="
+      ],
+      [
+        "return",
+        "=>"
+      ]
+    ],
+    "tests": [
+      {
+        "call": "vezesDez(3)",
+        "expected": "30"
+      },
+      {
+        "call": "vezesDez(0)",
+        "expected": "0"
+      },
+      {
+        "call": "vezesDez(-2)",
+        "expected": "-20"
+      }
+    ],
+    "solution": "function vezesDez(numero) {\n  return numero * 10;\n}",
+    "hints": [
+      "Multiplique numero por 10.",
+      "Use o operador *.",
+      "Retorne o resultado da multiplicacao."
+    ],
+    "note": "declare a funcao pedida e use return para devolver o valor (nao use console.log)."
+  },
+  {
+    "id": "csharp-tabuada",
+    "title": "Multiplicar por dez",
+    "language": "C#",
+    "difficulty": "Iniciante",
+    "description": "Crie um metodo chamado vezesDez que receba um inteiro e retorne esse numero multiplicado por 10.",
+    "starter": "public class Solution {\n  public int vezesDez(int numero) {\n    \n  }\n}",
+    "methodName": "vezesDez",
+    "requiredPatterns": [
+      "public int vezesDez",
+      "return",
+      "*",
+      "10"
+    ],
+    "tests": [
+      {
+        "call": "vezesDez(3)",
+        "expected": "30"
+      },
+      {
+        "call": "vezesDez(0)",
+        "expected": "0"
+      },
+      {
+        "call": "vezesDez(-2)",
+        "expected": "-20"
+      }
+    ],
+    "solution": "public class Solution {\n  public int vezesDez(int numero) {\n    return numero * 10;\n  }\n}",
     "hints": [
       "Multiplique numero por 10.",
       "Use o operador *.",

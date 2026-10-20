@@ -1,0 +1,34 @@
+/* Icones Pixelarticons (MIT) — https://pixelarticons.com
+ *
+ * Cada icone e um SVG usado como "mascara" CSS: a cor vem de `currentColor`,
+ * entao ele acompanha o texto, o hover e o tema claro/escuro automaticamente.
+ * Use assim: <span class="pxi pxi-home"></span>
+ *
+ * Para usar os arquivos localmente (sem depender do unpkg):
+ *   1) npm install pixelarticons
+ *   2) copie node_modules/pixelarticons/svg/*.svg para assets/icons/
+ *   3) troque abaixo "https://unpkg.com/pixelarticons@latest/svg/" por "../assets/icons/"
+ *      (o caminho e relativo a este arquivo, em shared/)
+ * Para trocar um icone, basta usar outro nome de https://pixelarticons.com
+ */
+.pxi {
+  display: inline-block;
+  flex: none;
+  width: 24px;
+  height: 24px;
+  background-color: currentColor;
+  -webkit-mask: var(--pxi) center / contain no-repeat;
+  mask: var(--pxi) center / contain no-repeat;
+  image-rendering: pixelated;
+}
+
+.pxi-home     { --pxi: url("https://unpkg.com/pixelarticons@latest/svg/home.svg"); }
+.pxi-user     { --pxi: url("https://unpkg.com/pixelarticons@latest/svg/user.svg"); }
+.pxi-trophy   { --pxi: url("https://unpkg.com/pixelarticons@latest/svg/trophy.svg"); }
+.pxi-support  { --pxi: url("https://unpkg.com/pixelarticons@latest/svg/circle-question.svg"); }
+.pxi-users    { --pxi: url("https://unpkg.com/pixelarticons@latest/svg/users.svg"); }
+.pxi-logout   { --pxi: url("https://unpkg.com/pixelarticons@latest/svg/logout.svg"); }
+.pxi-moon     { --pxi: url("https://unpkg.com/pixelarticons@latest/svg/moon.svg"); }
+.pxi-sun      { --pxi: url("https://unpkg.com/pixelarticons@latest/svg/sun.svg"); }
+.pxi-clock    { --pxi: url("https://unpkg.com/pixelarticons@latest/svg/clock.svg"); }
+.pxi-github   { --pxi: url("https://unpkg.com/pixelarticons@latest/svg/github.svg"); }

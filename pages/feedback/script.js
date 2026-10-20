@@ -112,7 +112,7 @@ function renderTrainingFeedback() {
   document.getElementById("training-detail").textContent = timedOut
     ? "A solução abaixo é apenas uma referência. Tente reescrevê-la com suas próprias palavras no próximo treino."
     : "Você pode iniciar outro desafio agora ou voltar ao painel.";
-  document.getElementById("reference-solution").textContent = referenceSolutions[payload.challengeId] || challenge?.starter || "Solução de referência indisponível.";
+  document.getElementById("reference-solution").textContent = referenceSolutions[payload.challengeId] || challenge?.solution || challenge?.starter || "Solução de referência indisponível.";
 }
 
 function renderPlayers() {

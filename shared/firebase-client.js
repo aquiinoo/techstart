@@ -188,7 +188,10 @@
   async function createRoom(ownerUserId, language) {
     const code = Math.random().toString(36).slice(2, 8).toUpperCase();
     const challenges = window.TechStartChallenges || [];
-    const challengeDeck = [...challenges]
+    // Apenas desafios da linguagem da sala; se nao houver, usa o catalogo inteiro.
+    const wanted = String(language || "Java").trim().toLowerCase();
+    const sameLanguage = challenges.filter((challenge) => String(challenge.language || "").toLowerCase() === wanted);
+    const challengeDeck = [...(sameLanguage.length ? sameLanguage : challenges)]
       .sort(() => Math.random() - 0.5)
       .map((challenge) => challenge.id);
     const room = {

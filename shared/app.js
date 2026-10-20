@@ -40,9 +40,16 @@ const TechStartApp = (() => {
     return shuffled;
   }
 
-  function buildChallengeDeck() {
+  // O baralho contem apenas desafios da linguagem da sala (Java, JavaScript, Python, C#).
+  // Se nao houver nenhum nessa linguagem, usa o catalogo inteiro para a sala nunca ficar vazia.
+  function buildChallengeDeck(language) {
     const challenges = getChallenges();
-    return shuffleList(challenges).map((challenge) => challenge.id);
+    const wanted = String(language || "").trim().toLowerCase();
+    const sameLanguage = wanted
+      ? challenges.filter((challenge) => String(challenge.language || "").toLowerCase() === wanted)
+      : [];
+    const pool = sameLanguage.length ? sameLanguage : challenges;
+    return shuffleList(pool).map((challenge) => challenge.id);
   }
 
   function read(key, fallback) {
@@ -94,7 +101,7 @@ const TechStartApp = (() => {
     room.status = room.status || "waiting";
     room.currentRound = room.currentRound || 1;
     room.totalRounds = MATCH_TOTAL_ROUNDS;
-    room.challengeDeck = room.challengeDeck?.length ? room.challengeDeck : buildChallengeDeck();
+    room.challengeDeck = room.challengeDeck?.length ? room.challengeDeck : buildChallengeDeck(room.language);
     room.currentChallengeId = room.currentChallengeId || room.challengeDeck[0] || challenges[0]?.id;
     room.timerStartedAt = room.timerStartedAt || null;
     room.countdownStartedAt = room.countdownStartedAt || null;
@@ -435,7 +442,7 @@ const TechStartApp = (() => {
 
   function createRoom(ownerUserId, language) {
     const code = Math.random().toString(36).slice(2, 8).toUpperCase();
-    const challengeDeck = buildChallengeDeck();
+    const challengeDeck = buildChallengeDeck(language);
     const room = {
       id: uid("room"),
       code,
@@ -1146,7 +1153,7 @@ Responda diretamente ao aluno.
     if (room.rematchRequests.length === 2) {
       room.status = "lobby";
       room.currentRound = 1;
-      room.challengeDeck = buildChallengeDeck();
+      room.challengeDeck = buildChallengeDeck(room.language);
       room.currentChallengeId = room.challengeDeck[0] || getChallenges()[0]?.id;
       room.totalRounds = MATCH_TOTAL_ROUNDS;
       room.winnerUserId = null;
@@ -2015,7 +2022,7 @@ Responda diretamente ao aluno.
         if (room.rematchRequests.length === 2) {
           room.status = "lobby";
           room.currentRound = 1;
-          room.challengeDeck = buildChallengeDeck();
+          room.challengeDeck = buildChallengeDeck(room.language);
           room.currentChallengeId = room.challengeDeck[0] || getChallenges()[0]?.id;
           room.totalRounds = MATCH_TOTAL_ROUNDS;
           room.winnerUserId = null;

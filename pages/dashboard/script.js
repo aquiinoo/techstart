@@ -12,49 +12,85 @@ const botaoEntrar = document.getElementById("botao_entrar")
 const botaoBuscar = document.getElementById("botao_buscar")
 const pandaImg = document.querySelector("img[alt='Panda Rodando']")
 
-// Verificação de segurança para o botão Sair
-if (botaoSair) {
-  botaoSair.addEventListener("mouseenter", () => {
-    if (pandaImg) pandaImg.src = "../../assets/triste.gif";
-  });
+botaoSair.addEventListener("mouseenter", () => {
 
-  botaoSair.addEventListener("mouseleave", () => {
-    if (pandaImg) pandaImg.src = "../../assets/pandarodando.gif";
-  });
-}
+  if(pandaImg) {
 
-// Verificação de segurança para o botão Criar
-if (botaoCriar) {
-  botaoCriar.addEventListener("mouseenter", () => {
-    if (pandaImg) pandaImg.src = "../../assets/prontopralutarv2.gif";
-  });
+    pandaImg.src = "../../assets/triste.gif";
 
-  botaoCriar.addEventListener("mouseleave", () => {
-    if (pandaImg) pandaImg.src = "../../assets/pandarodando.gif";
-  });
-}
+  }
 
-// Verificação de segurança para o botão Entrar
-if (botaoEntrar) {
-  botaoEntrar.addEventListener("mouseenter", () => {
-    if (pandaImg) pandaImg.src = "../../assets/prontopralutarv2.gif";
-  });
+});
 
-  botaoEntrar.addEventListener("mouseleave", () => {
-    if (pandaImg) pandaImg.src = "../../assets/pandarodando.gif";
-  });
-}
+botaoSair.addEventListener("mouseleave", () => {
 
-// Verificação de segurança para o botão Buscar
-if (botaoBuscar) {
-  botaoBuscar.addEventListener("mouseenter", () => {
-    if (pandaImg) pandaImg.src = "../../assets/prontopralutarv2.gif";
-  });
+  if(pandaImg) {
 
-  botaoBuscar.addEventListener("mouseleave", () => {
-    if (pandaImg) pandaImg.src = "../../assets/pandarodando.gif";
-  });
-}
+    pandaImg.src = "../../assets/pandarodando.gif";
+
+  }
+
+});
+
+botaoCriar.addEventListener("mouseenter", () => {
+
+  if(pandaImg) {
+
+    pandaImg.src = "../../assets/prontopralutarv2.gif";
+
+  }
+
+})
+
+botaoCriar.addEventListener("mouseleave", () =>{
+
+  if(pandaImg) {
+
+    pandaImg.src = "../../assets/pandarodando.gif";
+
+  }
+
+})
+
+botaoEntrar.addEventListener("mouseenter", () => {
+
+  if(pandaImg) {
+
+    pandaImg.src = "../../assets/prontopralutarv2.gif";
+
+  }
+
+})
+
+botaoEntrar.addEventListener("mouseleave", () =>{
+
+  if(pandaImg) {
+
+    pandaImg.src = "../../assets/pandarodando.gif";
+
+  }
+
+})
+
+botaoBuscar.addEventListener("mouseenter", () => {
+
+  if(pandaImg) {
+
+    pandaImg.src = "../../assets/prontopralutarv2.gif";
+
+  }
+
+})
+
+botaoBuscar.addEventListener("mouseleave", () =>{
+
+  if(pandaImg) {
+
+    pandaImg.src = "../../assets/pandarodando.gif";
+
+  }
+
+})
 
 function openPanel(target) {
   menuItems.forEach((button) => {
@@ -245,11 +281,28 @@ async function renderHelpRequests(user) {
   });
 }
 
+// Linguagem dos desafios: vem do perfil do jogador e pode ser trocada na tela inicial.
+function getSelectedLanguage() {
+  const select = document.getElementById("home-language");
+  return (select && select.value) || (currentUser && currentUser.language) || "Java";
+}
+
+function renderLanguage(user) {
+  const select = document.getElementById("home-language");
+  if (select) {
+    select.value = user.language || "Java";
+  }
+  document.querySelectorAll(".current-language").forEach((element) => {
+    element.textContent = getSelectedLanguage();
+  });
+}
+
 async function refresh() {
   const user = await TechStartApp.getCurrentUserAsync();
   currentUser = user;
   renderGreeting(user);
   renderProfile(user);
+  renderLanguage(user);
   renderHistory(user);
   await renderRanking(user);
   await renderProfiles(user);
@@ -258,6 +311,19 @@ async function refresh() {
 
 menuItems.forEach((button) => {
   button.addEventListener("click", () => openPanel(button.dataset.target));
+});
+
+document.getElementById("home-language").addEventListener("change", async (event) => {
+  const language = event.target.value;
+  // updateProfile apaga github/bio quando eles nao sao enviados, entao manda o perfil completo.
+  await TechStartApp.updateProfileAsync(currentUser.id, {
+    name: currentUser.name,
+    nick: currentUser.nick,
+    github: currentUser.github,
+    bio: currentUser.bio,
+    language,
+  });
+  await refresh();
 });
 
 document.getElementById("botao_sair").addEventListener("click", async () => {
@@ -292,13 +358,13 @@ document.getElementById("support-form").addEventListener("submit", async (event)
 });
 
 document.getElementById("botao_treinar").addEventListener("click", async () => {
-  const room = await TechStartApp.createRoomAsync(currentUser.id, "Java");
+  const room = await TechStartApp.createRoomAsync(currentUser.id, getSelectedLanguage());
   await TechStartApp.startOfflineTrainingAsync(room.code, currentUser.id);
   window.location.assign(buildChallengeUrl(room.code, { mode: "offline" }));
 });
 
 document.getElementById("botao_criar").addEventListener("click", async () => {
-  const room = await TechStartApp.createRoomAsync(currentUser.id, "Java");
+  const room = await TechStartApp.createRoomAsync(currentUser.id, getSelectedLanguage());
   const duelUrl = buildDuelUrl(room.code);
   document.getElementById("room-link").innerHTML = `Link copiavel: <strong>${duelUrl}</strong>`;
   navigator.clipboard?.writeText(duelUrl).catch(() => {});
@@ -316,7 +382,7 @@ document.getElementById("botao_entrar").addEventListener("click", async () => {
 });
 
 document.getElementById("botao_buscar").addEventListener("click", async () => {
-  const result = await TechStartApp.requestRandomMatchAsync(currentUser.id, "Java");
+  const result = await TechStartApp.requestRandomMatchAsync(currentUser.id, getSelectedLanguage());
   if (!result.ok) {
     showPopup("Fila indisponivel", result.message);
     return;

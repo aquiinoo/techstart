@@ -5,6 +5,10 @@
   --muted: #cccccc;
 }
 
+html {
+  font-size: 12px;
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -14,8 +18,8 @@
 
 body {
   min-height: 100vh;
-  background: black;
-  color: white;
+  background: var(--bg);
+  color: var(--text);
 }
 
 button {
@@ -27,30 +31,30 @@ button {
 }
 
 .feedback-layout {
-  width: min(1120px, calc(100% - 32px));
+  width: min(840px, calc(100% - 24px));
   margin: 0 auto;
   display: grid;
-  gap: 20px;
-  padding: 24px 0;
+  gap: 15px;
+  padding: 18px 0;
 }
 
 .panel {
   background: var(--painel);
-  border-radius: 8px;
-  padding: 20px;
+  border-radius: 6px;
+  padding: 15px;
 }
 
 .feedback-hero {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 18px;
+  gap: 14px;
   border: 1px solid black;
 }
 
 .feedback-hero h1 {
 
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 
 }
 
@@ -59,7 +63,7 @@ button {
   letter-spacing: 0.18em;
   font-size: 0.72rem;
   color: greenyellow;
-  margin-bottom: 12px;
+  margin-bottom: 9px;
 }
 
 .muted {
@@ -69,11 +73,11 @@ button {
 }
 
 .score-pill {
-  min-width: 128px;
-  min-height: 72px;
+  min-width: 96px;
+  min-height: 54px;
   display: grid;
   place-items: center;
-  border-radius: 8px;
+  border-radius: 6px;
   border: 4px solid black;
   background-color: yellow;
   color: black;
@@ -84,7 +88,7 @@ button {
 .feedback-grid,
 .players-grid {
   display: grid;
-  gap: 14px;
+  gap: 10px;
 }
 
 .feedback-grid {
@@ -92,7 +96,7 @@ button {
 }
 
 .result-panel {
-  min-height: 230px;
+  min-height: 172px;
   border: 3px solid black;
 }
 
@@ -102,13 +106,13 @@ button {
 
 .result-panel h2,
 .players-panel h2 {
-  margin: 12px 0 10px;
+  margin: 9px 0 8px;
   color: yellow;
 }
 
 .players-panel {
   display: grid;
-  gap: 18px;
+  gap: 14px;
 }
 
 .players-grid {
@@ -116,10 +120,10 @@ button {
 }
 
 .player-summary {
-  border-radius: 8px;
-  background: black;
+  border-radius: 6px;
+  background: var(--inset);
   border: 1px solid var(--painel);
-  padding: 16px;
+  padding: 12px;
 }
 
 .player-summary strong,
@@ -129,7 +133,7 @@ button {
 
 .player-summary span {
   color: var(--muted);
-  margin-top: 8px;
+  margin-top: 6px;
 }
 
 .player-summary.correct span {
@@ -141,8 +145,8 @@ button {
 }
 
 .primary-button {
-  min-height: 48px;
-  border-radius: 8px;
+  min-height: 36px;
+  border-radius: 6px;
   border: 1px solid transparent;
   cursor: pointer;
   background: green;
@@ -155,15 +159,15 @@ button {
 }
 
 .secondary-button {
-  min-height: 48px;
+  min-height: 36px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
-  padding: 0 20px;
+  border-radius: 6px;
+  padding: 0 15px;
   border: 1px solid transparent;
-  background: white;
-  color: black;
+  background: var(--btn-bg);
+  color: var(--btn-text);
   text-decoration: none;
 }
 
@@ -173,7 +177,7 @@ button {
 
 .training-panel {
   display: grid;
-  gap: 14px;
+  gap: 10px;
   border: 1px solid black;
 }
 
@@ -182,16 +186,16 @@ button {
 }
 
 .reference-solution {
-  padding: 16px;
-  border-radius: 8px;
-  background: black;
+  padding: 12px;
+  border-radius: 6px;
+  background: var(--inset);
   border: 1px solid var(--painel);
 }
 
 .reference-solution pre {
-  margin-top: 10px;
+  margin-top: 8px;
   overflow: auto;
-  color: white;
+  color: var(--text);
   font-size: 0.8rem;
   line-height: 1.6;
   white-space: pre-wrap;
@@ -200,7 +204,7 @@ button {
 .training-actions {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
+  gap: 9px;
 }
 
 .primary-button:disabled {
@@ -273,7 +277,7 @@ button {
   50% { opacity: 1; }
 }
 #ai-output p {
-  margin-top: 8px;
+  margin-top: 6px;
 }
  
 #ai-output p:first-child {
@@ -285,7 +289,7 @@ button {
 }
  
 #ai-output .feedback-list {
-  margin: 8px 0 0 20px;
+  margin: 6px 0 0 15px;
   padding: 0;
 }
  
@@ -295,7 +299,29 @@ button {
  
 #ai-output code {
   background: rgba(255, 255, 255, 0.08);
-  padding: 1px 5px;
+  padding: 1px 4px;
   border-radius: 4px;
   font-size: 0.92em;
+}
+
+/* =========================================
+   FONTES DE LEITURA
+   ========================================= */
+
+.reference-solution pre,
+.reference-solution pre * {
+  font-family: var(--font-code);
+}
+
+.reference-solution pre {
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.feedback-hero p,
+.result-panel p,
+.player-summary p,
+.training-panel p {
+  font-family: var(--font-read);
+  line-height: 1.65;
 }

@@ -147,19 +147,51 @@ function renderChallengeDetails(challenge) {
   const obsLabel = document.createElement("strong");
   obsLabel.textContent = "Obs: ";
 
-  const solutionWord = document.createElement("span");
-  solutionWord.className = "solution-word";
-  solutionWord.textContent = "Solution";
+  if (challenge.note) {
+    // Linguagens sem classe obrigatoria (Python, JavaScript) trazem a propria observacao no desafio.
+    obsParagraph.append(obsLabel, document.createTextNode(challenge.note));
+  } else {
+    const solutionWord = document.createElement("span");
+    solutionWord.className = "solution-word";
+    solutionWord.textContent = "Solution";
 
-  obsParagraph.append(
-    obsLabel,
-    document.createTextNode("o método pedido deve estar dentro da classe "),
-    solutionWord,
-    document.createTextNode(".")
-  );
+    obsParagraph.append(
+      obsLabel,
+      document.createTextNode("o método pedido deve estar dentro da classe "),
+      solutionWord,
+      document.createTextNode(".")
+    );
+  }
 
   paragraphs.push(obsParagraph);
   details.replaceChildren(...paragraphs);
+}
+
+function renderChat() {
+  const messages = room?.chat || [];
+  const container = document.getElementById("chat-messages");
+  const count = document.getElementById("chat-count");
+  count.textContent = messages.length ? String(messages.length) : "";
+  container.replaceChildren();
+  if (!messages.length) {
+    const empty = document.createElement("p");
+    empty.className = "muted";
+    empty.textContent = "Sem mensagens ainda.";
+    container.append(empty);
+    return;
+  }
+  messages.slice(-40).forEach((message) => {
+    const item = document.createElement("article");
+    item.className = "chat-message";
+    const author = document.createElement("strong");
+    const user = getUser(message.userId);
+    author.textContent = user ? `@${user.nick}` : "Jogador";
+    const text = document.createElement("p");
+    text.textContent = message.message;
+    item.append(author, text);
+    container.append(item);
+  });
+  container.scrollTop = container.scrollHeight;
 }
 
 async function evaluateCodeWithAI(source, challenge, testResult) {
@@ -178,6 +210,9 @@ async function evaluateCodeWithAI(source, challenge, testResult) {
 Você é a IA avaliadora do TechStart.
 
 Analise o código do aluno e o resultado dos testes.
+
+Linguagem:
+${challenge.language || room?.language || "Java"}
 
 Desafio:
 ${challenge.title}
@@ -262,43 +297,136 @@ REGRAS:
   }
 }
 
-async function compileJava(source, challenge) {
+// ---------------------------------------------------------------------------
+// Compilar e testar (Judge0) — Java, JavaScript, Python e C#
+// ---------------------------------------------------------------------------
+
+// Como achar cada linguagem na lista do Judge0 e quanta memoria ela precisa.
+const LANGUAGE_PROFILES = {
+  java: { label: "Java", match: /^Java \(JDK/i, fallback: /^Java \(/i, memory: 128000 },
+  javascript: { label: "JavaScript", match: /^JavaScript \(Node\.js/i, memory: 256000 },
+  python: { label: "Python", match: /^Python \(3\./i, memory: 128000 },
+  "c#": { label: "C#", match: /^C# \(Mono/i, fallback: /^C# \(/i, memory: 256000 },
+};
+
+let judge0RuntimesPromise = null;
+
+function loadJudge0Runtimes(endpoint, languageLabel) {
+  if (!judge0RuntimesPromise) {
+    judge0RuntimesPromise = fetch(`${endpoint}/languages`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Não foi possível carregar o compilador de ${languageLabel}.`);
+        }
+        return response.json();
+      })
+      .catch((error) => {
+        judge0RuntimesPromise = null; // tenta de novo na proxima vez
+        throw error;
+      });
+  }
+  return judge0RuntimesPromise;
+}
+
+// Se houver varias versoes da mesma linguagem, usa a mais nova (maior id).
+function pickRuntime(runtimes, profile) {
+  const newest = (list) => list.sort((a, b) => b.id - a.id)[0];
+  const preferred = runtimes.filter((runtime) => profile.match.test(runtime.name));
+  if (preferred.length) {
+    return newest(preferred);
+  }
+  if (profile.fallback) {
+    const others = runtimes.filter((runtime) => profile.fallback.test(runtime.name));
+    if (others.length) {
+      return newest(others);
+    }
+  }
+  return null;
+}
+
+function assertValidTestCall(call) {
+  if (!/^[a-zA-Z_$][\w$]*\s*\([^;{}]*\)$/.test(call)) {
+    throw new Error("Um caso de teste está inválido.");
+  }
+}
+
+// Monta o programa final: codigo do aluno + um "main" que imprime o retorno de cada teste.
+function buildProgram(languageKey, source, tests) {
+  const calls = tests.map((test) => String(test.call || "").trim());
+  calls.forEach(assertValidTestCall);
+  const marker = (index) => `__TECHSTART_TEST_${index}__`;
+
+  if (languageKey === "java") {
+    const normalizedSource = source.replace(/\bpublic\s+class\s+Solution\b/, "class Solution");
+    const lines = calls.map((call, index) => `System.out.println("${marker(index)}" + String.valueOf(__solution.${call}));`);
+    return `${normalizedSource}\n\npublic class Main {\n  public static void main(String[] args) {\n    try {\n      Solution __solution = new Solution();\n      ${lines.join("\n      ")}\n    } catch (Throwable error) {\n      error.printStackTrace();\n      System.exit(1);\n    }\n  }\n}`;
+  }
+
+  if (languageKey === "c#") {
+    const lines = calls.map((call, index) => `Console.WriteLine("${marker(index)}" + __solution.${call});`);
+    return `using System;\nusing System.Collections.Generic;\nusing System.Linq;\n\n${source}\n\npublic class Program {\n  public static void Main(string[] args) {\n    try {\n      var __solution = new Solution();\n      ${lines.join("\n      ")}\n    } catch (Exception error) {\n      Console.Error.WriteLine(error);\n      Environment.Exit(1);\n    }\n  }\n}\n`;
+  }
+
+  if (languageKey === "python") {
+    const lines = calls.map((call, index) => `    print("${marker(index)}" + str(${call}))`);
+    return `${source}\n\nimport sys as __ts_sys\ntry:\n${lines.join("\n")}\nexcept BaseException:\n    import traceback as __ts_tb\n    __ts_tb.print_exc()\n    __ts_sys.exit(1)\n`;
+  }
+
+  if (languageKey === "javascript") {
+    const lines = calls.map((call, index) => `  console.log("${marker(index)}" + String(${call}));`);
+    return `${source}\n\ntry {\n${lines.join("\n")}\n} catch (error) {\n  console.error(error && error.stack ? error.stack : String(error));\n  process.exit(1);\n}\n`;
+  }
+
+  throw new Error("Linguagem ainda não suportada pelo compilador.");
+}
+
+// As linguagens imprimem valores de forma diferente (True/true, 32/32.0).
+// Compara numeros pelo valor e booleanos sem diferenciar maiusculas.
+function sameOutput(actual, expected) {
+  const a = String(actual ?? "").trim();
+  const e = String(expected ?? "").trim();
+  if (a === e) {
+    return true;
+  }
+  if (/^(true|false)$/i.test(a) && /^(true|false)$/i.test(e)) {
+    return a.toLowerCase() === e.toLowerCase();
+  }
+  const isNumber = (value) => /^[-+]?\d+(\.\d+)?$/.test(value);
+  if (isNumber(a) && isNumber(e)) {
+    return Number(a) === Number(e);
+  }
+  return false;
+}
+
+async function compileCode(source, challenge) {
+  const languageKey = String(challenge.language || room?.language || "Java").trim().toLowerCase();
+  const profile = LANGUAGE_PROFILES[languageKey];
+  if (!profile) {
+    throw new Error(`A linguagem ${challenge.language} ainda não é suportada pelo compilador.`);
+  }
+
   const endpoint = window.TechStartJudge0Endpoint;
   if (!endpoint) {
-    throw new Error("O compilador Java não está configurado.");
+    throw new Error(`O compilador de ${profile.label} não está configurado.`);
   }
 
-  const runtimeResponse = await fetch(`${endpoint}/languages`);
-  if (!runtimeResponse.ok) {
-    throw new Error("Não foi possível carregar o compilador Java.");
-  }
-  const runtimes = await runtimeResponse.json();
-  const java =
-    runtimes.find((runtime) => /^Java \(JDK/i.test(runtime.name)) ||
-    runtimes.find((runtime) => /^Java \(/i.test(runtime.name));
-  if (!java) {
-    throw new Error("A instância de compilação não disponibiliza Java agora.");
+  const runtimes = await loadJudge0Runtimes(endpoint, profile.label);
+  const runtime = pickRuntime(runtimes, profile);
+  if (!runtime) {
+    throw new Error(`A instância de compilação não disponibiliza ${profile.label} agora.`);
   }
 
-  const normalizedSource = source.replace(/\bpublic\s+class\s+Solution\b/, "class Solution");
-  const testLines = (challenge.tests || []).map((test, index) => {
-    const call = String(test.call || "").trim();
-    if (!/^[a-zA-Z_$][\w$]*\s*\([^;{}]*\)$/.test(call)) {
-      throw new Error("Um caso de teste está inválido.");
-    }
-    return `System.out.println("__TECHSTART_TEST_${index}__" + String.valueOf(__solution.${call}));`;
-  });
-
-  const program = `${normalizedSource}\n\npublic class Main {\n  public static void main(String[] args) {\n    try {\n      Solution __solution = new Solution();\n      ${testLines.join("\n      ")}\n    } catch (Throwable error) {\n      error.printStackTrace();\n      System.exit(1);\n    }\n  }\n}`;
+  const tests = challenge.tests || [];
+  const program = buildProgram(languageKey, source, tests);
   const response = await fetch(`${endpoint}/submissions?base64_encoded=false&wait=true`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      language_id: java.id,
+      language_id: runtime.id,
       source_code: program,
       cpu_time_limit: 3,
       wall_time_limit: 5,
-      memory_limit: 128000,
+      memory_limit: profile.memory,
     }),
   });
   const payload = await response.json();
@@ -307,22 +435,29 @@ async function compileJava(source, challenge) {
   }
 
   const rawOutput = payload.stdout || "";
-  const testResults = (challenge.tests || []).map((test, index) => {
+  const testResults = tests.map((test, index) => {
     const prefix = `__TECHSTART_TEST_${index}__`;
     const actual = rawOutput.split(/\r?\n/).find((line) => line.startsWith(prefix))?.slice(prefix.length).trim() || "";
     const rawExpected = String(test.expected ?? "").trim();
     const expected = /^(['"]).*\1$/.test(rawExpected) ? rawExpected.slice(1, -1) : rawExpected;
-    return { call: test.call, expected, actual, passed: actual === expected };
+    return { call: test.call, expected, actual, passed: actual !== "" ? sameOutput(actual, expected) : expected === "" };
   });
-  const compiled = !payload.compile_output && !payload.stderr;
+
+  // Status 6 do Judge0 = erro de compilacao. Avisos do compilador nao reprovam o aluno.
+  const compileFailed = payload.status?.id === 6 || (!payload.status && Boolean(payload.compile_output));
+  const compiled = !compileFailed;
   const passed = compiled && testResults.length > 0 && testResults.every((test) => test.passed);
   const details = testResults.map((test) => `${test.passed ? "✓" : "✕"} ${test.call}: esperado ${test.expected}, recebido ${test.actual || "(sem retorno)"}`).join("\n");
-  const output =
-    payload.compile_output ||
-    payload.stderr ||
-    (passed
-      ? `Compilação concluída.\n${details}`
-      : details);
+  const doneMessage = languageKey === "java" || languageKey === "c#" ? "Compilação concluída." : "Execução concluída.";
+
+  let output;
+  if (compileFailed) {
+    output = payload.compile_output || payload.message || "Erro de compilação.";
+  } else if (passed) {
+    output = `${doneMessage}\n${details}`;
+  } else {
+    output = [payload.stderr, details].filter(Boolean).join("\n");
+  }
 
   const aiFeedback = await evaluateCodeWithAI(
     source,
@@ -332,6 +467,7 @@ async function compileJava(source, challenge) {
 
   return {
     configured: true,
+    languageLabel: profile.label,
     compiled,
     passed,
     tests: testResults,
@@ -604,11 +740,16 @@ async function renderRoom() {
     ? "sem adversario"
     : `${playerTwo ? playerTwo.score : 0} pts`;
   document.getElementById("challenge-name").textContent = challenge.title;
+  const languageLabel = document.getElementById("challenge-language");
+  if (languageLabel) {
+    languageLabel.textContent = `${challenge.language || room.language || "Java"}:`;
+  }
   renderChallengeDetails(challenge);
   document.getElementById("solution-input").placeholder = challenge.starter;
 
   setRoundControlsDisabled(!currentPlayer || currentPlayer.solutionStatus !== "pending");
   document.getElementById("botao_voltar").classList.toggle("hidden", !isOfflineTraining());
+  renderChat();
 }
 
 const testButton = document.getElementById("test-button");
@@ -624,11 +765,11 @@ if (testButton) {
     setBusy(true, "Compilando e executando os testes...");
     document.getElementById("ai-output").textContent = "Avaliando sua solução...";
     try {
-      const result = await compileJava(code, challenge);
+      const result = await compileCode(code, challenge);
       const passed = result.passed ?? result.evaluation?.correct;
       document.getElementById("result-output").textContent = result.output || result.error || result.message || result.evaluation?.message || "Teste concluído.";
       document.getElementById("ai-output").textContent = result.aiFeedback || (passed ? "Os testes concluíram sem erros." : "Revise a assinatura do método e os casos públicos.");
-      showPopup(passed ? "Testes concluídos" : "Ajuste necessário", result.configured ? "O compilador Java terminou a execução." : result.message);
+      showPopup(passed ? "Testes concluídos" : "Ajuste necessário", result.configured ? `A execução em ${result.languageLabel} terminou.` : result.message);
     } catch (error) {
       document.getElementById("result-output").textContent = error.message;
       showPopup("Não foi possível compilar", "Confira a conexão com o serviço de compilação e tente novamente.");

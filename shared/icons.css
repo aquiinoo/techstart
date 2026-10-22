@@ -32,3 +32,13 @@
 .pxi-sun      { --pxi: url("https://unpkg.com/pixelarticons@latest/svg/sun.svg"); }
 .pxi-clock    { --pxi: url("https://unpkg.com/pixelarticons@latest/svg/clock.svg"); }
 .pxi-github   { --pxi: url("https://unpkg.com/pixelarticons@latest/svg/github.svg"); }
+.pxi-train    { --pxi: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23fff'%3E%3Cpath d='M6 4h2v16h-2zM16 4h2v16h-2zM4 6h2v12h-2zM8 6h2v12h-2zM14 6h2v12h-2zM18 6h2v12h-2zM2 9h2v6h-2zM20 9h2v6h-2zM10 11h4v2h-4z'/%3E%3C/svg%3E");}
+.pxi-createroom { --pxi: url("https://unpkg.com/pixelarticons@latest/svg/plus-box.svg");
+  margin-left: 4px;
+}
+.pxi-join     { --pxi: url("https://unpkg.com/pixelarticons@latest/svg/chevron-right.svg"); 
+  margin-left: -4px;
+}
+.pxi-search   { --pxi: url("https://unpkg.com/pixelarticons@latest/svg/search.svg");
+  margin-left: 4px;
+}

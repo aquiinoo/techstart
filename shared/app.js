@@ -1394,7 +1394,7 @@ Responda diretamente ao aluno.
 
   async function getPublicProfilesAsync(currentUserId) {
     const users = await getUsersAsync();
-    return users.filter((user) => user.id !== currentUserId);
+    return users.filter((user) => user.id !== currentUserId && !user.guest);
   }
 
   async function createRoomAsync(ownerUserId, language) {

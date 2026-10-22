@@ -85,7 +85,7 @@ textarea {
   margin-bottom: 12px;
 }
 
-.panel-header > div {
+.panel-header>div {
   display: grid;
   gap: 9px;
 }
@@ -94,20 +94,20 @@ textarea {
   margin: 0;
 }
 
-.barra_lateral h1{
+.barra_lateral h1 {
   font-size: 18px;
   color: red;
   text-shadow: 1px 1px 8px red;
 }
 
-.barra_lateral h1 span{
+.barra_lateral h1 span {
 
   color: blue;
   text-shadow: 1px 1px 8px blue;
 
 }
 
-.techstart{
+.techstart {
 
   display: flex;
   justify-content: center;
@@ -263,7 +263,8 @@ textarea {
 
 .botao_sair,
 .primary-button {
-  width: 100%;
+  width: auto;
+  align-self: start;
 }
 
 
@@ -274,11 +275,9 @@ textarea {
    ========================================= */
 
 .primary-button {
-  background: linear-gradient(
-    135deg,
-    #78a6f8,
-    #8fc5ff
-  );
+  background: linear-gradient(135deg,
+      #78a6f8,
+      #8fc5ff);
 
   color: #07111f;
 
@@ -290,11 +289,9 @@ textarea {
 }
 
 .primary-button:hover {
-  background: linear-gradient(
-    135deg,
-    #6f9ff5,
-    #82bcf5
-  );
+  background: linear-gradient(135deg,
+      #6f9ff5,
+      #82bcf5);
 
   border-color: rgba(143, 197, 255, 1);
 
@@ -324,7 +321,7 @@ textarea {
   z-index: 0;
 }
 
-.panel > * + * {
+.panel>*+* {
   margin-top: 18px;
 }
 
@@ -367,35 +364,47 @@ textarea {
   padding: 15px;
 }
 
-.card > * + * {
+.card>*+* {
   margin-top: 14px;
 }
 
 .action-card {
   display: flex;
   flex-direction: column;
-  height: 100%;
-  min-height: 100%;
+  gap: 12px;
+}
+
+.action-card>*+* {
+  margin-top: 0;
 }
 
 .action-card .card-footer {
+  display: grid;
+  gap: 9px;
   margin-top: auto;
   padding-top: 14px;
-  display: grid;
-  align-content: end;
-  gap: 9px;
-  min-height: 69px;
 }
 
 .action-card .card-footer .inline-form {
   margin-top: 0;
   width: 100%;
-  display: flex;
-  align-items: flex-end;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: stretch;
 }
 
-.action-card .card-footer > * + * {
+.action-card .card-footer .inline-form input {
+  min-width: 0;
   margin-top: 0;
+}
+
+.action-card .card-footer .primary-button {
+  width: 100%;
+  align-self: stretch;
+}
+
+.action-card .card-footer .inline-form .primary-button {
+  width: auto;
 }
 
 .action-card .card-footer #room-link {
@@ -409,6 +418,10 @@ textarea {
 .action-card h3,
 .card h3 {
   margin-bottom: 8px;
+}
+
+.action-card h3 {
+  margin-bottom: 0;
 }
 
 .action-card p,
@@ -624,6 +637,7 @@ textarea {
 }
 
 @media (max-width: 720px) {
+
   .hero-grid,
   .grid,
   .double-column,
@@ -638,7 +652,7 @@ textarea {
     padding: 12px 9px 9px;
   }
 
-  .dashboard > .barra_lateral {
+  .dashboard>.barra_lateral {
     position: static !important;
     top: auto !important;
     left: auto !important;
@@ -658,7 +672,7 @@ textarea {
     margin: 0 auto;
   }
 
-  .dashboard > .barra_lateral {
+  .dashboard>.barra_lateral {
     gap: 14px;
     justify-content: initial;
   }
@@ -747,13 +761,28 @@ textarea {
 }
 
 @keyframes piscarCodigo {
-  0%, 100% { opacity: 0; }
-  30%, 70% { opacity: 0.3; }
+
+  0%,
+  100% {
+    opacity: 0;
+  }
+
+  30%,
+  70% {
+    opacity: 0.3;
+  }
 }
 
 @keyframes twinkle {
-  0%, 100% { opacity: 0; }
-  50% { opacity: 1; }
+
+  0%,
+  100% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
 }
 
 /* Seletor de linguagem dos desafios (tela inicial) */
@@ -779,14 +808,14 @@ textarea {
   font-weight: 700;
 }
 
-.line{
+.line {
 
   display: flex;
   align-items: center;
 
 }
 
-.label-text{
+.label-text {
 
   display: inline-flex;
   align-items: center;
@@ -794,9 +823,37 @@ textarea {
 
 }
 
-.label-text .pxi{
+.label-text .pxi {
 
   width: 16px;
   height: 16px;
+
+}
+
+.label-text-main h3 {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.label-text-main{
+
+  display: inline-flex;
+  align-items: center;
+  gap: 80px;
+
+}
+
+.label-text-main .pxi {
+
+  width: 40px;
+  height: 40px;
+
+}
+
+.connect-button {
+
+  width: auto;
+  align-self: start;
 
 }

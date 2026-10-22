@@ -183,7 +183,11 @@ function renderHistory(user) {
 }
 
 async function renderRanking(user) {
-  const users = [...(await TechStartApp.getUsersAsync())].sort((a, b) => b.rankingPoints - a.rankingPoints);
+  const users = [...(await TechStartApp.getUsersAsync())]
+  
+  .filter((item) => !item.guest)
+  .sort((a, b) => b.rankingPoints - a.rankingPoints);
+
   const friends = users.filter((item) => item.id === user.id || (user.connections || []).includes(item.id));
 
   document.getElementById("ranking-general").innerHTML = users
@@ -214,6 +218,7 @@ async function renderRanking(user) {
 async function renderProfiles(user) {
   const profiles = await TechStartApp.getPublicProfilesAsync(user.id);
   const profilesList = document.getElementById("profiles-list");
+  
   profilesList.innerHTML = profiles
     .map(
       (profile) => `
@@ -225,8 +230,8 @@ async function renderProfiles(user) {
             <span>${profile.github ? `<a href="${profile.github}" target="_blank" rel="noreferrer">GitHub</a>` : "Sem GitHub"}</span>
           </div>
           <p>${profile.bio || "Sem bio cadastrada."}</p>
-          <button class="connect-button" data-connect-id="${profile.id}">
-            ${(user.connections || []).includes(profile.id) ? "Conectado" : "Conectar"}
+          <button class="connect-button primary-button" data-connect-id="${profile.id}">
+            ${(user.connections || []).includes(profile.id) ? "Seguindo" : "Seguir"}
           </button>
         </article>
       `

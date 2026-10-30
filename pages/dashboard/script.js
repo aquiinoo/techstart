@@ -6,6 +6,7 @@ const popup = document.getElementById("popup");
 const popupTitle = document.getElementById("popup-title");
 const popupText = document.getElementById("popup-text");
 const popupButton = document.getElementById("popup-button");
+const popupCancel = document.getElementById("popup-cancel");
 const botaoSair = document.getElementById("botao_sair")
 const botaoCriar = document.getElementById("botao_criar")
 const botaoEntrar = document.getElementById("botao_entrar")
@@ -113,12 +114,26 @@ function openPanel(target) {
 function showPopup(title, text, callback) {
   popupTitle.textContent = title;
   popupText.textContent = text;
+  popupButton.textContent = "Continuar";
+  popupCancel.classList.add("hidden");
   popup.classList.remove("hidden");
   popupButton.onclick = () => {
     popup.classList.add("hidden");
     if (callback) {
       callback();
     }
+  };
+}
+
+function showConfirmationPopup(title, text, onConfirm) {
+  popupTitle.textContent = title;
+  popupText.textContent = text;
+  popupButton.textContent = "Confirmar";
+  popupCancel.classList.remove("hidden");
+  popup.classList.remove("hidden");
+  popupButton.onclick = onConfirm;
+  popupCancel.onclick = () => {
+    popup.classList.add("hidden");
   };
 }
 
@@ -331,9 +346,27 @@ document.getElementById("home-language").addEventListener("change", async (event
   await refresh();
 });
 
-document.getElementById("botao_sair").addEventListener("click", async () => {
-  await TechStartApp.logoutAsync();
-  window.location.href = "../../index.html";
+botaoSair.addEventListener("click", async () => {
+  showConfirmationPopup(
+    "Sair da conta",
+    "Tem certeza que deseja sair?",
+    async () => {
+      popupButton.disabled = true;
+      try {
+        await TechStartApp.logoutAsync();
+        popup.classList.add("hidden");
+        window.location.href = "../../index.html";
+      } catch (error) {
+        console.error("Erro ao sair da conta:", error);
+        showPopup(
+          "Não foi possível sair",
+          "Ocorreu um erro ao encerrar sua sessão. Tente novamente."
+        );
+      } finally {
+        popupButton.disabled = false;
+      }
+    }
+  );
 });
 
 document.getElementById("profile-form").addEventListener("submit", async (event) => {

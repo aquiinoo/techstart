@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geist+Pixel&display=swap');
 
 :root {
   --bg: #08111c;
@@ -7,8 +8,10 @@
   --text: #eef5f0;
   --muted: #aac6df;
   --accent: #6ea8ff;
+  --accent-soft: #a2cffc;
   --success: #7bd7a0;
   --danger: #ff9578;
+  --font-secondary: 'Geist Pixel', system-ui, sans-serif;
 }
 
 * {
@@ -20,10 +23,11 @@
 
 body {
   min-height: 100vh;
+  min-height: 100svh;
   display: grid;
   place-items: center;
-  padding: 24px;
-  background:black;
+  padding: clamp(12px, 4vw, 24px);
+  background: black;
   color: var(--text);
 }
 
@@ -38,7 +42,8 @@ body {
 }
 
 .register-card {
-  padding: 32px;
+  min-width: 0;
+  padding: clamp(20px, 5vw, 36px);
 }
 
 .header-row {
@@ -48,12 +53,43 @@ body {
 }
 
 .voltar {
+  position: relative;
+  display: inline-block;
   color: var(--muted);
   text-decoration: none;
+  font-family: var(--font-secondary);
+  font-size: 1rem;
+  transition: transform 0.2s ease;
 }
 
-.voltar:hover{
+.voltar::after {
+  position: absolute;
+  right: 0;
+  bottom: -4px;
+  left: 0;
+  height: 1px;
+  background: currentColor;
+  content: '';
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s ease;
+}
+
+.voltar:hover,
+.voltar:focus-visible {
   transform: translateY(-1px);
+}
+
+.voltar:hover::after,
+.voltar:focus-visible::after {
+  transform: scaleX(1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .voltar,
+  .voltar::after {
+    transition: none;
+  }
 }
 
 .section-label {
@@ -65,13 +101,17 @@ body {
 
 h1 {
   margin: 10px 0 8px;
-  font-size: 2.4rem;
+  font-size: clamp(1.2rem, 5vw, 2rem);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
 }
 
 .intro,
 .switch-auth {
   color: var(--muted);
   line-height: 1.6;
+  font-family: var(--font-secondary);
+  font-size: clamp(0.95rem, 2.5vw, 1.1rem);
 }
 
 .register-form {
@@ -83,7 +123,7 @@ h1 {
 .grid {
   display: grid;
   gap: 14px;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 label {
@@ -91,17 +131,21 @@ label {
   gap: 8px;
   color: var(--muted);
   font-size: 0.95rem;
+  font-family: 'Press Start 2P', system-ui;
 }
 
 input,
 select,
 textarea {
+  width: 100%;
+  min-width: 0;
+  min-height: 50px;
   border-radius: 14px;
   border: 1px solid var(--border);
   background: rgba(255, 255, 255, 0.08);
   color: var(--text);
   padding: 14px 16px;
-  font: inherit;
+  font: 1rem system-ui, sans-serif;
 }
 
 select {
@@ -143,23 +187,34 @@ textarea {
 }
 
 .primary-button {
-  min-height: 50px;
-  padding: 0 20px;
+  position: relative;
+  width: min(100%, 280px);
+  min-height: 52px;
+  padding: 12px 20px;
   border: none;
   border-radius: 16px;
   background: linear-gradient(135deg, var(--accent), #8cc9ff);
   color: #06120f;
-  font-weight: 700;
+  font: 700 0.9rem 'Press Start 2P', system-ui;
   cursor: pointer;
   box-shadow: 0 14px 28px rgba(110, 168, 255, 0.16);
-  width: fit-content;
-  margin: 0 auto;  /* Centralizar */
+  margin: 0 auto;
+  overflow-wrap: anywhere;
+  transition: transform 0.2s ease;
+}
+
+.primary-button:hover,
+.primary-button:focus-visible {
+  transform: translateY(-1px);
 }
 
 .feedback {
-  min-height: 24px;
+  min-height: 1.5em;
   margin-top: 16px;
   color: var(--danger);
+  font-family: var(--font-secondary);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
 }
 
 .feedback.success {
@@ -180,7 +235,8 @@ a {
   display: grid;
   place-items: center;
   background: rgba(2, 8, 14, 0.75);
-  padding: 20px;
+  padding: clamp(12px, 4vw, 20px);
+  overflow-y: auto;
 }
 
 .popup.hidden {
@@ -189,7 +245,8 @@ a {
 
 .popup-card {
   width: min(420px, 100%);
-  padding: 28px;
+  min-width: 0;
+  padding: clamp(20px, 5vw, 28px);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -197,51 +254,41 @@ a {
 
 .popup-card h2 {
   margin: 12px 0;
+  font-size: clamp(1rem, 4vw, 1.4rem);
+  line-height: 1.5;
+  overflow-wrap: anywhere;
 }
 
 .popup-card p:last-of-type {
   margin-bottom: 16px;
   color: var(--muted);
+  font-family: var(--font-secondary);
+  line-height: 1.6;
 }
 
 .popup-card .primary-button {
   margin-top: 16px;
 }
 
-@media (max-width: 1080px) {
+@media (max-width: 640px) {
   .grid {
     grid-template-columns: 1fr;
+    gap: 12px;
   }
 
   .header-row {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 14px;
-  }
-
-  .register-card {
-    padding: 28px;
+    margin-bottom: 20px;
   }
 }
 
-@media (max-width: 720px) {
+@media (max-width: 360px) {
   .register-card {
-    padding: 24px;
+    padding: 18px 16px;
+    border-radius: 20px;
   }
 
-  h1 {
-    font-size: 2rem;
-  }
-
-  .section-label {
-    font-size: 0.72rem;
-  }
-
-  .header-row {
+  .register-form {
     gap: 12px;
-  }
-
-  .grid {
-    gap: 12px;
+    margin-top: 20px;
   }
 }

@@ -581,6 +581,17 @@ textarea {
   padding: 21px;
 }
 
+.popup-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 9px;
+  margin-top: 16px;
+}
+
+#popup-cancel.hidden {
+  display: none;
+}
+
 .popup-card h3 {
   margin: 9px 0;
 }
@@ -876,4 +887,89 @@ textarea {
 
   height: 34px;
 
+}
+
+@media (max-width: 1080px) {
+  .dashboard,
+  .content,
+  .panel,
+  .card,
+  .hero-grid > *,
+  .double-column > *,
+  .profile-grid > * {
+    min-width: 0;
+  }
+
+  .label-text-main {
+    max-width: 100%;
+    gap: clamp(8px, 4vw, 40px);
+    flex-wrap: wrap;
+  }
+
+  .language-picker {
+    min-width: 0;
+    flex-wrap: wrap;
+  }
+
+  .language-picker select {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .history-item,
+  .ranking-item,
+  .profile-card,
+  .help-item,
+  #room-link {
+    overflow-wrap: anywhere;
+  }
+}
+
+@media (max-width: 720px) {
+  .dashboard {
+    min-height: 100vh;
+    min-height: 100svh;
+  }
+
+  .barra_lateral {
+    min-width: 0;
+  }
+
+  .action-card .card-footer .inline-form .primary-button {
+    width: 100%;
+  }
+
+  .form-card .grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .form-card input,
+  .form-card select,
+  .form-card textarea,
+  .language-picker select {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .popup-card {
+    max-height: calc(100vh - 30px);
+    max-height: calc(100svh - 30px);
+    overflow-y: auto;
+  }
+}
+
+@media (max-width: 360px) {
+  .dashboard {
+    padding-right: 8px;
+    padding-left: 8px;
+  }
+
+  .panel,
+  .card {
+    padding: 11px;
+  }
+
+  .menu {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }

@@ -115,6 +115,13 @@ textarea {
 
 }
 
+.techstart,
+.techstart * {
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
 .sidebar-copy,
 .muted {
   color: var(--muted);
@@ -229,6 +236,9 @@ textarea {
   height: auto;
   margin: 10px auto 0;
   image-rendering: pixelated;
+  -webkit-user-drag: none;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .barra_lateral .botao_sair,

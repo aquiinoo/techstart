@@ -114,6 +114,13 @@ input {
 
 }
 
+.div_logomarca,
+.div_logomarca * {
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
 .div_logomarca img {
   width: 80px;
   height: 80px;

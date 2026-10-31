@@ -169,9 +169,16 @@ body {
 .title-line{
 
   display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
   gap: 4px;
   letter-spacing: -1px;
 
+}
+
+.title-line h2 {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .title-line span{
@@ -186,7 +193,7 @@ body {
   align-items: start;
   gap: 12px;
   margin-bottom: 10px;
-  color: or;
+  color: var(--text);
 }
 
 .challenge-details {
@@ -195,6 +202,7 @@ body {
   padding: 10px;
   color: var(--text);
   line-height: 1.45;
+  overflow-wrap: anywhere;
 }
 
 .challenge-details strong {
@@ -261,6 +269,7 @@ body {
 
 textarea {
   width: 100%;
+  min-width: 0;
   min-height: 180px;
   padding: 14px;
   border-radius: 6px;
@@ -285,6 +294,7 @@ textarea {
 
 .feedback-card p {
   white-space: pre-line;
+  overflow-wrap: anywhere;
 }
 
 /* =========================================
@@ -294,11 +304,13 @@ textarea {
 .primary-button,
 .secondary-button,
 .danger-button {
+  min-width: 0;
   min-height: 36px;
   padding: 0 15px;
   border-radius: 6px;
   border: 1px solid transparent;
   cursor: pointer;
+  overflow-wrap: anywhere;
 }
 
 .primary-button:hover,
@@ -337,9 +349,11 @@ button:disabled {
 .floating-chat {
   position: fixed;
   right: 18px;
-  bottom: 15px;
+  bottom: max(8px, env(safe-area-inset-bottom, 0px));
   z-index: 5;
   width: min(278px, calc(100vw - 24px));
+  max-height: calc(100vh - 24px);
+  max-height: calc(100dvh - 24px);
   overflow: hidden;
   border-radius: 6px;
   background: rgba(9, 20, 33, 0.96);
@@ -377,7 +391,7 @@ button:disabled {
 }
 
 .chat-messages {
-  max-height: 195px;
+  max-height: min(195px, 30vh);
   overflow: auto;
   display: grid;
   gap: 6px;
@@ -465,10 +479,12 @@ body.is-busy .loading-overlay {
 .popup {
   position: fixed;
   inset: 0;
+  z-index: 1000;
   display: grid;
   place-items: center;
   background: var(--overlay);
   padding: 15px;
+  overflow-y: auto;
 }
 
 .popup.hidden {
@@ -477,6 +493,9 @@ body.is-busy .loading-overlay {
 
 .popup-card {
   width: min(315px, 100%);
+  min-width: 0;
+  max-height: 100%;
+  overflow-y: auto;
 }
 
 .popup-card h3 {
@@ -492,6 +511,10 @@ body.is-busy .loading-overlay {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 8px;
+}
+
+#popup-cancel-button {
+  white-space: nowrap;
 }
 
 .challenge-panel  textarea{
@@ -513,8 +536,33 @@ body.is-busy .loading-overlay {
     align-self: start;
   }
 
-  .match-topbar,
-  .score-strip,
+  .score-strip {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+  }
+
+  .score-strip .blue-side {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .score-strip .red-side {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .score-strip .timer-box {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    width: auto;
+  }
+
+  .score-strip .player-side {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
   .editor-actions,
   .feedback-grid {
     grid-template-columns: 1fr;
@@ -535,7 +583,36 @@ body.is-busy .loading-overlay {
 
   .floating-chat {
     right: 12px;
-    bottom: 12px;
+    width: min(320px, calc(100% - 24px));
+  }
+}
+
+@media (max-width: 380px) {
+  .challenge-layout {
+    width: calc(100% - 16px);
+    gap: 10px;
+    padding: 10px 0;
+  }
+
+  .card-scoreboard,
+  .panel {
+    padding: 10px;
+  }
+
+  .score-strip {
+    gap: 6px;
+  }
+
+  .score-strip > div {
+    padding: 8px;
+  }
+
+  .challenge-details {
+    padding: 8px;
+  }
+
+  .popup-actions {
+    grid-template-columns: 1fr;
   }
 }
 

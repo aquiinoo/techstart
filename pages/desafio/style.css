@@ -267,6 +267,40 @@ body {
   font-size: 0.92em;
 }
 
+.code-editor {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  height: 180px;
+  min-height: 165px;
+  overflow: hidden;
+  resize: vertical;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--inset);
+}
+
+.line-number-gutter {
+  flex: 0 0 auto;
+  min-width: 3.5em;
+  padding: 14px 10px;
+  overflow: hidden;
+  border-right: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.11);
+  color: var(--text);
+  text-align: right;
+  user-select: none;
+}
+
+html[data-theme="light"] .line-number-gutter {
+  background: rgba(22, 35, 58, 0.08);
+}
+
+.line-numbers {
+  font: inherit;
+  line-height: inherit;
+}
+
 textarea {
   width: 100%;
   min-width: 0;
@@ -675,10 +709,33 @@ body.is-busy .loading-overlay {
    ========================================= */
 
 .challenge-panel textarea {
+  flex: 1 1 0;
+  width: 0;
+  height: 100%;
+  min-height: 0;
+  border: 0;
+  border-radius: 0;
+  resize: none;
+  overflow: auto;
+  white-space: pre;
+  overflow-wrap: normal;
   font-family: var(--font-code);
   font-size: 13px;
   line-height: 1.6;
   tab-size: 2;
+}
+
+.code-editor,
+.line-number-gutter,
+.line-numbers {
+  font-family: var(--font-code);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.code-editor:focus-within {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(110, 168, 255, 0.16);
 }
 
 .challenge-details,

@@ -662,9 +662,23 @@ function handleEditorPairs(event) {
 
 function handleEditorKeydown(event) {
   if (handleEditorTab(event)) {
+    updateEditorLineNumbers();
     return;
   }
-  handleEditorPairs(event);
+  if (handleEditorPairs(event)) {
+    updateEditorLineNumbers();
+  }
+}
+
+function updateEditorLineNumbers() {
+  const textarea = document.getElementById("solution-input");
+  const lineNumbers = document.getElementById("solution-line-numbers");
+  if (!textarea || !lineNumbers) {
+    return;
+  }
+
+  const lineCount = textarea.value.split("\n").length;
+  lineNumbers.textContent = Array.from({ length: lineCount }, (_, index) => index + 1).join("\n");
 }
 
 async function renderRoom() {
@@ -822,6 +836,14 @@ if (botaoVoltar) {
 const solutionInput = document.getElementById("solution-input");
 if (solutionInput) {
   solutionInput.addEventListener("keydown", handleEditorKeydown);
+  solutionInput.addEventListener("input", updateEditorLineNumbers);
+  solutionInput.addEventListener("scroll", () => {
+    const lineNumberGutter = document.querySelector(".line-number-gutter");
+    if (lineNumberGutter) {
+      lineNumberGutter.scrollTop = solutionInput.scrollTop;
+    }
+  });
+  updateEditorLineNumbers();
 }
 
 const submitButton = document.getElementById("submit-button");

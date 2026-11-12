@@ -323,6 +323,7 @@ async function refresh() {
   renderGreeting(user);
   renderProfile(user);
   renderLanguage(user);
+  sincronizarSeletoresLinguagem();
   renderHistory(user);
   await renderRanking(user);
   await renderProfiles(user);
@@ -472,3 +473,146 @@ function criarCodigos() {
   }
 }
 criarCodigos();
+
+
+const linguagensDashboard = [
+  {
+    nome: "Java",
+    cor: "#f89820",
+    icone: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original.svg",
+    exemplo: `<span class="code-class">System</span><span class="code-default">.</span><span class="code-property">out</span><span class="code-default">.</span><span class="code-function">println</span><span class="code-default">(</span><span class="code-string">"Olá, mundo!"</span><span class="code-default">);</span>`
+  },
+  {
+    nome: "JavaScript",
+    cor: "#f7df1e",
+    icone: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg",
+    exemplo: `<span class="code-object">console</span><span class="code-default">.</span><span class="code-function">log</span><span class="code-default">(</span><span class="code-string">"Olá, mundo!"</span><span class="code-default">);</span>`
+  },
+  {
+    nome: "Python",
+    cor: "#3776ab",
+    icone: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg",
+    exemplo: `<span class="code-function">print</span><span class="code-default">(</span><span class="code-string">"Olá, mundo!"</span><span class="code-default">)</span>`
+  },
+  {
+    nome: "C#",
+    cor: "#512bd4",
+    icone: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/csharp/csharp-original.svg",
+    exemplo: `<span class="code-class">Console</span><span class="code-default">.</span><span class="code-function">WriteLine</span><span class="code-default">(</span><span class="code-string">"Olá, mundo!"</span><span class="code-default">);</span>`
+  }
+];
+
+function atualizarVisualLinguagem(select) {
+  const linguagem = linguagensDashboard.find(
+    (item) => item.nome === select.value
+  ) || linguagensDashboard[0];
+
+  const texto = select.closest(".language-select")
+    .querySelector(".language-select-trigger span");
+
+  texto.textContent = linguagem.nome;
+  texto.style.color = linguagem.cor;
+
+  if (select.id === "home-language") {
+    document.querySelectorAll("#panel-home .current-language").forEach((elemento) => {
+      elemento.style.color = linguagem.cor;
+    });
+  }
+}
+
+function sincronizarSeletoresLinguagem() {
+  ["home-language", "profile-language"].forEach((id) => {
+    const select = document.getElementById(id);
+    if (select) atualizarVisualLinguagem(select);
+  });
+}
+
+function configurarSeletoresLinguagem() {
+  ["home-language", "profile-language"].forEach((id) => {
+    const select = document.getElementById(id);
+    if (!select) return;
+
+    const container = select.closest(".language-select");
+    const botao = container.querySelector(".language-select-trigger");
+    const lista = container.querySelector(".language-select-options");
+
+    lista.innerHTML = linguagensDashboard.map((linguagem) => `
+      <button type="button" class="language-select-option" data-language="${linguagem.nome}">
+        <span class="language-name" style="color: ${linguagem.cor}">
+          ${linguagem.nome}
+        </span>
+        <code class="language-example">${linguagem.exemplo}</code>
+        <img class="language-icon" src="${linguagem.icone}" alt="">
+      </button>
+    `).join("");
+
+    botao.addEventListener("click", () => {
+      const abrir = lista.hidden;
+
+      document.querySelectorAll(".language-select-options").forEach((outraLista) => {
+        outraLista.hidden = true;
+        outraLista.closest(".language-select")
+          .querySelector(".language-select-trigger")
+          .setAttribute("aria-expanded", "false");
+      });
+
+      lista.hidden = !abrir;
+      botao.setAttribute("aria-expanded", String(abrir));
+    });
+
+    lista.addEventListener("click", (event) => {
+      const opcao = event.target.closest(".language-select-option");
+      if (!opcao) return;
+
+      const linguagem = linguagensDashboard.find(
+        (item) => item.nome === opcao.dataset.language
+      );
+
+      if (!linguagem) return;
+
+      select.value = linguagem.nome;
+      atualizarVisualLinguagem(select);
+
+      lista.hidden = true;
+      botao.setAttribute("aria-expanded", "false");
+      botao.focus();
+
+      select.dispatchEvent(new Event("change", { bubbles: true }));
+    });
+
+    select.addEventListener("change", () => {
+      atualizarVisualLinguagem(select);
+    });
+
+    atualizarVisualLinguagem(select);
+  });
+
+  document.addEventListener("click", (event) => {
+    if (event.target.closest(".language-select")) return;
+
+    document.querySelectorAll(".language-select-options").forEach((lista) => {
+      lista.hidden = true;
+      lista.closest(".language-select")
+        .querySelector(".language-select-trigger")
+        .setAttribute("aria-expanded", "false");
+    });
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") return;
+
+    document.querySelectorAll(".language-select-options").forEach((lista) => {
+      if (lista.hidden) return;
+
+      lista.hidden = true;
+
+      const botao = lista.closest(".language-select")
+        .querySelector(".language-select-trigger");
+
+      botao.setAttribute("aria-expanded", "false");
+      botao.focus();
+    });
+  });
+}
+
+configurarSeletoresLinguagem();

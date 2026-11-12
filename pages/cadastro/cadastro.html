@@ -31,21 +31,43 @@
         </div>
 
         <div class="grid">
-          <label>
-            E-mail *
-            <input type="email" id="email" required>
-          </label>
-          <label>
-            Linguagem preferida
-            <select id="language">
-              <option>Java</option>
-              <option>JavaScript</option>
-              <option>Python</option>
-              <option>C#</option>
-            </select>
-          </label>
-        </div>
+            <label>
+              E-mail *
+              <input type="email" id="email" required>
+            </label>
 
+            <div class="language-field">
+              <span id="language-label">Linguagem preferida</span>
+
+              <div class="language-select">
+                <select id="language" hidden>
+                  <option value="Java">Java</option>
+                  <option value="JavaScript">JavaScript</option>
+                  <option value="Python">Python</option>
+                  <option value="C#">C#</option>
+                </select>
+
+                <button
+                  type="button"
+                  class="language-select-trigger"
+                  id="language-trigger"
+                  aria-expanded="false"
+                  aria-controls="language-options"
+                  aria-labelledby="language-label language-selected"
+                >
+                  <span id="language-selected" style="color: #f89820;">
+                    Java
+                  </span>
+                </button>
+
+                <div
+                  id="language-options"
+                  class="language-select-options"
+                  hidden
+                ></div>
+              </div>
+            </div>
+          </div>
         <div class="grid">
           <label>
             Senha *

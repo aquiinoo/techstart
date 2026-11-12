@@ -5,6 +5,104 @@ const feedback = document.getElementById("register-feedback");
 const popup = document.getElementById("success-popup");
 const popupConfirm = document.getElementById("popup-confirm");
 
+
+const languageInput = document.getElementById("language");
+const languageTrigger = document.getElementById("language-trigger");
+const languageSelected = document.getElementById("language-selected");
+const languageOptions = document.getElementById("language-options");
+
+const linguagensCadastro = [
+  {
+    nome: "Java",
+    cor: "#f89820",
+    icone: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original.svg",
+    exemplo: `
+      <span class="code-class">System</span><span class="code-default">.</span><span class="code-property">out</span><span class="code-default">.</span><span class="code-function">println</span><span class="code-default">(</span><span class="code-string">"Olá, mundo!"</span><span class="code-default">);</span>
+    `
+  },
+  {
+    nome: "JavaScript",
+    cor: "#f7df1e",
+    icone: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg",
+    exemplo: `
+      <span class="code-object">console</span><span class="code-default">.</span><span class="code-function">log</span><span class="code-default">(</span><span class="code-string">"Olá, mundo!"</span><span class="code-default">);</span>
+    `
+  },
+  {
+    nome: "Python",
+    cor: "#3776ab",
+    icone: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg",
+    exemplo: `
+      <span class="code-function">print</span><span class="code-default">(</span><span class="code-string">"Olá, mundo!"</span><span class="code-default">)</span>
+    `
+  },
+  {
+    nome: "C#",
+    cor: "#512bd4",
+    icone: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/csharp/csharp-original.svg",
+    exemplo: `
+      <span class="code-class">Console</span><span class="code-default">.</span><span class="code-function">WriteLine</span><span class="code-default">(</span><span class="code-string">"Olá, mundo!"</span><span class="code-default">);</span>
+    `
+  }
+];
+
+languageOptions.innerHTML = linguagensCadastro.map((linguagem) => `
+  <button type="button" class="language-select-option" data-language="${linguagem.nome}">
+    <span class="language-name" style="color: ${linguagem.cor}">
+      ${linguagem.nome}
+    </span>
+    <code class="language-example">${linguagem.exemplo}</code>
+    <img class="language-icon" src="${linguagem.icone}" alt="">
+  </button>
+`).join("");
+
+function fecharSeletorLinguagem() {
+  languageOptions.hidden = true;
+  languageTrigger.setAttribute("aria-expanded", "false");
+}
+
+languageTrigger.addEventListener("click", () => {
+  const abrir = languageOptions.hidden;
+  languageOptions.hidden = !abrir;
+  languageTrigger.setAttribute("aria-expanded", String(abrir));
+});
+
+languageOptions.addEventListener("click", (event) => {
+  const opcao = event.target.closest(".language-select-option");
+
+  if (!opcao) return;
+
+  const linguagem = linguagensCadastro.find(
+    (item) => item.nome === opcao.dataset.language
+  );
+
+  if (!linguagem) return;
+
+  languageInput.value = linguagem.nome;
+  languageSelected.textContent = linguagem.nome;
+  languageSelected.style.color = linguagem.cor;
+
+  languageInput.dispatchEvent(new Event("change", { bubbles: true }));
+
+  fecharSeletorLinguagem();
+  languageTrigger.focus();
+});
+
+document.addEventListener("click", (event) => {
+  if (!event.target.closest(".language-select")) {
+    fecharSeletorLinguagem();
+  }
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && !languageOptions.hidden) {
+    fecharSeletorLinguagem();
+    languageTrigger.focus();
+  }
+});
+
+
+
 // Elementos dos inputs
 const nameInput = document.getElementById("name");
 const nickInput = document.getElementById("nick");

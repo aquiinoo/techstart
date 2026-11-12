@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -57,15 +58,35 @@
           <div>
             <h2 id="greeting">Olá, jogador</h2>
           </div>
-          
-          <label class="language-picker" for="home-language">Linguagem dos desafios:
-            <select id="home-language">
-              <option>Java</option>
-              <option>JavaScript</option>
-              <option>Python</option>
-              <option>C#</option>
-            </select>
-          </label>
+
+          <div class="language-picker">
+            <span id="home-language-label">Linguagem dos desafios:</span>
+
+            <div class="language-select">
+              <select id="home-language" hidden>
+                <option value="Java">Java</option>
+                <option value="JavaScript">JavaScript</option>
+                <option value="Python">Python</option>
+                <option value="C#">C#</option>
+              </select>
+
+              <button
+                type="button"
+                class="language-select-trigger"
+                aria-expanded="false"
+                aria-controls="home-language-options"
+                aria-labelledby="home-language-label home-language-selected"
+              >
+                <span id="home-language-selected">Java</span>
+              </button>
+
+              <div
+                id="home-language-options"
+                class="language-select-options"
+                hidden
+              ></div>
+            </div>
+          </div>
         </div>
 
         <div class="hero-grid">
@@ -82,7 +103,7 @@
           </article>
 
           <article class="card action-card">
-            
+
             <span class="label-text-main">
 
               <h3>Criar sala <span class="pxi pxi-createroom"></span></h3>
@@ -98,7 +119,7 @@
           </article>
 
           <article class="card action-card">
-            
+
             <span class="label-text-main">
 
               <h3>Entrar em duelo <span class="pxi pxi-join"></span></h3>
@@ -131,7 +152,7 @@
 
       <section class="panel" id="panel-profile">
         <div class="panel-header">
-          <div>            
+          <div>
             <h2>Meu perfil</h2>
           </div>
         </div>
@@ -156,14 +177,34 @@
               <input type="url" id="profile-github">
             </label>
 
-            <label>Linguagem
-              <select id="profile-language">
-                <option>Java</option>
-                <option>JavaScript</option>
-                <option>Python</option>
-                <option>C#</option>
-              </select>
-            </label>
+            <div class="profile-language-field">
+              <span id="profile-language-label">Linguagem</span>
+
+              <div class="language-select">
+                <select id="profile-language" hidden>
+                  <option value="Java">Java</option>
+                  <option value="JavaScript">JavaScript</option>
+                  <option value="Python">Python</option>
+                  <option value="C#">C#</option>
+                </select>
+
+                <button
+                  type="button"
+                  class="language-select-trigger"
+                  aria-expanded="false"
+                  aria-controls="profile-language-options"
+                  aria-labelledby="profile-language-label profile-language-selected"
+                >
+                  <span id="profile-language-selected">Java</span>
+                </button>
+
+                <div
+                  id="profile-language-options"
+                  class="language-select-options"
+                  hidden
+                ></div>
+              </div>
+            </div>
           </div>
           <label>Bio
             <textarea id="profile-bio" rows="4"></textarea>
@@ -175,7 +216,7 @@
 
       <section class="panel" id="panel-history">
         <div class="panel-header">
-          <div class="section-title">            
+          <div class="section-title">
             <h2>Histórico</h2>
           </div>
         </div>
@@ -184,7 +225,7 @@
 
       <section class="panel" id="panel-ranking">
         <div class="panel-header">
-          <div>            
+          <div>
             <h2>Ranking</h2>
           </div>
         </div>
@@ -202,7 +243,7 @@
 
       <section class="panel" id="panel-support">
         <div class="panel-header">
-          <div>          
+          <div>
             <h2>Suporte</h2>
           </div>
         </div>
@@ -220,7 +261,7 @@
 
       <section class="panel" id="panel-community">
         <div class="panel-header">
-          <div>            
+          <div>
             <h2>Jogadores</h2>
           </div>
         </div>

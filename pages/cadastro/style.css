@@ -292,3 +292,132 @@ a {
     margin-top: 20px;
   }
 }
+
+/*ABAIXO O NOVO MODELO DE SELEÇÃO DE LINGUAGEM FAVORITA, NO CADASTRO*/
+.language-field {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.language-select {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+}
+
+.language-select-trigger {
+  width: 100%;
+  min-height: 50px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #08111c;
+  color: #eef5f0;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.language-select-trigger:focus-visible {
+  outline: none;
+  border-color: #6ea8ff;
+  box-shadow: 0 0 0 4px rgba(110, 168, 255, 0.16);
+}
+
+.language-select-options {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 30;
+  width: max(100%, 620px);
+  max-width: min(620px, calc(100vw - 48px));
+  display: grid;
+  overflow: hidden;
+  background: #08111c;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
+}
+
+.language-select-options[hidden] {
+  display: none;
+}
+
+.language-select-option {
+  width: 100%;
+  min-height: 46px;
+  padding: 0 14px;
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr) 24px;
+  align-items: center;
+  gap: 14px;
+  background: transparent;
+  color: #eef5f0;
+  border: none;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.language-select-option:hover,
+.language-select-option:focus-visible {
+  background: rgba(110, 168, 255, 0.12);
+}
+
+.language-name {
+  min-width: 0;
+  font-size: 0.72rem;
+  white-space: nowrap;
+}
+
+.language-example {
+  min-width: 0;
+  overflow: hidden;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.52rem;
+  line-height: 1.6;
+  white-space: nowrap;
+}
+
+.language-icon {
+  width: 20px;
+  height: 20px;
+  justify-self: end;
+}
+
+.code-default { color: #d4d4d4; }
+.code-class { color: #4ec9b0; }
+.code-object, .code-property { color: #9cdcfe; }
+.code-function { color: #dcdcaa; }
+.code-string { color: #ce9178; }
+
+@media (max-width: 1080px) {
+  .language-select-option {
+    grid-template-columns: 110px minmax(0, 1fr) 24px;
+  }
+
+  .language-example {
+    font-size: 0.5rem;
+  }
+}
+
+@media (max-width: 520px) {
+  .language-select-options {
+    width: 100%;
+  }
+
+  .language-select-option {
+    grid-template-columns: 1fr 24px;
+  }
+
+  .language-example {
+    display: none;
+  }
+}
+/*ACIMA O NOVO MODELO DE SELEÇÃO DE LINGUAGEM FAVORITA, NO CADASTRO*/

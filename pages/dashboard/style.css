@@ -983,3 +983,163 @@ textarea {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/*ABAIXO O NOVO MODELO DE SELEÇÃO DE LINGUAGEM NO DASHBOARD*/
+
+.language-select {
+  position: relative;
+  min-width: 0;
+}
+
+.language-select-trigger {
+  width: 100%;
+  min-height: 36px;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: var(--select-bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-family: 'Press Start 2P', system-ui;
+  font-size: 0.85rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.language-select-trigger::after {
+  content: "";
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid var(--text);
+  flex-shrink: 0;
+}
+
+.language-select-trigger:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(110, 168, 255, 0.16);
+}
+
+.language-select-options {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 100;
+  width: max(100%, 620px);
+  max-width: min(620px, calc(100vw - 48px));
+  display: grid;
+  overflow: hidden;
+  background: #08111c;
+  border: 1px solid rgba(110, 168, 255, 0.18);
+  border-radius: 14px;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.35);
+}
+
+.language-select-options[hidden] {
+  display: none;
+}
+
+.language-select-option {
+  width: 100%;
+  min-height: 46px;
+  padding: 0 14px;
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr) 24px;
+  align-items: center;
+  gap: 14px;
+  background: transparent;
+  color: #eef5f0;
+  border: none;
+  font-family: 'Press Start 2P', system-ui;
+  text-align: left;
+  cursor: pointer;
+}
+
+.language-select-option:hover,
+.language-select-option:focus-visible {
+  background: rgba(110, 168, 255, 0.12);
+}
+
+.language-name {
+  min-width: 0;
+  font-size: 0.72rem;
+  white-space: nowrap;
+}
+
+.language-example {
+  min-width: 0;
+  overflow: hidden;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.52rem;
+  line-height: 1.6;
+  white-space: nowrap;
+}
+
+.language-icon {
+  width: 20px;
+  height: 20px;
+  justify-self: end;
+}
+
+.code-default { color: #d4d4d4; }
+.code-class { color: #4ec9b0; }
+.code-object, .code-property { color: #9cdcfe; }
+.code-function { color: #dcdcaa; }
+.code-string { color: #ce9178; }
+
+.language-picker {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.language-picker .language-select {
+  width: 135px;
+  flex-shrink: 0;
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.language-picker .language-select-trigger {
+  min-height: 30px;
+  padding: 0 10px;
+  font-size: 0.7rem;
+}
+
+.language-picker .language-select-options {
+  left: auto;
+  right: 0;
+}
+
+.profile-language-field {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+  margin-bottom: 12px;
+  color: var(--muted);
+}
+
+.profile-language-field .language-select {
+  width: 100%;
+}
+
+@media (max-width: 520px) {
+  .language-select-options {
+    width: min(220px, calc(100vw - 48px));
+  }
+
+  .language-select-option {
+    grid-template-columns: 1fr 24px;
+  }
+
+  .language-example {
+    display: none;
+  }
+}
+
+/*ACIMA O NOVO MODELO DE SELEÇÃO DE LINGUAGEM NO DASHBOARD*/

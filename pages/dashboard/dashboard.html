@@ -26,7 +26,11 @@
 
       <img class="sidebar-mascot" src="../../assets/pandarodando.gif" alt="Panda Rodando" draggable="false">
 
-      <nav class="menu" aria-label="Menu principal">
+      <button class="menu-toggle" id="menuToggle" type="button" aria-expanded="false" aria-controls="main-menu" aria-label="Abrir menu">
+        <span aria-hidden="true">☰</span>
+      </button>
+
+      <nav class="menu" id="main-menu" aria-label="Menu principal">
         <button type="button" class="menu-item active" data-target="home">
           <span class="pxi pxi-home" aria-hidden="true"></span><span class="menu-label">Início</span>
         </button>

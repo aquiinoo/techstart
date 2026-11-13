@@ -1,6 +1,9 @@
 let currentUser;
 
 const menuItems = document.querySelectorAll(".menu-item");
+const menuToggle = document.getElementById("menuToggle");
+const menuToggleIcon = menuToggle.querySelector("span");
+const sidebar = document.querySelector(".barra_lateral");
 const panels = document.querySelectorAll(".panel");
 const popup = document.getElementById("popup");
 const popupTitle = document.getElementById("popup-title");
@@ -110,6 +113,13 @@ function openPanel(target) {
     panel.classList.toggle("active-panel", panel.id === `panel-${target}`)
   );
 }
+
+menuToggle.addEventListener("click", () => {
+  const isOpen = sidebar.classList.toggle("menu-open");
+  menuToggle.setAttribute("aria-expanded", String(isOpen));
+  menuToggle.setAttribute("aria-label", isOpen ? "Fechar menu" : "Abrir menu");
+  menuToggleIcon.textContent = isOpen ? "×" : "☰";
+});
 
 function showPopup(title, text, callback) {
   popupTitle.textContent = title;
@@ -331,7 +341,13 @@ async function refresh() {
 }
 
 menuItems.forEach((button) => {
-  button.addEventListener("click", () => openPanel(button.dataset.target));
+  button.addEventListener("click", () => {
+    openPanel(button.dataset.target);
+    sidebar.classList.remove("menu-open");
+    menuToggle.setAttribute("aria-expanded", "false");
+    menuToggle.setAttribute("aria-label", "Abrir menu");
+    menuToggleIcon.textContent = "☰";
+  });
 });
 
 document.getElementById("home-language").addEventListener("change", async (event) => {

@@ -30,7 +30,7 @@ const linguagensCadastro = [
   },
   {
     nome: "Python",
-    cor: "#3776ab",
+    cor: "#79b8e8",
     icone: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-original.svg",
     exemplo: `
       <span class="code-function">print</span><span class="code-default">(</span><span class="code-string">"Olá, mundo!"</span><span class="code-default">)</span>
@@ -38,7 +38,7 @@ const linguagensCadastro = [
   },
   {
     nome: "C#",
-    cor: "#512bd4",
+    cor: "#a78bfa",
     icone: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/csharp/csharp-original.svg",
     exemplo: `
       <span class="code-class">Console</span><span class="code-default">.</span><span class="code-function">WriteLine</span><span class="code-default">(</span><span class="code-string">"Olá, mundo!"</span><span class="code-default">);</span>

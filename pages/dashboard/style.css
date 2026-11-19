@@ -71,7 +71,7 @@ textarea {
   display: flex;
   flex-direction: column;
   border-right: 2px solid var(--line);
-  background: transparent;
+  background: rgba(54, 54, 54, 0.692);
 }
 
 .menu-toggle {
@@ -1071,7 +1071,12 @@ textarea {
 .language-select-trigger:focus-visible {
   outline: none;
   border-color: var(--accent);
-  box-shadow: 0 0 0 4px rgba(110, 168, 255, 0.16);
+  box-shadow: 0 0 0 4px rgba(29, 87, 182, 0.16);
+}
+
+.language-select-trigger span {
+  -webkit-text-stroke: 2px #000;
+  paint-order: stroke fill;
 }
 
 .language-select-options {

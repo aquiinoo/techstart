@@ -206,6 +206,21 @@ html[data-theme="light"] .back-link {
   color: var(--btn-text);
 }
 
+html[data-theme="light"] button:not(.menu-item):not(.botao_sair):not(.theme-toggle--menu):not(.menu-toggle):not(.language-select-option):hover,
+html[data-theme="light"] .primary-button:hover,
+html[data-theme="light"] .secondary-button:hover,
+html[data-theme="light"] .danger-button:hover,
+html[data-theme="light"] .botao_primario:hover,
+html[data-theme="light"] .ghost-button:hover,
+html[data-theme="light"] .accept-button:hover,
+html[data-theme="light"] .connect-button:hover,
+html[data-theme="light"] .back-link:hover {
+  background: #032f57 !important;
+  background-image: none !important;
+  border-color: #032f57 !important;
+  color: #ffffff !important;
+}
+
 html[data-theme="light"] .result-hero.loss .outcome-pill {
   background-color: #b42318;
   border-color: #7f1d1d;
